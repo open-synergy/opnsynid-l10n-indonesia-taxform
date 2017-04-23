@@ -541,6 +541,10 @@ class BuktiPotongPPhLine(models.Model):
         required=True,
         ondelete="restrict",
     )
+    analytic_account_id = fields.Many2one(
+        string="Analytic Account",
+        comodel_name="account.analytic.account",
+        )
     income_move_line_ids = fields.Many2many(
         string="Income Move Lines",
         comodel_name="account.move.line",
@@ -572,6 +576,8 @@ class BuktiPotongPPhLine(models.Model):
                 "partner_id": bukpot.kpp_id.commercial_partner_id.id,
                 "tax_code_id": self.tax_code_id.id,
                 "tax_amount": self.amount_tax,
+                "analytic_account_id": self.analytic_account_id and \
+                    self.analytic_account_id.id or False,
             })
             data.append(res)
             if bukpot.direction == "in":
@@ -584,6 +590,8 @@ class BuktiPotongPPhLine(models.Model):
                 "debit": bukpot.direction == "out" and self.amount_tax or 0.0,
                 "credit": bukpot.direction == "in" and self.amount_tax or 0.0,
                 "partner_id": partner.id,
+                "analytic_account_id": self.analytic_account_id and \
+                    self.analytic_account_id.id or False,
             })
             data.append(res)
         return data

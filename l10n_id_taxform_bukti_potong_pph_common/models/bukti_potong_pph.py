@@ -494,6 +494,7 @@ class BuktiPotongPPh(models.Model):
 class BuktiPotongPPhLine(models.Model):
     _name = "l10n_id.bukti_potong_pph_line"
     _description = "Bukti Potong PPh Line"
+    _order = "sequence, id"
     _sql_constraints = [
         ("tax_code_unique", "unique(tax_code_id, bukti_potong_id)",
          "Tax code must be unique"),
@@ -523,6 +524,11 @@ class BuktiPotongPPhLine(models.Model):
         comodel_name="l10n_id.bukti_potong_pph",
         ondelete="cascade",
     )
+    sequence = fields.Integer(
+        string="Sequence",
+        required=True,
+        default=5,
+        )
     tax_code_id = fields.Many2one(
         string="Tax Code",
         comodel_name="account.tax.code",

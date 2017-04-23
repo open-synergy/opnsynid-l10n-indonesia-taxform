@@ -48,12 +48,6 @@ class BuktiPotongPPh(models.Model):
     def _default_date(self):
         return datetime.now().strftime("%Y-%m-%d")
 
-    @api.model
-    def _default_period_id(self):
-        period = self.env["account.period"].find(
-            datetime.now().strftime("%Y-%m-%d"))
-        return period[0].id
-
     @api.multi
     @api.depends(
         "line_ids",
@@ -212,7 +206,6 @@ class BuktiPotongPPh(models.Model):
         string="Period",
         comodel_name="account.period",
         required=True,
-        default=lambda self: self._default_period_id(),
         readonly=True,
         ondelete="restrict",
         states={
@@ -486,6 +479,12 @@ class BuktiPotongPPh(models.Model):
         for line in self.line_ids:
             data = line._prepare_move_line_data(data)
         return data
+
+    @api.onchange("date")
+    def onchange_period_id(self):
+        period = self.env["account.period"].find(
+            self.date)
+        self.period_id = period[0].id
 
 
 class BuktiPotongPPhLine(models.Model):

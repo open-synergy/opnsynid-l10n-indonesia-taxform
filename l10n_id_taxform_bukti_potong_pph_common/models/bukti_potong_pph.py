@@ -53,7 +53,6 @@ class BuktiPotongPPh(models.Model):
         period = self.env["account.period"].find(
             datetime.now().strftime("%Y-%m-%d"))
         return period[0].id
-        return
 
     @api.multi
     @api.depends(

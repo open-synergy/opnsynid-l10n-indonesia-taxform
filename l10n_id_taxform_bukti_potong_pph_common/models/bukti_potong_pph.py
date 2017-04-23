@@ -4,6 +4,7 @@
 
 from openerp import models, fields, api, SUPERUSER_ID
 from datetime import datetime
+from openerp.exceptions import Warning as UserError
 from openerp.tools.translate import _
 
 
@@ -457,6 +458,8 @@ class BuktiPotongPPh(models.Model):
     def _create_accounting_entry(self):
         self.ensure_one()
         obj_move = self.env["account.move"]
+        if self.total_tax <= 0.0:
+            raise UserError(_("Total tax has to be greater than 0"))
         move = obj_move.create(
             self._prepare_accounting_entry_data())
         return move

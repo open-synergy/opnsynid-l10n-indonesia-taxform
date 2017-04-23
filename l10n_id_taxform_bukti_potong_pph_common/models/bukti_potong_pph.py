@@ -570,6 +570,8 @@ class BuktiPotongPPhLine(models.Model):
                 "debit": bukpot.direction == "in" and self.amount_tax or 0.0,
                 "credit": bukpot.direction == "out" and self.amount_tax or 0.0,
                 "partner_id": bukpot.kpp_id.commercial_partner_id.id,
+                "tax_code_id": self.tax_code_id.id,
+                "tax_amount": self.amount_tax,
             })
             data.append(res)
             if bukpot.direction == "in":

@@ -165,6 +165,7 @@ class BuktiPotongPPh(models.Model):
         ],
         related="type_id.direction",
         store=False,
+        readonly=True,
     )
     type_id = fields.Many2one(
         string="Form Type",

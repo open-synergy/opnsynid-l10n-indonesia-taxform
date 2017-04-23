@@ -11,8 +11,8 @@
         <tree>
             <field name="name"/>
             <field name="date"/>
-            <field name="type_id" groups="base.group_system"/>
-            <field name="direction" groups="base.group_system"/>
+            <field name="type_id" invisible="1"/>
+            <field name="direction" invisible="1"/>
             <field name="company_id"/>
             <field name="journal_id"/>
             <field name="period_id"/>
@@ -84,15 +84,15 @@
                         <field name="company_id"/>
                         <field name="journal_id" domain="[('id', 'in', allowed_journal_ids[0][2])]"/>
                         <field name="account_id" domain="[('id', 'in', allowed_account_ids[0][2])]"/>
-                        <field name="direction" groups="base.group_system"/>
-                        <field name="type_id" groups="base.group_system"/>
+                        <field name="direction" invisible="1"/>
+                        <field name="type_id" invisible="1"/>
                         <field name="allowed_journal_ids" widget="many2many_tags" invisible="1"/>
                         <field name="allowed_tax_code_ids" widget="many2many_tags" invisible="1"/>
                         <field name="allowed_account_ids" widget="many2many_tags" invisible="1"/>
                     </group>
                     <group name="group_1_2" colspan="1" col="2">
-                        <field name="wajib_pajak_id" attrs="{'readonly': [('direction','=','in')]}"/>
-                        <field name="pemotong_pajak_id" attrs="{'readonly': [('direction','=','out')]}"/>
+                        <field name="wajib_pajak_id" attrs="{'readonly': ['|',('direction','=','in'),('state','!=','draft')]}"/>
+                        <field name="pemotong_pajak_id" attrs="{'readonly': ['|',('direction','=','out'),('state','!=','draft')]}"/>
                         <field name="ttd_id" domain="[('is_company','=',False)]"/>
                         <field name="kpp_id"/>
                     </group>

@@ -1,111 +1,65 @@
+
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==============
-{module_title}
-==============
+==================================================
+Indonesia - Common Feature for Bukti Potong PPh 23
+==================================================
 
-This module extends the functionality of ... to support ...
-and to allow you to ...
+This module add feature to manage bukti potong PPh 23 (f.1.33.06) for both
+incoming or outgoing.
+
 
 Installation
 ============
 
 To install this module, you need to:
 
-#. Do this ...
+1.  Clone the branch 8.0 of the repository https://github.com/open-synergy/opnsynid-l10n-indonesia
+2.  Add the path to this repository in your configuration (addons-path)
+3.  Update the module list
+4.  Go to menu *Setting -> Modules -> Local Modules*
+5.  Search For *Indonesia - Common Feature for Bukti Potong PPh 23*
+6.  Install the module
 
 Configuration
 =============
 
-To configure this module, you need to:
-
-#. Go to ...
-
-.. figure:: path/to/local/image.png
-   :alt: alternative description
-   :width: 600 px
 
 Usage
 =====
 
 
-**Scenario 1**
-
-You have create supplier invoice with PPh 21
-
-Beban Profesional                   Dr. 10.000.000
-Bukti Potong PPh 21 Belum Dicetak       Cr. 1.000.000
-Utang                                   Cr. 9.000.000
-
-Bukti Potong PPh 21 Belum Dicetak   Dr. 1.000.000
-Utang PPh 21                            Cr. 1.000.000
-
-**Scenario 2**
-
-Beban Profesional                   Dr. 10.000.000
-Utang                                   Cr. 10.000.000
-
-Utang                               Dr. 1.000.000
-Utang PPh 21                            Cr. 1.000.000
-
-
-**Scenario 3***
-
-Beban Profesional                   Dr. 10.000.000
-Bukti Potong PPh 21 Belum Dicetak       Cr. 1.000.000
-Kas/Bank                                Cr. 9.000.000
-
-Bukti Potong PPh 21 Belum Dicetak   Dr. 1.000.000
-Utang PPh 21                            Cr. 1.000.000
-
 Known issues / Roadmap
 ======================
 
-* ...
+* Printed form will be provided on other module
 
 Bug Tracker
 ===========
 
 Bugs are tracked on `GitHub Issues
-<https://github.com/OCA/{project_repo}/issues>`_. In case of trouble, please
-check there if your issue has already been reported. If you spotted it first,
-help us smashing it by providing a detailed and welcomed feedback.
+<https://github.com/open-synergy/opnsynid-l10n-indonesia/issues>`_.
+In case of trouble, please check there if your issue has already been reported.
+If you spotted it first, help us smashing it by providing a detailed
+and welcomed feedback.
 
 Credits
 =======
 
-Images
-------
-
-* Odoo Community Association: `Icon <https://github.com/OCA/maintainer-tools/blob/master/template/module/static/description/icon.svg>`_.
 
 Contributors
 ------------
 
-* Firstname Lastname <email.address@example.org>
-* Second Person <second.person@example.org>
+* Andhitia Rama <andhitia.r@gmail.com>
 
-Funders
--------
-
-The development of this module has been financially supported by:
-
-* Company 1 name
-* Company 2 name
 
 Maintainer
 ----------
 
-.. image:: https://odoo-community.org/logo.png
-   :alt: Odoo Community Association
-   :target: https://odoo-community.org
+.. image:: https://opensynergy-indonesia.com/logo.png
+   :alt: OpenSynergy Indonesia
+   :target: https://opensynergy-indonesia.com
 
-This module is maintained by the OCA.
-
-OCA, or the Odoo Community Association, is a nonprofit organization whose
-mission is to support the collaborative development of Odoo features and
-promote its widespread use.
-
-To contribute to this module, please visit https://odoo-community.org.
+This module is maintained by the OpenSynergy Indonesia.

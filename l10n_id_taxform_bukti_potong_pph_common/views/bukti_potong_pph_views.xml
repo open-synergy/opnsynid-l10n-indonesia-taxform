@@ -86,9 +86,9 @@
                         <field name="account_id" domain="[('id', 'in', allowed_account_ids[0][2])]"/>
                         <field name="direction" groups="base.group_system"/>
                         <field name="type_id" groups="base.group_system"/>
-                        <field name="allowed_journal_ids" widget="many2many_tags" groups="base.group_system"/>
-                        <field name="allowed_tax_code_ids" widget="many2many_tags" groups="base.group_system"/>
-                        <field name="allowed_account_ids" widget="many2many_tags" groups="base.group_system"/>
+                        <field name="allowed_journal_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="allowed_tax_code_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="allowed_account_ids" widget="many2many_tags" invisible="1"/>
                     </group>
                     <group name="group_1_2" colspan="1" col="2">
                         <field name="wajib_pajak_id" attrs="{'readonly': [('direction','=','in')]}"/>

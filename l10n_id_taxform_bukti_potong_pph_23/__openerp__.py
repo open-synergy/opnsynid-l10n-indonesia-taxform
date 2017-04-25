@@ -2,8 +2,8 @@
 # Copyright 2017 OpenSynergy Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
-    "name": "Indonesia - Bukti Potong PPh 26",
-    "version": "8.0.1.0.0",
+    "name": "Indonesia - Bukti Potong PPh 23",
+    "version": "8.0.1.0.1",
     "category": "localization",
     "website": "https://opensynergy-indonesia.com/",
     "author": "OpenSynergy Indonesia",

@@ -326,22 +326,22 @@ class BuktiPotongPPh(models.Model):
     confirm_ok = fields.Boolean(
         string="Confirm Ok",
         compute="_compute_policy",
-        readonly=False,
+        readonly=True,
     )
     approve_ok = fields.Boolean(
         string="Approve Ok",
         compute="_compute_policy",
-        readonly=False,
+        readonly=True,
     )
     cancel_ok = fields.Boolean(
         string="Cancel Ok",
         compute="_compute_policy",
-        readonly=False,
+        readonly=True,
     )
     reset_ok = fields.Boolean(
         string="Confirm Ok",
         compute="_compute_policy",
-        readonly=False,
+        readonly=True,
     )
 
     @api.multi
@@ -490,6 +490,10 @@ class BuktiPotongPPh(models.Model):
             self.date)
         self.period_id = period[0].id
 
+    @api.onchange("pemotong_pajak_id")
+    def onchange_pemotong_pajak_id(self):
+        self.ttd_id = False
+
 
 class BuktiPotongPPhLine(models.Model):
     _name = "l10n_id.bukti_potong_pph_line"
@@ -575,7 +579,7 @@ class BuktiPotongPPhLine(models.Model):
                 "credit": bukpot.direction == "out" and self.amount_tax or 0.0,
                 "partner_id": bukpot.kpp_id.commercial_partner_id.id,
                 "tax_code_id": self.tax_code_id.id,
-                "tax_amount": self.amount_tax,
+                "tax_amount": self.tax_id.tax_sign * self.amount_tax,
                 "analytic_account_id": self.analytic_account_id and
                 self.analytic_account_id.id or False,
             })

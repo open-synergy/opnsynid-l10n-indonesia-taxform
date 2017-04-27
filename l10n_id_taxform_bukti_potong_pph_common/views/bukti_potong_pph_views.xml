@@ -69,7 +69,7 @@
         <form>
             <header>
                 <button name="workflow_action_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','draft'),('confirm_ok','=',False)]}" confirm="Confirm bukti potong?"/>
-                <button name="workflow_action_done" string="Done" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','confirm'),('approve_ok','=',False)]}" confirm="Approve bukti potong?"/>
+                <button name="workflow_action_done" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','confirm'),('approve_ok','=',False)]}" confirm="Approve bukti potong?"/>
                 <button name="workflow_action_cancel" string="Cancel" type="object" attrs="{'invisible':['|',('state','not in', ['draft', 'confirm', 'done']),('cancel_ok','=',False)]}" confirm="Cancel bukti potong?"/>
                 <button name="workflow_action_reset" string="Set to Draft" type="object" attrs="{'invisible':['|',('state','!=','cancel'),('reset_ok','=',False)]}" confirm="Reset bukti potong?"/>
                 <field name="state" widget="statusbar"/>
@@ -92,9 +92,9 @@
                     </group>
                     <group name="group_1_2" colspan="1" col="2">
                         <field name="wajib_pajak_id" attrs="{'readonly': ['|',('direction','=','in'),('state','!=','draft')]}"/>
-                        <field name="pemotong_pajak_id" attrs="{'readonly': ['|',('direction','=','out'),('state','!=','draft')]}"/>
-                        <field name="ttd_id" domain="[('is_company','=',False)]"/>
-                        <field name="kpp_id"/>
+                        <field name="pemotong_pajak_id" domain="[('is_company','=',True)]" attrs="{'readonly': ['|',('direction','=','out'),('state','!=','draft')]}"/>
+                        <field name="ttd_id" domain="[('is_company','=',False),('commercial_partner_id.id','=',pemotong_pajak_id)]" attrs="{'required':[('direction','=','out')], 'readonly':[('state','!=','draft')]}"/>
+                        <field name="kpp_id" domain="[('is_company','=',True)]"/>
                     </group>
                 </group>
                 <notebook>

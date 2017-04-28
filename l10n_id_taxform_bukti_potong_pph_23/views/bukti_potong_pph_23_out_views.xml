@@ -52,7 +52,7 @@
     id="bukti_potong_pph_23_out_menu"
     name="PPh 23 (f.1.33.06) Out"
     parent="l10n_id_taxform.taxform_bukti_potong_menu"
-    groups="l10n_id_taxform.manager_group_taxform"
+    groups="l10n_id_taxform.user_group_taxform"
     action="bukti_potong_pph_23_out_action"
     sequence="23"
     />

@@ -39,7 +39,7 @@
 </record>
 
 <record id="bukti_potong_pph_23_in_action" model="ir.actions.act_window">
-    <field name="name">Bukti Potong PPh 23 - In</field>
+    <field name="name">Bukti Potong PPh 23 (f.1.33.06) In</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">l10n_id.bukti_potong_pph_23_in</field>
     <field name="view_type">form</field>
@@ -50,7 +50,7 @@
 
 <menuitem
     id="bukti_potong_pph_23_in_menu"
-    name="PPh 23 - In"
+    name="PPh 23 (f.1.33.06) In"
     parent="l10n_id_taxform.taxform_bukti_potong_menu"
     groups="l10n_id_taxform.manager_group_taxform"
     action="bukti_potong_pph_23_in_action"

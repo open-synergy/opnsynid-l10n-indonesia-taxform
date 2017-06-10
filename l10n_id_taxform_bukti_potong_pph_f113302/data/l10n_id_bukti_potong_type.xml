@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 OpenSynergy Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+    <data>
+        <record model="l10n_id.bukti_potong_pph_type" id="bukti_potong_pph_type_f113302_out">
+            <field name="name">Bukti Potong PPh 21 Final - Out</field>
+            <field name="code">f.1.1.33.02 - Out</field>
+            <field name="direction">out</field>
+            <field name="active" eval="1"/>
+        </record>
+    </data>
+</openerp>

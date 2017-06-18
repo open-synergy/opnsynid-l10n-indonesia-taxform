@@ -16,6 +16,7 @@
             <field name="company_id"/>
             <field name="journal_id"/>
             <field name="period_id"/>
+            <field name="tax_period_id"/>
             <field name="wajib_pajak_id"/>
             <field name="pemotong_pajak_id"/>
             <field name="ttd_id"/>
@@ -35,6 +36,7 @@
             <field name="company_id"/>
             <field name="journal_id"/>
             <field name="period_id"/>
+            <field name="tax_period_id"/>
             <field name="wajib_pajak_id"/>
             <field name="pemotong_pajak_id"/>
             <field name="ttd_id"/>
@@ -48,6 +50,7 @@
             <group name="group_main" string="Group By..">
                 <filter name="filter_grp_journal" string="Journal" context="{'group_by':'journal_id'}"/>
                 <filter name="filter_grp_period" string="Period" context="{'group_by':'period_id'}"/>
+                <filter name="filter_grp_tax_period" string="Tax Period" context="{'group_by':'tax_period_id'}"/>
                 <filter name="filter_grp_wp" string="Wajib Pajak" context="{'group_by':'wajib_pajak_id'}"/>
                 <filter name="filter_grp_pp" string="Pemotong Pajak" context="{'group_by':'pemotong_pajak_id'}"/>
                 <filter name="filter_grp_ttd" string="TTD" context="{'group_by':'ttd_id'}"/>
@@ -81,6 +84,7 @@
                         <field name="name"/>
                         <field name="date"/>
                         <field name="period_id"/>
+                        <field name="tax_period_id"/>
                         <field name="company_id"/>
                         <field name="journal_id" domain="[('id', 'in', allowed_journal_ids[0][2])]"/>
                         <field name="account_id" domain="[('id', 'in', allowed_account_ids[0][2])]"/>

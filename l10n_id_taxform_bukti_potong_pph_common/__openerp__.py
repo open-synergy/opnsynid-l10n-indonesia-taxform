@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Indonesia - Common Feature for Bukti Potong",
-    "version": "8.0.1.1.0",
+    "version": "8.0.2.0.0",
     "category": "localization",
     "website": "https://opensynergy-indonesia.com/",
     "author": "OpenSynergy Indonesia",
@@ -12,7 +12,7 @@
     "installable": True,
     "depends": [
         "mail",
-        "l10n_id_taxform",
+        "l10n_id_taxform_period",
     ],
     "data": [
         "security/ir.model.access.csv",

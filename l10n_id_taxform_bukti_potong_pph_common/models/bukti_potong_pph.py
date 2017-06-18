@@ -204,6 +204,25 @@ class BuktiPotongPPh(models.Model):
             ],
         }
     )
+
+    @api.multi
+    @api.depends(
+        "date",
+    )
+    def _compute_tax_period(self):
+        obj_tax_period = self.env["l10n_id.tax_period"]
+        for bukpot in self:
+            try:
+                bukpot.tax_period_id = obj_tax_period._find_period(bukpot.date)
+            except:
+                bukpot.tax_period_id = False
+
+    tax_period_id = fields.Many2one(
+        string="Tax Period",
+        comodel_name="l10n_id.tax_period",
+        compute="_compute_tax_period",
+        store=True,
+    )
     period_id = fields.Many2one(
         string="Period",
         comodel_name="account.period",

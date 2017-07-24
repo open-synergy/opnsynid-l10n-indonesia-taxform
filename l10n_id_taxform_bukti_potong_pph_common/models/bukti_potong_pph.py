@@ -616,7 +616,7 @@ class BuktiPotongPPhLine(models.Model):
                 "analytic_account_id": self.analytic_account_id and
                 self.analytic_account_id.id or False,
                 "tax_code_id": self.tax_id.base_code_id and
-                self.tax_id.base_code_id.id and False,
+                self.tax_id.base_code_id.id or False,
                 "tax_amount": self.tax_id.tax_sign * float(int(self.amount)),
             })
             data.append(res)

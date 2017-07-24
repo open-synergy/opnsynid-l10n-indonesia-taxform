@@ -625,22 +625,13 @@ class BuktiPotongPPhLine(models.Model):
     @api.multi
     def _select_tax_account(self):
         self.ensure_one()
-        bukpot = self.bukti_potong_id
         tax = self.tax_id
-        if bukpot.direction == "in":
-            if tax.account_paid_id:
-                return tax.account_paid_id
-            else:
-                raise UserWarning(
-                    _("Please configure refund tax account for %" %
-                        (tax.name)))
+        if tax.account_collected_id:
+            return tax.account_collected_id
         else:
-            if tax.account_collected_id:
-                return tax.account_collected_id
-            else:
-                raise UserWarning(
-                    _("Please configure invoice tax account for %" %
-                        (tax.name)))
+            raise UserWarning(
+                _("Please configure invoice tax account for %s" %
+                    (tax.name)))
 
     @api.onchange("tax_code_id")
     def onchange_tax_code(self):

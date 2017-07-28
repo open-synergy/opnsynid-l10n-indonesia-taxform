@@ -630,8 +630,8 @@ class BuktiPotongPPhLine(models.Model):
             return tax.account_collected_id
         else:
             raise UserWarning(
-                _("Please configure invoice tax account for %s" %
-                    (tax.name)))
+                _("Please configure invoice tax account for %s") %
+                (tax.name))
 
     @api.onchange("tax_code_id")
     def onchange_tax_code(self):

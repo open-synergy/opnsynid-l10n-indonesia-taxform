@@ -13,6 +13,7 @@
     "depends": [
         "mail",
         "l10n_id_taxform_period",
+        "base_amount_to_text"
     ],
     "data": [
         "security/ir.model.access.csv",

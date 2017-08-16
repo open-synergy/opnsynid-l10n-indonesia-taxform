@@ -14,7 +14,6 @@ class Parser(report_sxw.rml_parse):
         self.tarif = ""
         self.matrix = {}
         self.total_bruto = 0.00
-        self.total_pph = 0.00
         self.localcontext.update({
             'get_npwp_wajib_pajak': self._get_npwp_wajib_pajak,
             'get_npwp_pemotong_pajak': self._get_npwp_pemotong_pajak,
@@ -24,7 +23,6 @@ class Parser(report_sxw.rml_parse):
             'compute_matrix_line': self._compute_matrix_line,
             'get_matrix_line': self._get_matrix_line,
             'get_total_bruto': self._get_total_bruto,
-            'get_total_pph': self._get_total_pph,
             'get_terbilang': self._get_terbilang
         })
 
@@ -109,15 +107,12 @@ class Parser(report_sxw.rml_parse):
         if line_ids:
             for line in line_ids:
                 self.total_bruto += line.amount
-                self.total_pph += line.amount_tax
-                val_tarif_persen =\
-                    (line.amount_tax / line.amount) * 100
                 value = {
                     'bruto': line.amount,
                     'tarif': self.tarif,
                     'pph_dipotong': line.amount_tax,
                     'tax_code_name': line.tax_code_id.name,
-                    'tarif_persen': str(val_tarif_persen) + '%'
+                    'tarif_persen': line.tax_code_id.info,
                 }
                 self.matrix[line.sequence] = value
 
@@ -127,13 +122,6 @@ class Parser(report_sxw.rml_parse):
     def _get_total_bruto(self):
         if self.total_bruto > 0:
             result = self.total_bruto
-        else:
-            result = ""
-        return result
-
-    def _get_total_pph(self):
-        if self.total_pph > 0:
-            result = self.total_pph
         else:
             result = ""
         return result

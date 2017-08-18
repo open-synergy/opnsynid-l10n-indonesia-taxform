@@ -107,12 +107,14 @@ class Parser(report_sxw.rml_parse):
         if line_ids:
             for line in line_ids:
                 self.total_bruto += line.amount
+                val_tarif_persen =\
+                    (line.tax_id.amount * 100)
                 value = {
                     'bruto': line.amount,
                     'tarif': self.tarif,
                     'pph_dipotong': line.amount_tax,
                     'tax_code_name': line.tax_code_id.name,
-                    'tarif_persen': line.tax_code_id.info,
+                    'tarif_persen': str(val_tarif_persen) + "%",
                 }
                 self.matrix[line.sequence] = value
 

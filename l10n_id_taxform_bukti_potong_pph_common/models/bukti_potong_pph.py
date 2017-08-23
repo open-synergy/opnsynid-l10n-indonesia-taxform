@@ -542,6 +542,12 @@ class BuktiPotongPPhLine(models.Model):
                 tax = line.tax_id.compute_all(line.amount, 1.0)
                 line.amount_tax = tax["total_included"] - tax["total"]
 
+    name = fields.Char(
+        string="Description",
+        required=True,
+        default="/",
+    )
+
     bukti_potong_id = fields.Many2one(
         string="Bukti Potong",
         comodel_name="l10n_id.bukti_potong_pph",
@@ -585,6 +591,11 @@ class BuktiPotongPPhLine(models.Model):
         compute="_compute_amount",
         store=True,
     )
+
+    @api.onchange('tax_code_id')
+    def tax_code_id_onchange(self):
+        if self.tax_code_id:
+            self.name = self.tax_code_id.name
 
     @api.multi
     def _prepare_move_line_data(self, data):

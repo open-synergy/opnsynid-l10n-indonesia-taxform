@@ -113,7 +113,7 @@ class Parser(report_sxw.rml_parse):
                     'bruto': line.amount,
                     'tarif': self.tarif,
                     'pph_dipotong': line.amount_tax,
-                    'tax_code_name': line.tax_code_id.name,
+                    'tax_code_name': line.name,
                     'tarif_persen': str(val_tarif_persen) + "%",
                 }
                 self.matrix[line.sequence] = value

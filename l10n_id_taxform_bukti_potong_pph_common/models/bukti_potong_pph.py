@@ -96,7 +96,6 @@ class BuktiPotongPPh(models.Model):
     @api.multi
     @api.depends(
         "type_id",
-        "type_id.tax_code_ids",
     )
     def _compute_allowed_tax_code(self):
         obj_code = self.env["account.tax.code"]
@@ -106,6 +105,32 @@ class BuktiPotongPPh(models.Model):
             else:
                 criteria = []
                 bukpot.allowed_tax_code_ids = obj_code.search(criteria)
+
+    @api.multi
+    @api.depends(
+        "type_id",
+    )
+    def _compute_allowed_base_code(self):
+        obj_code = self.env["account.tax.code"]
+        for bukpot in self:
+            if bukpot.type_id.base_code_ids:
+                bukpot.allowed_base_code_ids = bukpot.type_id.base_code_ids
+            else:
+                criteria = []
+                bukpot.allowed_base_code_ids = obj_code.search(criteria)
+
+    @api.multi
+    @api.depends(
+        "type_id",
+    )
+    def _compute_allowed_tax(self):
+        obj_code = self.env["account.tax"]
+        for bukpot in self:
+            if bukpot.type_id.tax_ids:
+                bukpot.allowed_tax_ids = bukpot.type_id.tax_ids
+            else:
+                criteria = []
+                bukpot.allowed_tax_ids = obj_code.search(criteria)
 
     @api.multi
     @api.depends(
@@ -185,6 +210,18 @@ class BuktiPotongPPh(models.Model):
         string="Allowed Tax Code",
         comodel_name="account.tax.code",
         compute="_compute_allowed_tax_code",
+        store=False,
+    )
+    allowed_base_code_ids = fields.Many2many(
+        string="Allowed Base Code",
+        comodel_name="account.tax.code",
+        compute="_compute_allowed_base_code",
+        store=False,
+    )
+    allowed_tax_ids = fields.Many2many(
+        string="Allowed Tax",
+        comodel_name="account.tax",
+        compute="_compute_allowed_tax",
         store=False,
     )
     allowed_account_ids = fields.Many2many(
@@ -342,6 +379,12 @@ class BuktiPotongPPh(models.Model):
         readonly=True,
         copy=False,
     )
+    move_line_ids = fields.One2many(
+        string="Move Lines",
+        comodel_name="account.move.line",
+        related="move_id.line_id",
+        store=False,
+    )
     confirm_ok = fields.Boolean(
         string="Confirm Ok",
         compute="_compute_policy",
@@ -377,12 +420,15 @@ class BuktiPotongPPh(models.Model):
     def workflow_action_done(self):
         for bukpot in self:
             bukpot.write(self._prepare_done_data())
+            bukpot._create_aml()
 
     @api.multi
     def workflow_action_cancel(self):
         for bukpot in self:
-            if bukpot.move_id:
-                bukpot.move_id.unlink()
+            bukpot._unreconcile_aml()
+            if bukpot._check_move():
+                bukpot.move_id.button_cancel()
+            bukpot.move_id.unlink()
             bukpot.write(self._prepare_cancel_data())
 
     @api.multi
@@ -431,6 +477,14 @@ class BuktiPotongPPh(models.Model):
             "state": "draft",
         }
         return data
+
+    @api.multi
+    def _check_move(self):
+        self.ensure_one()
+        result = False
+        if self.move_id.state == "posted":
+            result = True
+        return result
 
     @api.model
     def _get_button_policy(self, bukpot_type, button_type):
@@ -484,6 +538,17 @@ class BuktiPotongPPh(models.Model):
         return move
 
     @api.multi
+    def _create_aml(self):
+        self.ensure_one()
+        pairs = []
+        for line in self.line_ids:
+            result = line._create_aml()
+            if result:
+                pairs.append(result)
+        for pair in pairs:
+            pair.reconcile_partial()
+
+    @api.multi
     def _prepare_accounting_entry_data(self):
         self.ensure_one()
         data = {
@@ -491,17 +556,23 @@ class BuktiPotongPPh(models.Model):
             "date": self.date,
             "journal_id": self.journal_id.id,
             "period_id": self.period_id.id,
-            "line_id": self._prepare_move_line_data(),
         }
         return data
 
     @api.multi
-    def _prepare_move_line_data(self):
+    def _unreconcile_aml(self):
         self.ensure_one()
-        data = []
-        for line in self.line_ids:
-            data = line._prepare_move_line_data(data)
-        return data
+        for aml in self.move_line_ids:
+            aml.refresh()
+            reconcile = aml.reconcile_id or aml.reconcile_partial_id or \
+                False
+            if reconcile:
+                move_lines = reconcile.line_id
+                move_lines -= aml
+                reconcile.unlink()
+
+                if len(move_lines) > 2:
+                    move_lines.reconcile_partial()
 
     @api.onchange("date")
     def onchange_period_id(self):
@@ -512,138 +583,3 @@ class BuktiPotongPPh(models.Model):
     @api.onchange("pemotong_pajak_id")
     def onchange_pemotong_pajak_id(self):
         self.ttd_id = False
-
-
-class BuktiPotongPPhLine(models.Model):
-    _name = "l10n_id.bukti_potong_pph_line"
-    _description = "Bukti Potong PPh Line"
-    _order = "sequence, id"
-    _sql_constraints = [
-        ("tax_code_unique", "unique(tax_code_id, bukti_potong_id)",
-         "Tax code must be unique"),
-    ]
-
-    @api.multi
-    @api.depends(
-        "income_move_line_ids",
-        "income_move_line_ids.debit",
-        "income_move_line_ids.credit",
-        "bukti_potong_id.direction",
-    )
-    def _compute_amount(self):
-        for line in self:
-            line.amount = 0.0
-            for move_line in line.income_move_line_ids:
-                if line.bukti_potong_id.direction == "in":
-                    line.amount += move_line.credit
-                else:
-                    line.amount += move_line.debit
-            if line.amount != 0.0:
-                tax = line.tax_id.compute_all(line.amount, 1.0)
-                line.amount_tax = tax["total_included"] - tax["total"]
-
-    name = fields.Char(
-        string="Description",
-        required=True,
-        default="/",
-    )
-
-    bukti_potong_id = fields.Many2one(
-        string="Bukti Potong",
-        comodel_name="l10n_id.bukti_potong_pph",
-        ondelete="cascade",
-    )
-    sequence = fields.Integer(
-        string="Sequence",
-        required=True,
-        default=5,
-    )
-    tax_code_id = fields.Many2one(
-        string="Tax Code",
-        comodel_name="account.tax.code",
-        required=True,
-        ondelete="restrict",
-    )
-    tax_id = fields.Many2one(
-        string="Tax",
-        comodel_name="account.tax",
-        required=True,
-        ondelete="restrict",
-    )
-    analytic_account_id = fields.Many2one(
-        string="Analytic Account",
-        comodel_name="account.analytic.account",
-    )
-    income_move_line_ids = fields.Many2many(
-        string="Income Move Lines",
-        comodel_name="account.move.line",
-        relation="rel_bukpot_line_2_income_move",
-        column1="bukpot_line_id",
-        column2="account_move_id",
-    )
-    amount = fields.Float(
-        string="Amount",
-        compute="_compute_amount",
-        store=True,
-    )
-    amount_tax = fields.Float(
-        string="Tax",
-        compute="_compute_amount",
-        store=True,
-    )
-
-    @api.onchange('tax_code_id')
-    def tax_code_id_onchange(self):
-        if self.tax_code_id:
-            self.name = self.tax_code_id.name
-
-    @api.multi
-    def _prepare_move_line_data(self, data):
-        self.ensure_one()
-        bukpot = self.bukti_potong_id
-        if self.amount_tax != 0.0:
-            res = (0, 0, {
-                "name": self.tax_code_id.name,
-                "account_id": self._select_tax_account().id,
-                "debit": bukpot.direction == "in" and self.amount_tax or 0.0,
-                "credit": bukpot.direction == "out" and self.amount_tax or 0.0,
-                "partner_id": bukpot.kpp_id.commercial_partner_id.id,
-                "tax_code_id": self.tax_code_id.id,
-                "tax_amount": self.tax_id.tax_sign * self.amount_tax,
-                "analytic_account_id": self.analytic_account_id and
-                self.analytic_account_id.id or False,
-            })
-            data.append(res)
-            if bukpot.direction == "in":
-                partner = bukpot.pemotong_pajak_id
-            else:
-                partner = bukpot.wajib_pajak_id
-            res = (0, 0, {
-                "name": self.tax_code_id.name,
-                "account_id": bukpot.account_id.id,
-                "debit": bukpot.direction == "out" and self.amount_tax or 0.0,
-                "credit": bukpot.direction == "in" and self.amount_tax or 0.0,
-                "partner_id": partner.id,
-                "analytic_account_id": self.analytic_account_id and
-                self.analytic_account_id.id or False,
-                "tax_code_id": self.tax_id.base_code_id and
-                self.tax_id.base_code_id.id or False,
-                "tax_amount": self.tax_id.tax_sign * float(int(self.amount)),
-            })
-            data.append(res)
-        return data
-
-    @api.multi
-    def _select_tax_account(self):
-        self.ensure_one()
-        tax = self.tax_id
-        if tax.account_collected_id:
-            return tax.account_collected_id
-        else:
-            raise UserWarning(
-                _("Please configure invoice tax account for %s") %
-                (tax.name))
-
-    @api.onchange("tax_code_id")
-    def onchange_tax_code(self):
-        self.tax_id = False

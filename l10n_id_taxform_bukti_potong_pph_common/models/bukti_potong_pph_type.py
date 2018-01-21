@@ -76,6 +76,20 @@ class BuktiPotongPPhType(models.Model):
         column1="type_id",
         column2="tax_code_id",
     )
+    base_code_ids = fields.Many2many(
+        string="Allowed Base Codes",
+        comodel_name="account.tax.code",
+        relation="rel_bukpot_type_2_base_code",
+        column1="type_id",
+        column2="tax_code_id",
+    )
+    tax_ids = fields.Many2many(
+        string="Allowed Taxes",
+        comodel_name="account.tax",
+        relation="rel_bukpot_type_2_tax",
+        column1="type_id",
+        column2="tax_id",
+    )
     account_ids = fields.Many2many(
         string="Allowed Accounts",
         comodel_name="account.account",

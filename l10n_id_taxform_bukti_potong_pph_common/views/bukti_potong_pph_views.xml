@@ -92,6 +92,8 @@
                         <field name="type_id" invisible="1"/>
                         <field name="allowed_journal_ids" widget="many2many_tags" invisible="1"/>
                         <field name="allowed_tax_code_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="allowed_base_code_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="allowed_tax_ids" widget="many2many_tags" invisible="1"/>
                         <field name="allowed_account_ids" widget="many2many_tags" invisible="1"/>
                     </group>
                     <group name="group_1_2" colspan="1" col="2">
@@ -103,27 +105,40 @@
                 </group>
                 <notebook>
                     <page name="page_line" string="Details">
-                        <field name="line_ids" nolabel="1" colspan="4">
+                        <field name="line_ids" nolabel="1" colspan="4" context="{'default_direction':direction,'wajib_pajak_id':wajib_pajak_id,'pemotong_pajak_id':pemotong_pajak_id}">
                             <tree>
                                 <field name="sequence"/>
                                 <field name="name"/>
-                                <field name="tax_code_id"/>
                                 <field name="tax_id"/>
+                                <field name="tax_code_id"/>
+                                <field name="base_code_id"/>
                                 <field name="amount"/>
                                 <field name="amount_tax"/>
                             </tree>
                             <form>
                                 <group name="grp_main" colspan="4" col="2">
-                                    <field name="sequence"/>
-                                    <field name="name"/>
-                                    <field name="tax_code_id" domain="[('id','in',parent.allowed_tax_code_ids[0][2])]"/>
-                                    <field name="tax_id" domain="[('tax_code_id','=',tax_code_id)]"/>
-                                    <field name="analytic_account_id" domain="[('type','!=','view')]"/>
-                                    <label for="income_move_line_ids" colspan="2"/>
-                                    <field name="income_move_line_ids" colspan="4" nolabel="1"/>
-                                    <field name="amount"/>
-                                    <field name="amount_tax"/>
+                                    <group name="grp_main_1" colspan="1" col="2">
+                                        <field name="sequence"/>
+                                        <field name="direction" invisible="1"/>
+                                        <field name="partner_id" invisible="1"/>
+                                        <field name="move_line_id"/>
+                                        <field name="tax_id" domain="[('id','in',parent.allowed_tax_ids[0][2])]"/>
+                                        <field name="base_code_id" domain="[('id','in',parent.allowed_base_code_ids[0][2])]"/>
+                                        <field name="tax_code_id" domain="[('id','in',parent.allowed_tax_code_ids[0][2])]"/>
+                                        <field name="analytic_account_id" domain="[('type','!=','view')]"/>
+                                    </group>
+                                    <group name="grp_main_2" colspan="1" col="2">
+                                        <field name="amount"/>
+                                        <field name="amount_tax"/>
+                                    </group>
+                                    <label for="name" colspan="2"/>
+                                    <field name="name" nolabel="1" colspan="2"/>
                                 </group>
+                                <notebook>
+                                    <page name="page_income" string="Income Move Lines">
+                                        <field name="income_move_line_ids" nolabel="1"/>
+                                    </page>
+                                </notebook>
                             </form>
                         </field>
                         <group name="group_total" colspan="4" col="2">

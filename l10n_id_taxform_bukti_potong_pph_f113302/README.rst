@@ -3,11 +3,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==================================================
+===================================================
 Indonesia - Bukti Potong PPh 21 Final (f.1.1.33.02)
-==================================================
+===================================================
 
-This module add feature to manage bukti potong PPh 21 Final (f.1.33.02)
+This module add feature to manage bukti potong PPh 21 Final (f.1.1.33.02)
 
 
 Installation

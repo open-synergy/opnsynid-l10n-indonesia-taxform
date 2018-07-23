@@ -20,7 +20,7 @@
             <field name="wajib_pajak_id"/>
             <field name="pemotong_pajak_id"/>
             <field name="ttd_id"/>
-            <field name="total_tax"/>
+            <field name="total_tax" sum="Total Tax"/>
             <field name="state"/>
         </tree>
     </field>

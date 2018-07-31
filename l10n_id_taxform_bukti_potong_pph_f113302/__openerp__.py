@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Indonesia - Bukti Potong PPh 21  Final (F.1.1.33.02)",
-    "version": "8.0.1.0.0",
+    "version": "8.0.1.1.0",
     "category": "localization",
     "website": "https://opensynergy-indonesia.com/",
     "author": "OpenSynergy Indonesia",

@@ -583,3 +583,13 @@ class BuktiPotongPPh(models.Model):
     @api.onchange("pemotong_pajak_id")
     def onchange_pemotong_pajak_id(self):
         self.ttd_id = False
+
+    @api.multi
+    def unlink(self):
+        strWarning = _("You can only delete data on draft state")
+        for bukti_potong in self:
+            if bukti_potong.state != "draft":
+                if not self.env.context.get("force_unlink", False):
+                    raise UserError(strWarning)
+        _super = super(BuktiPotongPPh, self)
+        _super.unlink()

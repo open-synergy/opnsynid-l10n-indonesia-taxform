@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 OpenSynergy Indonesia
+     Copyright 2021 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<openerp>
+<data>
+
+<record id="res_company_view_form" model="ir.ui.view">
+    <field name="name">res.company form</field>
+    <field name="model">res.company</field>
+    <field name="inherit_id" ref="base.view_company_form" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//notebook" position="inside">
+                <page name="1721A1_configuration" string="1721-A1 Configuration">
+                    <group name="1721_01" string="Phyton Code" colspan="2" col="1">
+                        <field name="python_code_1721a1_penghasilan_01" />
+                        <field name="python_code_1721a1_penghasilan_02" />
+                        <field name="python_code_1721a1_penghasilan_03" />
+                        <field name="python_code_1721a1_penghasilan_04" />
+                        <field name="python_code_1721a1_penghasilan_05" />
+                        <field name="python_code_1721a1_penghasilan_06" />
+                        <field name="python_code_1721a1_penghasilan_07" />
+                        <field name="python_code_1721a1_pengurang_10" />
+                        <field name="python_code_1721a1_perhitungan_13" />
+                        <field name="python_code_1721a1_perhitungan_18" />
+                        <field name="python_code_1721a1_perhitungan_20" />
+                    </group>
+                    <group
+                                name="workflow"
+                                string="Workflow 1721 A1"
+                                colspan="4"
+                                col="2"
+                            >
+                        <field
+                                    name="taxform_1721a1_confirm_grp_ids"
+                                    widget="many2many_tags"
+                                />
+                        <field
+                                    name="taxform_1721a1_restart_approval_grp_ids"
+                                    widget="many2many_tags"
+                                />
+                        <field
+                                    name="taxform_1721a1_cancel_grp_ids"
+                                    widget="many2many_tags"
+                                />
+                        <field
+                                    name="taxform_1721a1_restart_grp_ids"
+                                    widget="many2many_tags"
+                                />
+                    </group>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+</data>
+</openerp>

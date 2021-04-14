@@ -5,7 +5,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia - Form Bukti Potong 1721 A1",
-    "version": "8.0.1.0.0",
+    "version": "8.0.1.1.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
@@ -36,5 +36,6 @@
         "data/base_sequence_configurator_data.xml",
         "views/bukti_potong_1721_a1_views.xml",
         "views/res_company_views.xml",
+        "views/taxform_1721a1_config_setting_views.xml",
     ],
 }

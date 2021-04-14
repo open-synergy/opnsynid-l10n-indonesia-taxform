@@ -6,5 +6,6 @@
 from . import (
     bukti_potong_taxform_1721a1,
     res_company,
+    res_config,
     tier_definition,
 )

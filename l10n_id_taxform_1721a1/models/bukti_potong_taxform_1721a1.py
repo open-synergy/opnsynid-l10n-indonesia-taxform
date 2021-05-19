@@ -540,6 +540,14 @@ class BuktiPotongTaxform1721A1(models.Model):
             ],
         },
     )
+    company_partner_id = fields.Many2one(
+        string="Company Partner",
+        comodel_name="res.partner",
+        store=True,
+        readonly=True,
+        related="company_id.partner_id",
+    )
+
     ttd_id = fields.Many2one(
         string="TTD",
         comodel_name="res.partner",
@@ -964,3 +972,8 @@ class BuktiPotongTaxform1721A1(models.Model):
             except Exception:
                 result = 0.0
             self.perhitungan_20 = result
+
+    @api.onchange("tax_year_id")
+    def onchange_tax_year_id(self):
+        self.start_tax_period_id = False
+        self.end_tax_period_id = False

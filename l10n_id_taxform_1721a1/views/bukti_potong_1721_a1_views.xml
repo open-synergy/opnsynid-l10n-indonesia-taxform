@@ -89,6 +89,7 @@
             <field name="end_tax_period_id" />
             <field name="pemotong_pajak_id" />
             <field name="wajib_pajak_id" />
+            <field name="company_partner_id" invisible="1" />
             <field name="ttd_id" />
             <field name="date" />
             <field name="company_id" groups="base.group_multi_company" />
@@ -207,7 +208,7 @@
                         <field name="company_id" attrs="{'invisible': 1}" />
                         <field
                                     name="wajib_pajak_id"
-                                    domain="[('is_company','=',False)]"
+                                    domain="[('is_company','=',False),('parent_id','=',False)]"
                                     attrs="{'readonly': ['|',('state','!=','draft')]}"
                                 />
                         <field name="wajib_pajak_npwp" />
@@ -248,9 +249,10 @@
                                     domain="[('year_id','=',tax_year_id)]"
                                     attrs="{'readonly': ['|',('state','!=','draft')]}"
                                 />
+                        <field name="company_partner_id" invisible="1" />
                         <field
                                     name="ttd_id"
-                                    domain="[('is_company','=',False)]"
+                                    domain="[('is_company','=',False),('parent_id','=',company_partner_id)]"
                                     attrs="{'readonly': ['|',('state','!=','draft')]}"
                                 />
                     </group>

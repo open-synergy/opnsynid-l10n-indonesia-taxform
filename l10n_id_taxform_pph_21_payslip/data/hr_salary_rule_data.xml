@@ -122,5 +122,44 @@ else:
     result = -1.0 * perhitungan_pph['pph']]]></field>
 </record>
 
+<record id="salary_rule_tunjangan_pph" model="hr.salary.rule">
+    <field name="name">Tunjangan PPh</field>
+    <field name="code">TUNJPPh</field>
+    <field name="sequence" eval="100" />
+    <field name="category_id" ref="rule_categ_tunjangan_pph" />
+    <field name="condition_select">none</field>
+    <field name="amount_select">code</field>
+    <field
+                name="amount_python_compute"
+            ><![CDATA[
+if not employee.address_home_id:
+    result = 0.0
+else:
+    perhitungan_pph = 0.0
+    save_counter = 0
+    perhitungan_pph_awal = employee.address_home_id.compute_pph_21_2110001(
+        payslip.joining_tax_month,
+        payslip.date_to,
+        categories.GAPOK,
+        0.0,
+        categories.TL+categories.PEN,
+        categories.PNR,
+        categories.PEN)
+    while True:
+        perhitungan_pph = employee.address_home_id.compute_pph_21_2110001(
+            payslip.joining_tax_month,
+            payslip.date_to,
+            categories.GAPOK,
+            perhitungan_pph_awal,
+            categories.TL + categories.PEN,
+            categories.PNR,
+            categories.PEN)
+        save_counter = save_counter + 1
+        if (save_counter >= 20) or (perhitungan_pph_awal == perhitungan_pph):
+            break
+        perhitungan_pph_awal = perhitungan_pph
+    result = float(int(1.0 * perhitungan_pph['pph']))]]></field>
+</record>
+
 </data>
 </openerp>

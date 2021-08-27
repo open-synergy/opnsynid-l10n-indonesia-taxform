@@ -71,14 +71,54 @@
     <field name="arch" type="xml">
         <form>
             <header>
+                <button name="request_validation"
+                    string="Request Validation"
+                    attrs="{'invisible': ['|','|',('need_validation', '!=', True),('rejected','=',True),('state','not in',['confirm'])]}"
+                    type="object"/>
+                <button name="restart_validation"
+                    string="Restart Validation"
+                    attrs="{'invisible': ['|','|','|',('review_ids', '=', []),('rejected','=',False),('state','not in',['confirm']),('restart_validation_ok','=',False)]}"
+                    type="object"/>
                 <button name="workflow_action_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','draft'),('confirm_ok','=',False)]}" confirm="Confirm bukti potong?"/>
-                <button name="workflow_action_done" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','confirm'),('approve_ok','=',False)]}" confirm="Approve bukti potong?"/>
-                <button name="workflow_action_cancel" string="Cancel" type="object" attrs="{'invisible':['|',('state','not in', ['draft', 'confirm', 'done']),('cancel_ok','=',False)]}" confirm="Cancel bukti potong?"/>
                 <button name="workflow_action_reset" string="Set to Draft" type="object" attrs="{'invisible':['|',('state','!=','cancel'),('reset_ok','=',False)]}" confirm="Reset bukti potong?"/>
+                <button name="%(base_cancel_reason.base_cancel_reason_wizard_action)d" type="action" string="Cancel" attrs="{'invisible':['|',('state','=','cancel'),('cancel_ok','=',False)]}" confirm="Cancel Bukti Potong. Are you sure?"/>
                 <field name="state" widget="statusbar"/>
             </header>
+            <field name="need_validation" invisible="1" />
+            <field name="validated" invisible="1" />
+            <field name="rejected" invisible="1" />
+            <div
+                        class="alert alert-warning"
+                        attrs="{'invisible': ['|', '|', '|',
+                 ('validated', '=', True), ('state', 'not in', ['confirm']),
+                 ('rejected', '=', True), ('review_ids', '=', [])]}"
+                        style="margin-bottom:0px;"
+                    >
+                <p><i class="fa fa-info-circle" />This appointment needs to be
+                    validated.
+                    <button
+                                name="validate_tier"
+                                string="Validate"
+                                attrs="{'invisible': [('review_ids', '=', [])]}"
+                                type="object"
+                                class="oe_inline oe_button btn-success"
+                                icon="terp-check"
+                            />
+                    <button
+                                name="reject_tier"
+                                string="Reject"
+                                type="object"
+                                class="btn-icon btn-danger"
+                                icon="terp-gtk-stop"
+                            />
+                </p>
+            </div>
             <sheet>
                 <h1 name="form_name"/>
+                <h2 attrs="{'invisible': [('state', '!=', 'cancel')]}">
+                    <label for="cancel_reason_id" string="Cancellation reason:"/>
+                    <field name="cancel_reason_id" class="oe_inline"/>
+                </h2>
                 <group name="group_1" colspan="4" col="2">
                     <group name="group_1_1" colspan="1" col="2">
                         <field name="name"/>
@@ -150,12 +190,31 @@
                             <field name="move_id"/>
                         </group>
                     </page>
+                    <page string="Reviews" name="tier_validation">
+                        <group>
+                            <field name="definition_id"/>
+                            <field name="reviewer_partner_ids" widget="many2many_tags"/>
+                            <field name="review_ids" readonly="1"/>
+                        </group>
+                    </page>
                     <page name="page_policy" string="Policy" groups="base.group_system">
                         <group name="group_policy" colspan="4" col="2">
                             <field name="confirm_ok"/>
-                            <field name="approve_ok"/>
+                            <field name="restart_validation_ok"/>
                             <field name="cancel_ok"/>
                             <field name="reset_ok"/>
+                        </group>
+                    </page>
+                    <page name="page_log" string="Log" groups="base.group_system">
+                        <group name="group_log_1" colspan="4" col="3">
+                            <!-- <field name="create_date"/> -->
+                            <!-- <field name="create_uid" nolabel="1"/> -->
+                            <field name="confirm_date" string="Confirmation"/>
+                            <field name="confirm_user_id" nolabel="1"/>
+                            <field name="done_date" string="Done"/>
+                            <field name="done_user_id" nolabel="1"/>
+                            <field name="cancel_date" string="Cancellation"/>
+                            <field name="cancel_user_id" nolabel="1"/>
                         </group>
                     </page>
                 </notebook>

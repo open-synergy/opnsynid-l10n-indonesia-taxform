@@ -10,8 +10,16 @@ from openerp.tools.translate import _
 
 class BuktiPotongPPh(models.Model):
     _name = "l10n_id.bukti_potong_pph"
-    _inherit = ["mail.thread"]
+    _inherit = [
+        "mail.thread",
+        "base.sequence_document",
+        "base.workflow_policy_object",
+        "base.cancel.reason_common",
+        "tier.validation",
+    ]
     _description = "Bukti Potong PPh"
+    _state_from = ["draft", "confirm"]
+    _state_to = ["done"]
 
     @api.model
     def _default_company_id(self):
@@ -131,32 +139,6 @@ class BuktiPotongPPh(models.Model):
             else:
                 criteria = []
                 bukpot.allowed_tax_ids = obj_code.search(criteria)
-
-    @api.multi
-    @api.depends(
-        "state",
-        "type_id.allow_confirm_group_ids",
-        "type_id.allow_approve_group_ids",
-        "type_id.allow_cancel_group_ids",
-        "type_id.allow_reset_group_ids",
-    )
-    def _compute_policy(self):
-        for bukpot in self:
-            if self.env.user.id == SUPERUSER_ID:
-                bukpot.confirm_ok = bukpot.approve_ok = bukpot.cancel_ok = \
-                    bukpot.reset_ok = True
-                continue
-
-            bukpot_type = bukpot.type_id
-
-            bukpot.confirm_ok = self._get_button_policy(
-                bukpot_type, "confirm")
-            bukpot.approve_ok = self._get_button_policy(
-                bukpot_type, "approve")
-            bukpot.cancel_ok = self._get_button_policy(
-                bukpot_type, "cancel")
-            bukpot.reset_ok = self._get_button_policy(
-                bukpot_type, "reset")
 
     name = fields.Char(
         string="# Bukti Potong",
@@ -385,25 +367,58 @@ class BuktiPotongPPh(models.Model):
         related="move_id.line_id",
         store=False,
     )
-    confirm_ok = fields.Boolean(
-        string="Confirm Ok",
-        compute="_compute_policy",
+    confirm_date = fields.Datetime(
+        string="Confirm Date",
         readonly=True,
+        copy=False,
     )
-    approve_ok = fields.Boolean(
-        string="Approve Ok",
-        compute="_compute_policy",
+    confirm_user_id = fields.Many2one(
+        string="Confirmed By",
+        comodel_name="res.users",
         readonly=True,
+        copy=False,
+    )
+    done_date = fields.Datetime(
+        string="Finish Date",
+        readonly=True,
+        copy=False,
+    )
+    done_user_id = fields.Many2one(
+        string="Finished By",
+        comodel_name="res.users",
+        readonly=True,
+        copy=False,
+    )
+    cancel_date = fields.Datetime(
+        string="Cancel Date",
+        readonly=True,
+        copy=False,
+    )
+    cancel_user_id = fields.Many2one(
+        string="Cancelled By",
+        comodel_name="res.users",
+        readonly=True,
+        copy=False,
+    )
+    confirm_ok = fields.Boolean(
+        string="Can Confirm",
+        compute="_compute_policy",
+        store=False,
+    )
+    restart_validation_ok = fields.Boolean(
+        string="Can Restart Validation",
+        compute="_compute_policy",
+        store=False,
     )
     cancel_ok = fields.Boolean(
-        string="Cancel Ok",
+        string="Can Cancel",
         compute="_compute_policy",
-        readonly=True,
+        store=False,
     )
     reset_ok = fields.Boolean(
-        string="Confirm Ok",
+        string="Can Restart",
         compute="_compute_policy",
-        readonly=True,
+        store=False,
     )
 
     @api.multi
@@ -415,6 +430,7 @@ class BuktiPotongPPh(models.Model):
     def workflow_action_confirm(self):
         for bukpot in self:
             bukpot.write(self._prepare_confirm_data())
+            bukpot.request_validation()
 
     @api.multi
     def workflow_action_done(self):
@@ -449,15 +465,27 @@ class BuktiPotongPPh(models.Model):
         self.ensure_one()
         data = {
             "state": "confirm",
+            "confirm_date": fields.Datetime.now(),
+            "confirm_user_id": self.env.user.id,
         }
         return data
 
     @api.multi
     def _prepare_done_data(self):
         self.ensure_one()
+        ctx = self.env.context.copy()
+        ctx.update(
+            {
+                "ir_sequence_date": self.date,
+            }
+        )
+        sequence = self.with_context(ctx)._create_sequence()
         move = self._create_accounting_entry()
         data = {
+            "name": sequence,
             "state": "done",
+            "done_date": fields.Datetime.now(),
+            "done_user_id": self.env.user.id,
             "move_id": move.id,
         }
         return data
@@ -467,6 +495,8 @@ class BuktiPotongPPh(models.Model):
         self.ensure_one()
         data = {
             "state": "cancel",
+            "cancel_date": fields.Datetime.now(),
+            "cancel_user_id": self.env.user.id,
         }
         return data
 
@@ -475,6 +505,12 @@ class BuktiPotongPPh(models.Model):
         self.ensure_one()
         data = {
             "state": "draft",
+            "confirm_date": False,
+            "confirm_user_id": False,
+            "done_date": False,
+            "done_user_id": False,
+            "cancel_date": False,
+            "cancel_user_id": False,
         }
         return data
 
@@ -485,47 +521,6 @@ class BuktiPotongPPh(models.Model):
         if self.move_id.state == "posted":
             result = True
         return result
-
-    @api.model
-    def _get_button_policy(self, bukpot_type, button_type):
-        result = False
-        user = self.env.user
-        group_ids = user.groups_id.ids
-
-        if button_type == "confirm":
-            button_group_ids = bukpot_type.allow_confirm_group_ids.ids
-        elif button_type == "approve":
-            button_group_ids = bukpot_type.allow_approve_group_ids.ids
-        elif button_type == "cancel":
-            button_group_ids = bukpot_type.allow_cancel_group_ids.ids
-        elif button_type == "reset":
-            button_group_ids = bukpot_type.allow_reset_group_ids.ids
-
-        if not button_group_ids:
-            result = True
-        else:
-            if (set(button_group_ids) & set(group_ids)):
-                result = True
-        return result
-
-    @api.multi
-    def _create_sequence(self, journal_id):
-        journal = self.env["account.journal"].browse(journal_id)
-        name = self.env["ir.sequence"].\
-            next_by_id(journal.sequence_id.id) or "/"
-        return name
-
-    @api.model
-    def create(self, values):
-        new_values = self._prepare_create_data(values)
-        return super(BuktiPotongPPh, self).create(new_values)
-
-    @api.model
-    def _prepare_create_data(self, values):
-        name = values.get("name", False)
-        if not name or name == "/":
-            values["name"] = self._create_sequence(values["journal_id"])
-        return values
 
     @api.multi
     def _create_accounting_entry(self):
@@ -593,3 +588,18 @@ class BuktiPotongPPh(models.Model):
                     raise UserError(strWarning)
         _super = super(BuktiPotongPPh, self)
         _super.unlink()
+
+    @api.multi
+    def validate_tier(self):
+        _super = super(BuktiPotongPPh, self)
+        _super.validate_tier()
+        for bukti_potong in self:
+            if bukti_potong.validated:
+                bukti_potong.workflow_action_done()
+
+    @api.multi
+    def restart_validation(self):
+        _super = super(BuktiPotongPPh, self)
+        _super.restart_validation()
+        for bukti_potong in self:
+            bukti_potong.request_validation()

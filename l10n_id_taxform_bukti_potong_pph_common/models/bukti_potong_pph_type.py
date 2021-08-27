@@ -41,10 +41,10 @@ class BuktiPotongPPhType(models.Model):
         column1="type_id",
         column2="group_id",
     )
-    allow_approve_group_ids = fields.Many2many(
-        string="Allow to Approve",
+    allow_restart_validation_group_ids = fields.Many2many(
+        string="Allow to Restart Validation",
         comodel_name="res.groups",
-        relation="rel_bukpot_pph_type_approve_group",
+        relation="rel_bukpot_pph_type_restart_validation_group",
         column1="type_id",
         column2="group_id",
     )

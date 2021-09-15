@@ -6,7 +6,11 @@
     "version": "8.0.1.5.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
+<<<<<<< HEAD
     "author": "PT. Simetri Sinergi Indonesia,OpenSynergy Indonesia",
+=======
+    "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
+>>>>>>> pre-commit
     "license": "AGPL-3",
     "application": False,
     "installable": True,

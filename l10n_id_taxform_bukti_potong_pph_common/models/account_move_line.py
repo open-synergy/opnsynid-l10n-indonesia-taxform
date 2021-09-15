@@ -28,6 +28,13 @@ class AccountMoveLine(models.Model):
         for move_line in self:
             taxform = move_line._check_taxform()
             if taxform:
+<<<<<<< HEAD
                 strWarning = _("You cannot delete journal item linked to taxform!")
                 raise UserError(strWarning)
+=======
+                raise UserError(
+                    _("Warning!"),
+                    _("You cannot delete journal item linked to taxform!"),
+                )
+>>>>>>> pre-commit
         return super(AccountMoveLine, self).unlink()

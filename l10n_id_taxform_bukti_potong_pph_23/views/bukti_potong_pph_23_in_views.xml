@@ -1,16 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2017 OpenSynergy Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-
 <openerp>
 <data>
 <record id="bukti_potong_pph_23_in_view_tree" model="ir.ui.view">
     <field name="name">Bukti Potong PPh 23 In Tree</field>
     <field name="model">l10n_id.bukti_potong_pph_23_in</field>
     <field name="mode">primary</field>
-    <field name="inherit_id" ref="l10n_id_taxform_bukti_potong_pph_common.bukti_potong_pph_view_tree"/>
+    <field
+                name="inherit_id"
+                ref="l10n_id_taxform_bukti_potong_pph_common.bukti_potong_pph_view_tree"
+            />
     <field name="arch" type="xml">
-        <data/>
+        <data />
     </field>
 </record>
 
@@ -18,11 +20,14 @@
     <field name="name">Bukti Potong PPh 23 In Form</field>
     <field name="model">l10n_id.bukti_potong_pph_23_in</field>
     <field name="mode">primary</field>
-    <field name="inherit_id" ref="l10n_id_taxform_bukti_potong_pph_common.bukti_potong_pph_view_form"/>
+    <field
+                name="inherit_id"
+                ref="l10n_id_taxform_bukti_potong_pph_common.bukti_potong_pph_view_form"
+            />
     <field name="arch" type="xml">
         <data>
             <xpath expr="//h1[@name='form_name']" attributes="inside">
-                <label string="Bukti Potong PPh 23 - In"/>
+                <label string="Bukti Potong PPh 23 - In" />
             </xpath>
         </data>
     </field>
@@ -32,9 +37,12 @@
     <field name="name">Bukti Potong PPh 23 In Search</field>
     <field name="model">l10n_id.bukti_potong_pph_23_in</field>
     <field name="mode">primary</field>
-    <field name="inherit_id" ref="l10n_id_taxform_bukti_potong_pph_common.bukti_potong_pph_view_search"/>
+    <field
+                name="inherit_id"
+                ref="l10n_id_taxform_bukti_potong_pph_common.bukti_potong_pph_view_search"
+            />
     <field name="arch" type="xml">
-        <data/>
+        <data />
     </field>
 </record>
 
@@ -44,18 +52,18 @@
     <field name="res_model">l10n_id.bukti_potong_pph_23_in</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
-    <field name="search_view_id" ref="bukti_potong_pph_23_in_view_search"/>
+    <field name="search_view_id" ref="bukti_potong_pph_23_in_view_search" />
     <field name="context">{'default_filter_draft':1, 'default_filter_confirm':1}</field>
 </record>
 
 <menuitem
-    id="bukti_potong_pph_23_in_menu"
-    name="PPh 23 (f.1.33.06) In"
-    parent="l10n_id_taxform.taxform_bukti_potong_menu"
-    groups="l10n_id_taxform.user_group_taxform"
-    action="bukti_potong_pph_23_in_action"
-    sequence="23"
-    />
+            id="bukti_potong_pph_23_in_menu"
+            name="PPh 23 (f.1.33.06) In"
+            parent="l10n_id_taxform.taxform_bukti_potong_menu"
+            groups="l10n_id_taxform.user_group_taxform"
+            action="bukti_potong_pph_23_in_action"
+            sequence="23"
+        />
 
 </data>
 </openerp>

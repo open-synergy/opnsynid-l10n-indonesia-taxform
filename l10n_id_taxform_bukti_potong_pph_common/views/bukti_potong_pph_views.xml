@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2017 OpenSynergy Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-
 <openerp>
 <data>
 <record id="bukti_potong_pph_view_tree" model="ir.ui.view">
@@ -9,19 +8,19 @@
     <field name="model">l10n_id.bukti_potong_pph</field>
     <field name="arch" type="xml">
         <tree>
-            <field name="name"/>
-            <field name="date"/>
-            <field name="type_id" invisible="1"/>
-            <field name="direction" invisible="1"/>
-            <field name="company_id"/>
-            <field name="journal_id"/>
-            <field name="period_id"/>
-            <field name="tax_period_id"/>
-            <field name="wajib_pajak_id"/>
-            <field name="pemotong_pajak_id"/>
-            <field name="ttd_id"/>
-            <field name="total_tax" sum="Total Tax"/>
-            <field name="state"/>
+            <field name="name" />
+            <field name="date" />
+            <field name="type_id" invisible="1" />
+            <field name="direction" invisible="1" />
+            <field name="company_id" />
+            <field name="journal_id" />
+            <field name="period_id" />
+            <field name="tax_period_id" />
+            <field name="wajib_pajak_id" />
+            <field name="pemotong_pajak_id" />
+            <field name="ttd_id" />
+            <field name="total_tax" sum="Total Tax" />
+            <field name="state" />
         </tree>
     </field>
 </record>
@@ -31,35 +30,95 @@
     <field name="model">l10n_id.bukti_potong_pph</field>
     <field name="arch" type="xml">
         <search>
-            <field name="name"/>
-            <field name="date"/>
-            <field name="company_id"/>
-            <field name="journal_id"/>
-            <field name="period_id"/>
-            <field name="tax_period_id"/>
-            <field name="wajib_pajak_id"/>
-            <field name="pemotong_pajak_id"/>
-            <field name="ttd_id"/>
-            <field name="state"/>
+            <field name="name" />
+            <field name="date" />
+            <field name="company_id" />
+            <field name="journal_id" />
+            <field name="period_id" />
+            <field name="tax_period_id" />
+            <field name="wajib_pajak_id" />
+            <field name="pemotong_pajak_id" />
+            <field name="ttd_id" />
+            <field name="state" />
             <group name="group_state" string="State">
-                <filter name="filter_draft" string="Draft" domain="[('state','=','draft')]"/>
-                <filter name="filter_confirm" string="Waiting for Approval" domain="[('state','=','confirm')]"/>
-                <filter name="filter_done" string="Done" domain="[('state','=','done')]"/>
-                <filter name="filter_cancel" string="Cancel" domain="[('state','=','cancel')]"/>
+                <filter
+                            name="filter_draft"
+                            string="Draft"
+                            domain="[('state','=','draft')]"
+                        />
+                <filter
+                            name="filter_confirm"
+                            string="Waiting for Approval"
+                            domain="[('state','=','confirm')]"
+                        />
+                <filter
+                            name="filter_done"
+                            string="Done"
+                            domain="[('state','=','done')]"
+                        />
+                <filter
+                            name="filter_cancel"
+                            string="Cancel"
+                            domain="[('state','=','cancel')]"
+                        />
             </group>
             <group name="group_main" string="Group By..">
-                <filter name="filter_grp_journal" string="Journal" context="{'group_by':'journal_id'}"/>
-                <filter name="filter_grp_period" string="Period" context="{'group_by':'period_id'}"/>
-                <filter name="filter_grp_tax_period" string="Tax Period" context="{'group_by':'tax_period_id'}"/>
-                <filter name="filter_grp_wp" string="Wajib Pajak" context="{'group_by':'wajib_pajak_id'}"/>
-                <filter name="filter_grp_pp" string="Pemotong Pajak" context="{'group_by':'pemotong_pajak_id'}"/>
-                <filter name="filter_grp_ttd" string="TTD" context="{'group_by':'ttd_id'}"/>
-                <filter name="filter_grp_state" string="State" context="{'group_by':'state'}"/>
-                <separator/>
-                <filter name="filter_grp_day" string="Day" context="{'group_by':'date:day'}"/>
-                <filter name="filter_grp_week" string="Week" context="{'group_by':'date:week'}"/>
-                <filter name="filter_grp_month" string="Month" context="{'group_by':'date:month'}"/>
-                <filter name="filter_grp_year" string="Year" context="{'group_by':'date:year'}"/>
+                <filter
+                            name="filter_grp_journal"
+                            string="Journal"
+                            context="{'group_by':'journal_id'}"
+                        />
+                <filter
+                            name="filter_grp_period"
+                            string="Period"
+                            context="{'group_by':'period_id'}"
+                        />
+                <filter
+                            name="filter_grp_tax_period"
+                            string="Tax Period"
+                            context="{'group_by':'tax_period_id'}"
+                        />
+                <filter
+                            name="filter_grp_wp"
+                            string="Wajib Pajak"
+                            context="{'group_by':'wajib_pajak_id'}"
+                        />
+                <filter
+                            name="filter_grp_pp"
+                            string="Pemotong Pajak"
+                            context="{'group_by':'pemotong_pajak_id'}"
+                        />
+                <filter
+                            name="filter_grp_ttd"
+                            string="TTD"
+                            context="{'group_by':'ttd_id'}"
+                        />
+                <filter
+                            name="filter_grp_state"
+                            string="State"
+                            context="{'group_by':'state'}"
+                        />
+                <separator />
+                <filter
+                            name="filter_grp_day"
+                            string="Day"
+                            context="{'group_by':'date:day'}"
+                        />
+                <filter
+                            name="filter_grp_week"
+                            string="Week"
+                            context="{'group_by':'date:week'}"
+                        />
+                <filter
+                            name="filter_grp_month"
+                            string="Month"
+                            context="{'group_by':'date:month'}"
+                        />
+                <filter
+                            name="filter_grp_year"
+                            string="Year"
+                            context="{'group_by':'date:year'}"
+                        />
             </group>
         </search>
     </field>
@@ -71,18 +130,41 @@
     <field name="arch" type="xml">
         <form>
             <header>
-                <button name="request_validation"
-                    string="Request Validation"
-                    attrs="{'invisible': ['|','|',('need_validation', '!=', True),('rejected','=',True),('state','not in',['confirm'])]}"
-                    type="object"/>
-                <button name="restart_validation"
-                    string="Restart Validation"
-                    attrs="{'invisible': ['|','|','|',('review_ids', '=', []),('rejected','=',False),('state','not in',['confirm']),('restart_validation_ok','=',False)]}"
-                    type="object"/>
-                <button name="workflow_action_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','draft'),('confirm_ok','=',False)]}" confirm="Confirm bukti potong?"/>
-                <button name="workflow_action_reset" string="Set to Draft" type="object" attrs="{'invisible':['|',('state','!=','cancel'),('reset_ok','=',False)]}" confirm="Reset bukti potong?"/>
-                <button name="%(base_cancel_reason.base_cancel_reason_wizard_action)d" type="action" string="Cancel" attrs="{'invisible':['|',('state','=','cancel'),('cancel_ok','=',False)]}" confirm="Cancel Bukti Potong. Are you sure?"/>
-                <field name="state" widget="statusbar"/>
+                <button
+                            name="request_validation"
+                            string="Request Validation"
+                            attrs="{'invisible': ['|','|',('need_validation', '!=', True),('rejected','=',True),('state','not in',['confirm'])]}"
+                            type="object"
+                        />
+                <button
+                            name="restart_validation"
+                            string="Restart Validation"
+                            attrs="{'invisible': ['|','|','|',('review_ids', '=', []),('rejected','=',False),('state','not in',['confirm']),('restart_validation_ok','=',False)]}"
+                            type="object"
+                        />
+                <button
+                            name="workflow_action_confirm"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible':['|',('state','!=','draft'),('confirm_ok','=',False)]}"
+                            confirm="Confirm bukti potong?"
+                        />
+                <button
+                            name="workflow_action_reset"
+                            string="Set to Draft"
+                            type="object"
+                            attrs="{'invisible':['|',('state','!=','cancel'),('reset_ok','=',False)]}"
+                            confirm="Reset bukti potong?"
+                        />
+                <button
+                            name="%(base_cancel_reason.base_cancel_reason_wizard_action)d"
+                            type="action"
+                            string="Cancel"
+                            attrs="{'invisible':['|',('state','=','cancel'),('cancel_ok','=',False)]}"
+                            confirm="Cancel Bukti Potong. Are you sure?"
+                        />
+                <field name="state" widget="statusbar" />
             </header>
             <field name="need_validation" invisible="1" />
             <field name="validated" invisible="1" />
@@ -114,114 +196,178 @@
                 </p>
             </div>
             <sheet>
-                <h1 name="form_name"/>
+                <h1 name="form_name" />
                 <h2 attrs="{'invisible': [('state', '!=', 'cancel')]}">
-                    <label for="cancel_reason_id" string="Cancellation reason:"/>
-                    <field name="cancel_reason_id" class="oe_inline"/>
+                    <label for="cancel_reason_id" string="Cancellation reason:" />
+                    <field name="cancel_reason_id" class="oe_inline" />
                 </h2>
                 <group name="group_1" colspan="4" col="2">
                     <group name="group_1_1" colspan="1" col="2">
-                        <field name="name"/>
-                        <field name="date"/>
-                        <field name="period_id"/>
-                        <field name="tax_period_id"/>
-                        <field name="company_id"/>
-                        <field name="journal_id" domain="[('id', 'in', allowed_journal_ids[0][2])]"/>
-                        <field name="account_id" domain="[('id', 'in', allowed_account_ids[0][2])]"/>
-                        <field name="direction" invisible="1"/>
-                        <field name="type_id" invisible="1"/>
-                        <field name="allowed_journal_ids" widget="many2many_tags" invisible="1"/>
-                        <field name="allowed_tax_code_ids" widget="many2many_tags" invisible="1"/>
-                        <field name="allowed_base_code_ids" widget="many2many_tags" invisible="1"/>
-                        <field name="allowed_tax_ids" widget="many2many_tags" invisible="1"/>
-                        <field name="allowed_account_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="name" />
+                        <field name="date" />
+                        <field name="period_id" />
+                        <field name="tax_period_id" />
+                        <field name="company_id" />
+                        <field
+                                    name="journal_id"
+                                    domain="[('id', 'in', allowed_journal_ids[0][2])]"
+                                />
+                        <field
+                                    name="account_id"
+                                    domain="[('id', 'in', allowed_account_ids[0][2])]"
+                                />
+                        <field name="direction" invisible="1" />
+                        <field name="type_id" invisible="1" />
+                        <field
+                                    name="allowed_journal_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                        <field
+                                    name="allowed_tax_code_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                        <field
+                                    name="allowed_base_code_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                        <field
+                                    name="allowed_tax_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                        <field
+                                    name="allowed_account_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
                     </group>
                     <group name="group_1_2" colspan="1" col="2">
-                        <field name="wajib_pajak_id" attrs="{'readonly': ['|',('direction','=','in'),('state','!=','draft')]}"/>
-                        <field name="pemotong_pajak_id" domain="[('is_company','=',True)]" attrs="{'readonly': ['|',('direction','=','out'),('state','!=','draft')]}"/>
-                        <field name="ttd_id" domain="[('is_company','=',False),('commercial_partner_id.id','=',pemotong_pajak_id)]" attrs="{'required':[('direction','=','out')], 'readonly':[('state','!=','draft')]}"/>
-                        <field name="kpp_id" domain="[('is_company','=',True)]"/>
+                        <field
+                                    name="wajib_pajak_id"
+                                    attrs="{'readonly': ['|',('direction','=','in'),('state','!=','draft')]}"
+                                />
+                        <field
+                                    name="pemotong_pajak_id"
+                                    domain="[('is_company','=',True)]"
+                                    attrs="{'readonly': ['|',('direction','=','out'),('state','!=','draft')]}"
+                                />
+                        <field
+                                    name="ttd_id"
+                                    domain="[('is_company','=',False),('commercial_partner_id.id','=',pemotong_pajak_id)]"
+                                    attrs="{'required':[('direction','=','out')], 'readonly':[('state','!=','draft')]}"
+                                />
+                        <field name="kpp_id" domain="[('is_company','=',True)]" />
                     </group>
                 </group>
                 <notebook>
                     <page name="page_line" string="Details">
-                        <field name="line_ids" nolabel="1" colspan="4" context="{'default_direction':direction,'wajib_pajak_id':wajib_pajak_id,'pemotong_pajak_id':pemotong_pajak_id}">
+                        <field
+                                    name="line_ids"
+                                    nolabel="1"
+                                    colspan="4"
+                                    context="{'default_direction':direction,'wajib_pajak_id':wajib_pajak_id,'pemotong_pajak_id':pemotong_pajak_id}"
+                                >
                             <tree>
-                                <field name="sequence"/>
-                                <field name="name"/>
-                                <field name="tax_id"/>
-                                <field name="tax_code_id"/>
-                                <field name="base_code_id"/>
-                                <field name="amount"/>
-                                <field name="amount_tax"/>
+                                <field name="sequence" />
+                                <field name="name" />
+                                <field name="tax_id" />
+                                <field name="tax_code_id" />
+                                <field name="base_code_id" />
+                                <field name="amount" />
+                                <field name="amount_tax" />
                             </tree>
                             <form>
                                 <group name="grp_main" colspan="4" col="2">
                                     <group name="grp_main_1" colspan="1" col="2">
-                                        <field name="sequence"/>
-                                        <field name="direction" invisible="1"/>
-                                        <field name="partner_id" invisible="1"/>
-                                        <field name="move_line_id"/>
-                                        <field name="tax_id" domain="[('id','in',parent.allowed_tax_ids[0][2])]"/>
-                                        <field name="base_code_id" domain="[('id','in',parent.allowed_base_code_ids[0][2])]"/>
-                                        <field name="tax_code_id" domain="[('id','in',parent.allowed_tax_code_ids[0][2])]"/>
-                                        <field name="analytic_account_id" domain="[('type','!=','view')]"/>
+                                        <field name="sequence" />
+                                        <field name="direction" invisible="1" />
+                                        <field name="partner_id" invisible="1" />
+                                        <field name="move_line_id" />
+                                        <field
+                                                    name="tax_id"
+                                                    domain="[('id','in',parent.allowed_tax_ids[0][2])]"
+                                                />
+                                        <field
+                                                    name="base_code_id"
+                                                    domain="[('id','in',parent.allowed_base_code_ids[0][2])]"
+                                                />
+                                        <field
+                                                    name="tax_code_id"
+                                                    domain="[('id','in',parent.allowed_tax_code_ids[0][2])]"
+                                                />
+                                        <field
+                                                    name="analytic_account_id"
+                                                    domain="[('type','!=','view')]"
+                                                />
                                     </group>
                                     <group name="grp_main_2" colspan="1" col="2">
-                                        <field name="amount"/>
-                                        <field name="amount_tax"/>
+                                        <field name="amount" />
+                                        <field name="amount_tax" />
                                     </group>
-                                    <label for="name" colspan="2"/>
-                                    <field name="name" nolabel="1" colspan="2"/>
+                                    <label for="name" colspan="2" />
+                                    <field name="name" nolabel="1" colspan="2" />
                                 </group>
                                 <notebook>
                                     <page name="page_income" string="Income Move Lines">
-                                        <field name="income_move_line_ids" nolabel="1"/>
+                                        <field
+                                                    name="income_move_line_ids"
+                                                    nolabel="1"
+                                                />
                                     </page>
                                 </notebook>
                             </form>
                         </field>
                         <group name="group_total" colspan="4" col="2">
-                            <field name="total_tax"/>
+                            <field name="total_tax" />
                         </group>
                     </page>
                     <page name="page_acc" string="Accounting">
                         <group name="group_acc_1" colspan="4" col="2">
-                            <field name="move_id"/>
+                            <field name="move_id" />
                         </group>
                     </page>
                     <page string="Reviews" name="tier_validation">
                         <group>
-                            <field name="definition_id"/>
-                            <field name="reviewer_partner_ids" widget="many2many_tags"/>
-                            <field name="review_ids" readonly="1"/>
+                            <field name="definition_id" />
+                            <field
+                                        name="reviewer_partner_ids"
+                                        widget="many2many_tags"
+                                    />
+                            <field name="review_ids" readonly="1" />
                         </group>
                     </page>
                     <page name="page_policy" string="Policy" groups="base.group_system">
                         <group name="group_policy" colspan="4" col="2">
-                            <field name="confirm_ok"/>
-                            <field name="restart_validation_ok"/>
-                            <field name="cancel_ok"/>
-                            <field name="reset_ok"/>
+                            <field name="confirm_ok" />
+                            <field name="restart_validation_ok" />
+                            <field name="cancel_ok" />
+                            <field name="reset_ok" />
                         </group>
                     </page>
                     <page name="page_log" string="Log" groups="base.group_system">
                         <group name="group_log_1" colspan="4" col="3">
                             <!-- <field name="create_date"/> -->
                             <!-- <field name="create_uid" nolabel="1"/> -->
-                            <field name="confirm_date" string="Confirmation"/>
-                            <field name="confirm_user_id" nolabel="1"/>
-                            <field name="done_date" string="Done"/>
-                            <field name="done_user_id" nolabel="1"/>
-                            <field name="cancel_date" string="Cancellation"/>
-                            <field name="cancel_user_id" nolabel="1"/>
+                            <field name="confirm_date" string="Confirmation" />
+                            <field name="confirm_user_id" nolabel="1" />
+                            <field name="done_date" string="Done" />
+                            <field name="done_user_id" nolabel="1" />
+                            <field name="cancel_date" string="Cancellation" />
+                            <field name="cancel_user_id" nolabel="1" />
                         </group>
                     </page>
                 </notebook>
             </sheet>
             <div class="oe_chatter">
-                <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
-                <field name="message_ids" widget="mail_thread"/>
+                <field
+                            name="message_follower_ids"
+                            widget="mail_followers"
+                            groups="base.group_user"
+                        />
+                <field name="message_ids" widget="mail_thread" />
             </div>
         </form>
     </field>

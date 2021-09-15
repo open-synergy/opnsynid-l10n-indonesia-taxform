@@ -2,12 +2,12 @@
 # Copyright 2019 OpenSynergy Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
+from openerp import _, api, models
 from openerp.exceptions import Warning as UserError
 
 
 class AccountMoveLine(models.Model):
-    _inherit = 'account.move.line'
+    _inherit = "account.move.line"
 
     @api.multi
     def _check_taxform(self):
@@ -16,7 +16,8 @@ class AccountMoveLine(models.Model):
             """SELECT 1 FROM rel_bukpot_line_2_income_move
             WHERE account_move_id=%s
             """,
-            (self.id,))
+            (self.id,),
+        )
         if self._cr.fetchone():
             return True
         else:
@@ -29,6 +30,6 @@ class AccountMoveLine(models.Model):
             if taxform:
                 raise UserError(
                     _("Warning!"),
-                    _("You cannot delete journal item linked to taxform!")
+                    _("You cannot delete journal item linked to taxform!"),
                 )
         return super(AccountMoveLine, self).unlink()

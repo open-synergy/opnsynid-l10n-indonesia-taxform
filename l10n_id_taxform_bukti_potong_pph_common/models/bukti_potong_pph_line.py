@@ -2,7 +2,7 @@
 # Copyright 2017 OpenSynergy Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api
+from openerp import api, fields, models
 from openerp.tools.translate import _
 
 
@@ -11,8 +11,11 @@ class BuktiPotongPPhLine(models.Model):
     _description = "Bukti Potong PPh Line"
     _order = "sequence, id"
     _sql_constraints = [
-        ("tax_code_unique", "unique(tax_code_id, bukti_potong_id)",
-         "Tax code must be unique"),
+        (
+            "tax_code_unique",
+            "unique(tax_code_id, bukti_potong_id)",
+            "Tax code must be unique",
+        ),
     ]
 
     @api.model
@@ -20,10 +23,7 @@ class BuktiPotongPPhLine(models.Model):
         direction = self._context.get("default_direction", False)
         wajib_pajak_id = self._context.get("wajib_pajak_id", False)
         pemotong_pajak_id = self._context.get("pemotong_pajak_id", False)
-        return self._choose_partner(
-            direction,
-            wajib_pajak_id,
-            pemotong_pajak_id)
+        return self._choose_partner(direction, wajib_pajak_id, pemotong_pajak_id)
 
     @api.multi
     @api.depends(
@@ -64,9 +64,8 @@ class BuktiPotongPPhLine(models.Model):
         for line in self:
             bukpot = line.bukti_potong_id
             line.partner_id = self._choose_partner(
-                bukpot.direction,
-                bukpot.wajib_pajak_id,
-                bukpot.pemotong_pajak_id)
+                bukpot.direction, bukpot.wajib_pajak_id, bukpot.pemotong_pajak_id
+            )
 
     name = fields.Char(
         string="Description",
@@ -177,18 +176,25 @@ class BuktiPotongPPhLine(models.Model):
         self.ensure_one()
         obj_aml = self.env["account.move.line"]
         pair = False
-        obj_aml.create(
-            self._prepare_tax_aml_data())
-        contra_tax_aml = obj_aml.create(
-            self._prepare_contra_tax_aml_data())
+        obj_aml.create(self._prepare_tax_aml_data())
+        contra_tax_aml = obj_aml.create(self._prepare_contra_tax_aml_data())
         if self.move_line_id:
             pair = contra_tax_aml + self.move_line_id
         return pair
 
     @api.model
     def _prepare_aml_data(
-            self, name, account_id, debit, credit, partner_id, tax_code_id,
-            tax_amount, analytic_account_id, move_id):
+        self,
+        name,
+        account_id,
+        debit,
+        credit,
+        partner_id,
+        tax_code_id,
+        tax_amount,
+        analytic_account_id,
+        move_id,
+    ):
         result = {
             "name": name,
             "account_id": account_id,
@@ -237,8 +243,9 @@ class BuktiPotongPPhLine(models.Model):
             partner_id=bukpot.kpp_id.commercial_partner_id.id,
             tax_code_id=self._get_tax_code_id(),
             tax_amount=self.tax_id.tax_sign * self.amount_tax,
-            analytic_account_id=self.analytic_account_id and
-            self.analytic_account_id.id or False,
+            analytic_account_id=self.analytic_account_id
+            and self.analytic_account_id.id
+            or False,
             move_id=bukpot.move_id.id,
         )
         return result
@@ -257,8 +264,9 @@ class BuktiPotongPPhLine(models.Model):
             partner_id=partner.id,
             tax_code_id=self._get_base_code_id(),
             tax_amount=self.tax_id.tax_sign * float(int(self.amount)),
-            analytic_account_id=self.analytic_account_id and
-            self.analytic_account_id.id or False,
+            analytic_account_id=self.analytic_account_id
+            and self.analytic_account_id.id
+            or False,
             move_id=bukpot.move_id.id,
         )
         return result
@@ -268,13 +276,11 @@ class BuktiPotongPPhLine(models.Model):
         self.ensure_one()
         bukpot = self.bukti_potong_id
         return self._choose_partner(
-            bukpot.direction, bukpot.wajib_pajak_id,
-            bukpot.pemotong_pajak_id)
+            bukpot.direction, bukpot.wajib_pajak_id, bukpot.pemotong_pajak_id
+        )
 
     @api.model
-    def _choose_partner(
-            self, direction, wajib_pajak_id,
-            pemotong_pajak_id):
+    def _choose_partner(self, direction, wajib_pajak_id, pemotong_pajak_id):
         if direction == "in":
             partner = pemotong_pajak_id
         else:
@@ -289,8 +295,8 @@ class BuktiPotongPPhLine(models.Model):
             return tax.account_collected_id
         else:
             raise UserWarning(
-                _("Please configure invoice tax account for %s") %
-                (tax.name))
+                _("Please configure invoice tax account for %s") % (tax.name)
+            )
 
     @api.onchange("partner_id", "direction", "move_line_id")
     def onchange_move_line_id(self):
@@ -304,23 +310,22 @@ class BuktiPotongPPhLine(models.Model):
             }
         }
         if self.direction == "out":
-            result["domain"]["move_line_id"].append(
-                ("credit", ">", 0))
+            result["domain"]["move_line_id"].append(("credit", ">", 0))
         else:
-            result["domain"]["move_line_id"].append(
-                ("debit", ">", 0))
+            result["domain"]["move_line_id"].append(("debit", ">", 0))
 
         if self.partner_id:
             if self.move_line_id:
                 result["domain"]["move_line_id"].append(
-                    ("partner_id", "=", self.partner_id.id))
+                    ("partner_id", "=", self.partner_id.id)
+                )
                 if self.move_line_id.partner_id != self.partner_id:
                     self.move_line_id = False
             else:
                 result["domain"]["move_line_id"].append(
-                    ("partner_id", "=", self.partner_id.id))
+                    ("partner_id", "=", self.partner_id.id)
+                )
         else:
             self.move_line_id = False
-            result["domain"]["move_line_id"].append(
-                ("partner_id", "=", False))
+            result["domain"]["move_line_id"].append(("partner_id", "=", False))
         return result

@@ -5,8 +5,8 @@
     "name": "Indonesia - Common Feature for Bukti Potong",
     "version": "8.0.5.2.0",
     "category": "localization",
-    "website": "https://opensynergy-indonesia.com/",
-    "author": "OpenSynergy Indonesia",
+    "website": "https://simetri-sinergi.id",
+    "author": "PT. Simetri Sinergi Indonesia,OpenSynergy Indonesia",
     "license": "AGPL-3",
     "application": False,
     "installable": True,
@@ -17,7 +17,7 @@
         "base_workflow_policy",
         "base_cancel_reason",
         "base_multiple_approval",
-        "base_amount_to_text"
+        "base_amount_to_text",
     ],
     "data": [
         "security/ir.model.access.csv",

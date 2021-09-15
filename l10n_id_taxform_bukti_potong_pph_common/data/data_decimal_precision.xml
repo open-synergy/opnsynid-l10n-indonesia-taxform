@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <openerp>
     <data noupdate="1">
         <record id="decimal_precision_dpp_bukti_potong" model="decimal.precision">
@@ -11,4 +11,3 @@
         </record>
     </data>
 </openerp>
-

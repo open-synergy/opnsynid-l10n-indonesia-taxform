@@ -9,7 +9,7 @@ from openerp.exceptions import Warning as UserError
 from openerp.tools.translate import _
 
 
-class BuktiPotongPPh(models.Model):
+class BuktiPotongPPh(models.AbstractModel):
     _name = "l10n_id.bukti_potong_pph"
     _inherit = [
         "mail.thread",

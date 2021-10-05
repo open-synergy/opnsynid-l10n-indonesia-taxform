@@ -14,7 +14,6 @@ class BuktiPotongPPh23In(models.Model):
 
     @api.multi
     def _get_type_id(self):
-        self.ensure_one()
         type_id = self.env.ref(
             "l10n_id_taxform_bukti_potong_pph_23." "bukti_potong_pph_type_f113306_in"
         )

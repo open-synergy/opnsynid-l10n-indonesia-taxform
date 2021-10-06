@@ -8,6 +8,7 @@
     <field name="model">l10n_id.bukti_potong_pph</field>
     <field name="arch" type="xml">
         <tree>
+            <field name="id" />
             <field name="name" />
             <field name="date" />
             <field name="type_id" invisible="1" />
@@ -197,13 +198,29 @@
             </div>
             <sheet>
                 <h1 name="form_name" />
-                <h2 attrs="{'invisible': [('state', '!=', 'cancel')]}">
-                    <label for="cancel_reason_id" string="Cancellation reason:" />
-                    <field name="cancel_reason_id" class="oe_inline" />
-                </h2>
+                <div
+                            class="oe_right oe_button_box"
+                            style="width: 300px;"
+                            name="buttons"
+                        >
+                </div>
+                <div class="oe_left" style="width: 500px;">
+                    <div class="oe_title" style="width: 500px;">
+                        <h1>
+                            <field name="name" class="oe_edit_only" />
+                            <field name="display_name" class="oe_read_only" />
+                        </h1>
+                        <h2 attrs="{'invisible': [('state', '!=', 'cancel')]}">
+                            <label
+                                        for="cancel_reason_id"
+                                        string="Cancellation reason:"
+                                    />
+                            <field name="cancel_reason_id" class="oe_inline" />
+                        </h2>
+                    </div>
+                </div>
                 <group name="group_1" colspan="4" col="2">
                     <group name="group_1_1" colspan="1" col="2">
-                        <field name="name" />
                         <field name="date" />
                         <field name="period_id" />
                         <field name="tax_period_id" />

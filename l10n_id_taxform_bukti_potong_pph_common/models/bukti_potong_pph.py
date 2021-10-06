@@ -601,3 +601,14 @@ class BuktiPotongPPh(models.Model):
         _super.restart_validation()
         for bukti_potong in self:
             bukti_potong.request_validation()
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for record in self:
+            if record.name == "/":
+                name = "*" + str(record.id)
+            else:
+                name = record.name
+            result.append((record.id, name))
+        return result

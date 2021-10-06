@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bukpot_pph_type_all,Type of Bukti Potong PPh - All User,model_l10n_id_bukti_potong_pph_type,base.group_user,1,0,0,0
+access_bukpot_pph_all,Bukti Potong PPh - All User,model_l10n_id_bukti_potong_pph,base.group_user,1,0,0,0
+access_bukpot_pph_line_all,Bukti Potong PPh Line - All User,model_l10n_id_bukti_potong_pph_line,base.group_user,1,0,0,0
+access_bukpot_pph_type_taxform_manager,Type of Bukti Potong PPh - Taxform Manager,model_l10n_id_bukti_potong_pph_type,l10n_id_taxform.manager_group_taxform,1,0,1,0
+access_bukpot_pph_taxform_user,Bukti Potong PPh - Taxform User,model_l10n_id_bukti_potong_pph,l10n_id_taxform.user_group_taxform,1,1,1,1
+access_bukpot_pph_line_taxform_user,Bukti Potong PPh Line - Taxform User,model_l10n_id_bukti_potong_pph_line,l10n_id_taxform.user_group_taxform,1,1,1,1

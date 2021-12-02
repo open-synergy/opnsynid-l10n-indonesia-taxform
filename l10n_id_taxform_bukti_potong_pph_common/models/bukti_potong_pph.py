@@ -141,6 +141,20 @@ class BuktiPotongPPh(models.Model):
                 criteria = []
                 bukpot.allowed_tax_ids = obj_code.search(criteria)
 
+    @api.multi
+    @api.depends(
+        "total_tax",
+        "total_tax_computation",
+        "manual_total_tax",
+    )
+    def _compute_total_tax(self):
+        for record in self:
+            record.total_tax_diff = record.manual_total_tax - record.total_tax
+            if record.total_tax_computation == "auto":
+                record.total_tax_final = record.total_tax
+            else:
+                record.total_tax_final = record.manual_total_tax
+
     name = fields.Char(
         string="# Bukti Potong",
         required=True,
@@ -329,8 +343,44 @@ class BuktiPotongPPh(models.Model):
         },
     )
     total_tax = fields.Float(
-        string="Total Tax",
+        string="Total Tax (Auto)",
         compute="_compute_tax",
+        store=True,
+    )
+    total_tax_computation = fields.Selection(
+        string="Total Tax Computation",
+        selection=[
+            ("auto", "Automatic"),
+            ("manual", "Manual"),
+        ],
+        required=True,
+        default="auto",
+    )
+    manual_total_tax = fields.Float(
+        string="Total Tax (Manual)",
+    )
+    total_tax_diff = fields.Float(
+        string="Total Tax Diff.",
+        compute="_compute_total_tax",
+        store=True,
+    )
+    diff_debit_account_id = fields.Many2one(
+        string="Diff. Debit Account",
+        comodel_name="account.account",
+        domain=[
+            ("type", "not in", ["view", "consolidation", "close"]),
+        ],
+    )
+    diff_credit_account_id = fields.Many2one(
+        string="Diff. Credit Account",
+        comodel_name="account.account",
+        domain=[
+            ("type", "not in", ["view", "consolidation", "close"]),
+        ],
+    )
+    total_tax_final = fields.Float(
+        string="Total Tax",
+        compute="_compute_total_tax",
         store=True,
     )
     state = fields.Selection(
@@ -542,6 +592,88 @@ class BuktiPotongPPh(models.Model):
                 pairs.append(result)
         for pair in pairs:
             pair.reconcile_partial()
+        self._create_aml_diff()
+
+    @api.multi
+    def _create_aml_diff(self):
+        self.ensure_one()
+        if self.total_tax_computation == "manual":
+            self.env["account.move.line"].create(self._prepare_debit_aml_diff())
+            self.env["account.move.line"].create(self._prepare_credit_aml_diff())
+
+    @api.multi
+    def _prepare_debit_aml_diff(self):
+        self.ensure_one()
+        name = "Taxform diff %s" % (self.name)
+        result = {
+            "name": name,
+            "account_id": self._get_diff_debit_account().id,
+            "debit": abs(self.total_tax_diff),
+            "credit": 0.0,
+            "move_id": self.move_id.id,
+            "partner_id": self._get_partner_debit_aml_diff_id(),
+        }
+        return result
+
+    @api.multi
+    def _prepare_credit_aml_diff(self):
+        self.ensure_one()
+        name = "Taxform diff %s" % (self.name)
+        result = {
+            "name": name,
+            "account_id": self._get_diff_credit_account().id,
+            "credit": abs(self.total_tax_diff),
+            "debit": 0.0,
+            "move_id": self.move_id.id,
+            "partner_id": self._get_partner_credit_aml_diff_id(),
+        }
+        return result
+
+    @api.multi
+    def _get_partner_debit_aml_diff_id(self):
+        self.ensure_one()
+        if self.direction == "in":
+            if self.total_tax_diff > 0.0:
+                result = self.kpp_id.id
+            else:
+                result = False
+        elif self.direction == "out":
+            if self.total_tax_diff > 0.0:
+                result = False
+            else:
+                result = self.kpp_id.id
+        return result
+
+    @api.multi
+    def _get_partner_credit_aml_diff_id(self):
+        self.ensure_one()
+        if self.direction == "in":
+            if self.total_tax_diff > 0.0:  #
+                result = False
+            else:
+                result = self.kpp_id.id
+        elif self.direction == "out":
+            if self.total_tax_diff > 0.0:
+                result = self.kpp_id.id
+            else:
+                result = False
+        return result
+
+    @api.multi
+    def _get_diff_debit_account(self):
+        self.ensure_one()
+        if not self.diff_debit_account_id:
+            error_msg = _("Debit diff. account not defined")
+            raise UserError(error_msg)
+        return self.diff_debit_account_id
+
+    @api.multi
+    def _get_diff_credit_account(self):
+        self.ensure_one()
+        if not self.diff_credit_account_id:
+            error_msg = _("Credit diff. account not defined")
+            raise UserError(error_msg)
+        return self.diff_credit_account_id
 
     @api.multi
     def _prepare_accounting_entry_data(self):

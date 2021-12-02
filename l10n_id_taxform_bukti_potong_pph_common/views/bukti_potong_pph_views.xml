@@ -20,7 +20,7 @@
             <field name="wajib_pajak_id" />
             <field name="pemotong_pajak_id" />
             <field name="ttd_id" />
-            <field name="total_tax" sum="Total Tax" />
+            <field name="total_tax_final" sum="Total Tax" />
             <field name="state" />
         </tree>
     </field>
@@ -339,6 +339,23 @@
                         </field>
                         <group name="group_total" colspan="4" col="2">
                             <field name="total_tax" />
+                            <field name="total_tax_computation" />
+                            <field
+                                        name="manual_total_tax"
+                                        attrs="{'invisible': [('total_tax_computation','=','auto')],'required': [('total_tax_computation','=','manual')]}"
+                                    />
+                            <field
+                                        name="total_tax_diff"
+                                        attrs="{'invisible': [('total_tax_computation','=','auto')]}"
+                                    />/>
+                            <field
+                                        name="diff_debit_account_id"
+                                        attrs="{'invisible': [('total_tax_computation','=','auto')],'required': [('total_tax_computation','=','manual')]}"
+                                    />/>
+                            <field
+                                        name="diff_credit_account_id"
+                                        attrs="{'invisible': [('total_tax_computation','=','auto')],'required': [('total_tax_computation','=','manual')]}"
+                                    />/>
                         </group>
                     </page>
                     <page name="page_acc" string="Accounting">

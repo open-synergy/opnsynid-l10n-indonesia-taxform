@@ -4,12 +4,43 @@
 import re
 from datetime import datetime
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class AccountInvoice(models.Model):
     _name = "account.invoice"
     _inherit = "account.invoice"
+
+    lock_taxform = fields.Boolean(
+        string="Lock Taxform",
+        readonly=True,
+        copy=False,
+    )
+
+    @api.depends(
+        "type",
+        "date_taxform",
+    )
+    @api.multi
+    def _compute_allowed_nomor_seri_ids(self):
+        obj_nsfp = self.env["l10n_id.nomor_seri_faktur_pajak"]
+        for fp in self:
+            result = []
+            if fp.type == "out_invoice" and fp.date_taxform:
+                criteria = [
+                    ("taxform_year_id", "=", fp.taxform_year_id.id),
+                    ("faktur_pajak_id", "=", False),
+                ]
+                result = obj_nsfp.search(criteria).ids
+            fp.allowed_nomor_seri_ids = result
+
+    allowed_nomor_seri_ids = fields.Many2many(
+        string="Allowed Nomor Seri Faktur Pajak",
+        comodel_name="l10n_id.nomor_seri_faktur_pajak",
+        store=False,
+        compute="_compute_allowed_nomor_seri_ids",
+    )
 
     @api.depends(
         "date_taxform",
@@ -36,6 +67,7 @@ class AccountInvoice(models.Model):
     transaction_type_id = fields.Many2one(
         string="Transaction Type",
         comodel_name="l10n_id.faktur_pajak_transaction_type",
+        copy=False,
     )
     fp_state = fields.Selection(
         string="Normal/Substitute?",
@@ -43,31 +75,37 @@ class AccountInvoice(models.Model):
             ("0", "Normal"),
             ("1", "Substitute"),
         ],
+        copy=False,
     )
     # Taxform Date and Period
     date_taxform = fields.Date(
         string="Document Date",
+        copy=False,
     )
     taxform_period_id = fields.Many2one(
         string="Masa Pajak",
         comodel_name="l10n_id.tax_period",
         compute="_compute_taxform_period",
         store=True,
+        copy=False,
     )
     taxform_year_id = fields.Many2one(
         string="Tahun Pajak",
         comodel_name="l10n_id.tax_year",
         compute="_compute_taxform_year",
         store=True,
+        copy=False,
     )
 
     # Nomor Seri Faktur Pajak
     nomor_seri_id = fields.Many2one(
         string="Nomor Seri FP",
         comodel_name="l10n_id.nomor_seri_faktur_pajak",
+        copy=False,
     )
     nomor_seri = fields.Char(
         string="Nomor Seri FP Manual",
+        copy=False,
     )
 
     @api.depends(
@@ -298,3 +336,56 @@ class AccountInvoice(models.Model):
         compute="_compute_jumlah_ppnbm",
         store=False,
     )
+
+    @api.multi
+    def action_lock_taxform(self):
+        for doc in self:
+            doc._lock_taxform()
+
+    @api.multi
+    def _lock_taxform(self):
+        self.ensure_one()
+        self.write(self._prepare_lock_taxform())
+        if self.type == "out_invoice":
+            self.nomor_seri_id.mark_used(self)
+
+    @api.multi
+    def _prepare_lock_taxform(self):
+        self.ensure_one()
+        return {
+            "lock_taxform": True,
+        }
+
+    @api.multi
+    def action_unlock_taxform(self):
+        for doc in self:
+            doc._unlock_taxform()
+
+    @api.multi
+    def _unlock_taxform(self):
+        self.ensure_one()
+        self.write(self._prepare_unlock_taxform())
+        if self.type == "out_invoice":
+            self.nomor_seri_id.mark_unused()
+
+    @api.multi
+    def _prepare_unlock_taxform(self):
+        self.ensure_one()
+        return {
+            "lock_taxform": False,
+        }
+
+    @api.constrains(
+        "lock_taxform",
+        "nomor_seri_id",
+        "nomor_seri",
+    )
+    def _check_lock_taxform(self):
+        error_msg = _("Please fill taxform number")
+        for doc in self:
+            if doc.type == "out_invoice" and not doc.nomor_seri_id and doc.lock_taxform:
+                raise UserError(error_msg)
+            elif (
+                doc.type != "out_invoice" and not doc.nomor_seri_id and doc.lock_taxform
+            ):
+                raise UserError(error_msg)

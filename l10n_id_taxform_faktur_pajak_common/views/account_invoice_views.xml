@@ -23,15 +23,55 @@
                     <page name="taxform" string="Taxform">
                         <group name="taxform_1" colspan="4" col="2">
                             <group name="taxform_1_1" colspan="1" col="2">
-                                <field name="transaction_type_id" />
-                                <field name="fp_state" />
-                                <field name="nomor_seri_id" />
-                                <field name="nomor_seri" />
+                                <field name="lock_taxform" />
+                                <field
+                                    name="transaction_type_id"
+                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                />
+                                <field
+                                    name="fp_state"
+                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                />
+                                <field
+                                    name="allowed_nomor_seri_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                                <field
+                                    name="nomor_seri_id"
+                                    domain="[('id','in',allowed_nomor_seri_ids)]"
+                                    attrs="{'readonly':[('lock_taxform','=',True)],'invisible':[('type','!=','out_invoice')]}"
+                                />
+                                <field
+                                    name="nomor_seri"
+                                    attrs="{'readonly':[('lock_taxform','=',True)],'invisible':[('type','=','out_invoice')]}"
+                                />
+                                <button
+                                    name="action_lock_taxform"
+                                    type="object"
+                                    string="Lock Taxform"
+                                    attrs="{'invisible':[('lock_taxform','=',True)]}"
+                                />
+                                <button
+                                    name="action_unlock_taxform"
+                                    type="object"
+                                    string="Unlock Taxform"
+                                    attrs="{'invisible':[('lock_taxform','=',False)]}"
+                                />
                             </group>
                             <group name="taxform_1_2" colspan="1" col="2">
-                                <field name="date_taxform" />
-                                <field name="taxform_year_id" />
-                                <field name="taxform_period_id" />
+                                <field
+                                    name="date_taxform"
+                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                />
+                                <field
+                                    name="taxform_year_id"
+                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                />
+                                <field
+                                    name="taxform_period_id"
+                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                />
                             </group>
                         </group>
                         <group name="taxform_2" colspan="4" col="2">

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2017 OpenSynergy Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<menuitem
+        id="taxform_faktur_pajak_menu"
+        name="Faktur Pajak, Nota Retur &amp; Nota Pembatalan"
+        sequence="3"
+        parent="l10n_id_taxform.taxform_formulir_lainnya_menu"
+    />
+
+<menuitem
+        id="taxform_faktur_pajak_configuration_menu"
+        name="Faktur Pajak, Nota Retur &amp; Nota Pembatalan"
+        sequence="3"
+        parent="l10n_id_taxform.taxform_configuration_menu"
+    />
+
+
+</odoo>

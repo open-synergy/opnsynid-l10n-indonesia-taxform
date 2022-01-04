@@ -8,6 +8,7 @@
     <field name="arch" type="xml">
         <tree>
             <field name="name" />
+            <field name="taxform_year_id" />
             <field name="faktur_pajak_id" />
             <field name="branch_id" />
         </tree>
@@ -22,6 +23,7 @@
             <group name="group_main">
                 <field name="company_id" />
                 <field name="name" />
+                <field name="taxform_year_id" />
                 <field name="faktur_pajak_id" />
                 <field name="branch_id" />
             </group>

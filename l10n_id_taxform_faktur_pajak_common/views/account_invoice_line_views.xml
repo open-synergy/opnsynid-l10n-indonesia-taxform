@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="account_invoice_line_view_form" model="ir.ui.view">
+      <field name="name">account.invoice.line form - taxform</field>
+      <field name="model">account.invoice.line</field>
+      <field name="inherit_id" ref="account.view_invoice_line_form" />
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='name']" posiion="after">
+              <group name="enofa" colspan="4" col="2">
+                  <field name="enofa_kode_objek" />
+                  <field name="enofa_nama" />
+                  <field name="enofa_harga_satuan" />
+                  <field name="enofa_jumlah_barang" />
+                  <field name="enofa_harga_total" />
+                  <field name="enofa_diskon" />
+                  <field name="enofa_dpp" />
+                  <field name="enofa_ppn" />
+                  <field name="enofa_tarif_ppnbm" />
+                  <field name="enofa_ppnbm" />
+              </group>
+          </xpath>
+      </field>
+  </record>
+
+</odoo>

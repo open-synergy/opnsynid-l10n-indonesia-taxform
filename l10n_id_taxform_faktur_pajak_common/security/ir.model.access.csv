@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fp_transaction_type_user,Faktur Pajak Transaction Type - User,model_l10n_id_faktur_pajak_transaction_type,base.group_user,1,1,1,1
+access_fp_transaction_type_all,Faktur Pajak Transaction Type - All,model_l10n_id_faktur_pajak_transaction_type,,1,0,0,0
+access_nomor_seri_fp_all,l10n_id.nomor_seri_faktur_pajak - All,model_l10n_id_nomor_seri_faktur_pajak,,1,0,0,0
+access_nomor_seri_fp_user,l10n_id.nomor_seri_faktur_pajak - User,model_l10n_id_nomor_seri_faktur_pajak,base.group_user,1,1,1,1

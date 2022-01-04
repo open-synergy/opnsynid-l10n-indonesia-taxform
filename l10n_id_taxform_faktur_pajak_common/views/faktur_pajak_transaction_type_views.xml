@@ -22,24 +22,6 @@
                 <field name="code" />
                 <field name="name" />
                 <field name="active" />
-                <field name="allowed_base_tax_code_ids">
-                    <tree editable="top">
-                        <field name="type_id" />
-                        <field name="tax_group_ids" widget="many2many_tags" />
-                    </tree>
-                </field>
-                <field name="allowed_ppn_tax_code_ids">
-                    <tree editable="top">
-                        <field name="type_id" />
-                        <field name="tax_group_ids" widget="many2many_tags" />
-                    </tree>
-                </field>
-                <field name="allowed_ppnbm_tax_code_ids">
-                    <tree editable="top">
-                        <field name="type_id" />
-                        <field name="tax_group_ids" widget="many2many_tags" />
-                    </tree>
-                </field>
                 <field name="description" />
             </group>
         </form>

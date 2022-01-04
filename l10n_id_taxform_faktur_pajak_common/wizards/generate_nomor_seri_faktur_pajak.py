@@ -4,28 +4,9 @@
 from openerp import api, fields, models
 
 
-class NomorSeriFakturPajak(models.Model):
-    _name = "l10n_id.nomor_seri_faktur_pajak"
-    _description = "Nomor Seri Faktur Pajak"
-    _order = "taxform_year_id, name"
-
-    name = fields.Char(
-        string="Nomor Seri",
-        readonly=False,
-        required=True,
-    )
-    faktur_pajak_id = fields.Many2one(
-        comodel_name="account.invoice",
-        string="# Invoice",
-        readonly=True,
-        ondelete="restrict",
-        required=False,
-    )
-    taxform_year_id = fields.Many2one(
-        string="Tahun Pajak",
-        comodel_name="l10n_id.tax_year",
-        required=True,
-    )
+class GenerateNomorSeriFakturPajak(models.TransientModel):
+    _name = "l10n_id.generate_nomor_seri_faktur_pajak"
+    _description = "Generate Nomor Seri Faktur Pajak"
 
     @api.model
     def _default_company_id(self):
@@ -42,6 +23,21 @@ class NomorSeriFakturPajak(models.Model):
         comodel_name="res.partner",
         ondelete="restrict",
         required=True,
+    )
+    taxform_year_id = fields.Many2one(
+        string="Tahun Pajak",
+        comodel_name="l10n_id.tax_year",
+        required=True,
+    )
+    sequence_id = fields.Many2one(
+        string="Sequence",
+        comodel_name="ir.sequence",
+        required=True,
+    )
+    quantity = fields.Integer(
+        string="Number of.",
+        required=True,
+        default=1,
     )
 
     @api.onchange("company_id")
@@ -65,11 +61,14 @@ class NomorSeriFakturPajak(models.Model):
         return result
 
     @api.multi
-    def mark_used(self, fp):
+    def generate_nomor_seri(self):
         self.ensure_one()
-        self.faktur_pajak_id = fp
-
-    @api.multi
-    def mark_unused(self):
-        self.ensure_one()
-        self.faktur_pajak_id = False
+        for _qty in range(1, self.quantity + 1):
+            name = self.sequence_id._next()
+            data = {
+                "name": name,
+                "company_id": self.company_id.id,
+                "branch_id": self.branch_id.id,
+                "taxform_year_id": self.taxform_year_id.id,
+            }
+            self.env["l10n_id.nomor_seri_faktur_pajak"].create(data)

@@ -13,7 +13,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
-        "data/faktur_pajak_transaction_type_data",
+        "data/faktur_pajak_transaction_type_data.xml",
         "menu.xml",
         "views/faktur_pajak_transaction_type_views.xml",
         "views/account_invoice_views.xml",

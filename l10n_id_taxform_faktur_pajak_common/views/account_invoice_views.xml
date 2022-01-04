@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="account_invoice_supplier_view_form" model="ir.ui.view">
+        <field name="name">Account Invoice Supplier Form</field>
+        <field name="model">account.invoice</field>
+        <field name="priority" eval="100" />
+        <field name="inherit_id" ref="account.invoice_supplier_form" />
+        <field name="arch" type="xml">
+            <data>
+            </data>
+        </field>
+    </record>
+
+    <record id="account_invoice_view_form" model="ir.ui.view">
+        <field name="name">Account Invoice Form</field>
+        <field name="model">account.invoice</field>
+        <field name="priority" eval="100" />
+        <field name="inherit_id" ref="account.invoice_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//notebook" position="inside">
+                    <page name="taxform" string="Taxform">
+                        <group name="taxform_1" colspan="4" col="2">
+                            <group name="taxform_1_1" colspan="1" col="2">
+                                <field name="transaction_type_id" />
+                                <field name="fp_state" />
+                                <field name="nomor_seri_id" />
+                                <field name="nomor_seri" />
+                            </group>
+                            <group name="taxform_1_2" colspan="1" col="2">
+                                <field name="date_taxform" />
+                                <field name="taxform_year_id" />
+                                <field name="taxform_period_id" />
+                            </group>
+                        </group>
+                        <group name="taxform_2" colspan="4" col="2">
+                            <field name="enofa_jenis_transaksi" />
+                            <field name="enofa_fg_pengganti" />
+                            <field name="enofa_nomor_dokumen" />
+                            <field name="enofa_masa_pajak" />
+                            <field name="enofa_tahun_pajak" />
+                            <field name="enofa_tanggal_dokumen" />
+                            <field name="enofa_npwp" />
+                            <field name="enofa_nama" />
+                            <field name="enofa_alamat_lengkap" />
+                            <field name="enofa_jumlah_dpp" />
+                            <field name="enofa_jumlah_ppn" />
+                            <field name="enofa_jumlah_ppnbm" />
+                        </group>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

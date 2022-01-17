@@ -276,10 +276,10 @@ class AccountInvoice(models.Model):
         for fp in self:
             fp.enofa_alamat_lengkap = "-"
             if fp.type in ["out_invoice", "out_refund"]:
-                fp.enofa_alamat_lengkap = fp.company_id.partner_id.contact_address
+                fp.enofa_alamat_lengkap = fp.company_id.partner_id.enofa_address
             else:
                 fp.enofa_alamat_lengkap = (
-                    fp.partner_id.commercial_partner_id.contact_address
+                    fp.partner_id.commercial_partner_id.enofa_address
                 )
 
     enofa_alamat_lengkap = fields.Char(

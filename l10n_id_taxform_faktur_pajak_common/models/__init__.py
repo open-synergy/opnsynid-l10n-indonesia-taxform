@@ -6,4 +6,5 @@ from . import (
     account_invoice,
     account_invoice_line,
     nomor_seri_faktur_pajak,
+    res_partner,
 )

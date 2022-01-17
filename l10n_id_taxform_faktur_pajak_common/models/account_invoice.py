@@ -230,15 +230,15 @@ class AccountInvoice(models.Model):
             if fp.type in ["out_invoice", "out_refund"]:
                 if fp.company_id.partner_id.vat:
                     npwp = fp.company_id.partner_id.vat
-                    self.enofa_npwp = ""
+                    fp.enofa_npwp = ""
                     for s in re.findall(r"\d+", npwp):
-                        self.enofa_npwp += s
+                        fp.enofa_npwp += s
             else:
                 if fp.partner_id.commercial_partner_id.vat:
                     npwp = fp.partner_id.commercial_partner_id.vat
-                    self.enofa_npwp = ""
+                    fp.enofa_npwp = ""
                     for s in re.findall(r"\d+", npwp):
-                        self.enofa_npwp += s
+                        fp.enofa_npwp += s
 
     enofa_npwp = fields.Char(
         string="NPWP",

@@ -129,8 +129,30 @@ class BuktiPotongTaxform1721A1(models.Model):
         for pph in self:
             pph_21 = 0.0
             if pph.perhitungan_16 > 0:
-                obj_pph = self.env["l10n_id.pph_21_rate"]
-                pph_21 = obj_pph.find(pph.date).compute_tax(pph.perhitungan_16)
+                tunj_lain = (
+                    pph.penghasilan_03
+                    + pph.penghasilan_04
+                    + pph.penghasilan_05
+                    + pph.penghasilan_06
+                )
+                perhitungan_pph = pph.wajib_pajak_id.compute_pph_21_2110001(
+                    1,
+                    pph.end_tax_period_id.date_end,
+                    pph.penghasilan_01,
+                    pph.penghasilan_02,
+                    tunj_lain,
+                    pph.penghasilan_07,
+                    pph.pengurang_10,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    True,
+                    not pph.wajib_pajak_karyawan_asing,
+                )
+                pph_21 = perhitungan_pph["pph"]
             pph.perhitungan_17 = pph_21
 
     @api.depends(

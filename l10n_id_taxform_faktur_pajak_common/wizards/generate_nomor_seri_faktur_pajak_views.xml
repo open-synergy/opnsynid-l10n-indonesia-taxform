@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2017 OpenSynergy Indonesia
-     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html). -->
+<openerp>
+<data>
 <record id="generate_nomor_seri_faktur_pajak_view_form" model="ir.ui.view">
     <field name="name">Generate Nomor Seri Faktur Pajak</field>
     <field name="model">l10n_id.generate_nomor_seri_faktur_pajak</field>
@@ -16,11 +18,11 @@
             </group>
             <footer>
                 <button
-                        name="generate_nomor_seri"
-                        type="object"
-                        string="Generate"
-                        class="oe_highlight"
-                    />
+                            name="generate_nomor_seri"
+                            type="object"
+                            string="Generate"
+                            class="oe_highlight"
+                        />
                 Or
                 <button string="Cancel" special="cancel" class="oe_link" />
             </footer>
@@ -39,10 +41,11 @@
 </record>
 
 <menuitem
-        id="generate_nomor_seri_faktur_pajak_menu"
-        name="Generate Nomor Seri Faktur Pajak"
-        parent="l10n_id_taxform_faktur_pajak_common.taxform_faktur_pajak_configuration_menu"
-        action="generate_nomor_seri_faktur_pajak_action"
-        sequence="2"
-    />
-</odoo>
+            id="generate_nomor_seri_faktur_pajak_menu"
+            name="Generate Nomor Seri Faktur Pajak"
+            parent="l10n_id_taxform_faktur_pajak_common.taxform_faktur_pajak_configuration_menu"
+            action="generate_nomor_seri_faktur_pajak_action"
+            sequence="2"
+        />
+</data>
+</openerp>

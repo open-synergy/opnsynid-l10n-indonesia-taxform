@@ -4,8 +4,8 @@
 import re
 from datetime import datetime
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from openerp import _, api, fields, models
+from openerp.exceptions import Warning as UserError
 
 
 class AccountInvoice(models.Model):
@@ -30,7 +30,7 @@ class AccountInvoice(models.Model):
             if fp.type == "out_invoice" and fp.date_taxform:
                 criteria = [
                     ("taxform_year_id", "=", fp.taxform_year_id.id),
-                    ("faktur_pajak_id", "=", False),
+                    ("lock_nomor_seri", "=", False),
                 ]
                 result = obj_nsfp.search(criteria).ids
             fp.allowed_nomor_seri_ids = result
@@ -51,7 +51,7 @@ class AccountInvoice(models.Model):
             fp.taxform_period_id = False
             if fp.date_taxform:
                 fp.taxform_period_id = (
-                    self.env["l10n_id.tax_period"]._find_period(fp.date).id
+                    self.env["l10n_id.tax_period"]._find_period(fp.date_invoice).id
                 )
 
     @api.depends(
@@ -157,7 +157,7 @@ class AccountInvoice(models.Model):
                     result = fp.nomor_seri_id.name
             else:
                 if fp.nomor_seri:
-                    result = fp.nomor_ser
+                    result = fp.nomor_seri
             fp.enofa_nomor_dokumen = result
 
     enofa_nomor_dokumen = fields.Char(
@@ -289,10 +289,8 @@ class AccountInvoice(models.Model):
     )
 
     @api.depends(
-        "tax_line_ids",
-        "tax_line_ids.tax_id",
-        "tax_line_ids.amount",
-        "tax_line_ids.amount_rounding",
+        "tax_line",
+        "tax_line.amount",
     )
     @api.multi
     def _compute_jumlah_dpp(self):
@@ -300,10 +298,8 @@ class AccountInvoice(models.Model):
             fp.enofa_jumlah_dpp = fp.amount_untaxed
 
     @api.depends(
-        "tax_line_ids",
-        "tax_line_ids.tax_id",
-        "tax_line_ids.amount",
-        "tax_line_ids.amount_rounding",
+        "tax_line",
+        "tax_line.amount",
     )
     @api.multi
     def _compute_jumlah_ppn(self):
@@ -311,10 +307,8 @@ class AccountInvoice(models.Model):
             fp.enofa_jumlah_ppn = fp.amount_tax
 
     @api.depends(
-        "tax_line_ids",
-        "tax_line_ids.tax_id",
-        "tax_line_ids.amount",
-        "tax_line_ids.amount_rounding",
+        "tax_line",
+        "tax_line.amount",
     )
     @api.multi
     def _compute_jumlah_ppnbm(self):
@@ -338,16 +332,9 @@ class AccountInvoice(models.Model):
     )
 
     @api.multi
-    def action_lock_taxform(self):
-        for doc in self:
-            doc._lock_taxform()
-
-    @api.multi
     def _lock_taxform(self):
         self.ensure_one()
         self.write(self._prepare_lock_taxform())
-        if self.type == "out_invoice":
-            self.nomor_seri_id.mark_used(self)
 
     @api.multi
     def _prepare_lock_taxform(self):
@@ -357,16 +344,9 @@ class AccountInvoice(models.Model):
         }
 
     @api.multi
-    def action_unlock_taxform(self):
-        for doc in self:
-            doc._unlock_taxform()
-
-    @api.multi
     def _unlock_taxform(self):
         self.ensure_one()
         self.write(self._prepare_unlock_taxform())
-        if self.type == "out_invoice":
-            self.nomor_seri_id.mark_unused()
 
     @api.multi
     def _prepare_unlock_taxform(self):

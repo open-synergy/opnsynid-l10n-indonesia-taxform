@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<odoo>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html). -->
+<openerp>
+<data>
+
+    <record id="account_invoice_view_search" model="ir.ui.view">
+        <field name="name">account.invoice.faktur.pajak.search</field>
+        <field name="model">account.invoice</field>
+        <field name="priority" eval="100" />
+        <field name="inherit_id" ref="account.view_account_invoice_filter" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//filter[@name='group_by_partner_id']" position="after">
+                    <filter
+                            string="Nomor Seri FP"
+                            context="{'group_by':'nomor_seri_id'}"
+                        />
+                </xpath>
+            </data>
+        </field>
+    </record>
 
     <record id="account_invoice_supplier_view_form" model="ir.ui.view">
         <field name="name">Account Invoice Supplier Form</field>
@@ -25,53 +46,41 @@
                             <group name="taxform_1_1" colspan="1" col="2">
                                 <field name="lock_taxform" />
                                 <field
-                                    name="transaction_type_id"
-                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                />
+                                        name="transaction_type_id"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
                                 <field
-                                    name="fp_state"
-                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                />
+                                        name="fp_state"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
                                 <field
-                                    name="allowed_nomor_seri_ids"
-                                    widget="many2many_tags"
-                                    invisible="1"
-                                />
+                                        name="allowed_nomor_seri_ids"
+                                        widget="many2many_tags"
+                                        invisible="1"
+                                    />
                                 <field
-                                    name="nomor_seri_id"
-                                    domain="[('id','in',allowed_nomor_seri_ids)]"
-                                    attrs="{'readonly':[('lock_taxform','=',True)],'invisible':[('type','!=','out_invoice')]}"
-                                />
+                                        name="nomor_seri_id"
+                                        domain="[('id','in',allowed_nomor_seri_ids[0][2])]"
+                                        attrs="{'readonly':[('lock_taxform','=',True)],'invisible':[('type','!=','out_invoice')]}"
+                                    />
                                 <field
-                                    name="nomor_seri"
-                                    attrs="{'readonly':[('lock_taxform','=',True)],'invisible':[('type','=','out_invoice')]}"
-                                />
-                                <button
-                                    name="action_lock_taxform"
-                                    type="object"
-                                    string="Lock Taxform"
-                                    attrs="{'invisible':[('lock_taxform','=',True)]}"
-                                />
-                                <button
-                                    name="action_unlock_taxform"
-                                    type="object"
-                                    string="Unlock Taxform"
-                                    attrs="{'invisible':[('lock_taxform','=',False)]}"
-                                />
+                                        name="nomor_seri"
+                                        attrs="{'readonly':[('lock_taxform','=',True)],'invisible':[('type','=','out_invoice')]}"
+                                    />
                             </group>
                             <group name="taxform_1_2" colspan="1" col="2">
                                 <field
-                                    name="date_taxform"
-                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                />
+                                        name="date_taxform"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
                                 <field
-                                    name="taxform_year_id"
-                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                />
+                                        name="taxform_year_id"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
                                 <field
-                                    name="taxform_period_id"
-                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                />
+                                        name="taxform_period_id"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
                             </group>
                         </group>
                         <group name="taxform_2" colspan="4" col="2">
@@ -93,5 +102,5 @@
             </data>
         </field>
     </record>
-
-</odoo>
+</data>
+</openerp>

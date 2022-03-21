@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2017 OpenSynergy Indonesia
-     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html). -->
+<openerp>
+<data>
 <record id="nomor_seri_faktur_pajak_view_tree" model="ir.ui.view">
     <field name="name">Nomor Seri Faktur Pajak</field>
     <field name="model">l10n_id.nomor_seri_faktur_pajak</field>
@@ -9,7 +11,6 @@
         <tree>
             <field name="name" />
             <field name="taxform_year_id" />
-            <field name="faktur_pajak_id" />
             <field name="branch_id" />
         </tree>
     </field>
@@ -20,13 +21,42 @@
     <field name="model">l10n_id.nomor_seri_faktur_pajak</field>
     <field name="arch" type="xml">
         <form>
-            <group name="group_main">
-                <field name="company_id" />
-                <field name="name" />
-                <field name="taxform_year_id" />
-                <field name="faktur_pajak_id" />
-                <field name="branch_id" />
-            </group>
+            <header>
+                <button
+                            name="action_lock_nomor_seri"
+                            type="object"
+                            string="Lock Nomor Seri"
+                            attrs="{'invisible':[('lock_nomor_seri','=',True)]}"
+                        />
+                <button
+                            name="action_unlock_nomor_seri"
+                            type="object"
+                            string="Unlock Nomor Seri"
+                            attrs="{'invisible':[('lock_nomor_seri','=',False)]}"
+                        />
+            </header>
+            <sheet>
+                <div
+                            class="oe_right oe_button_box"
+                            style="width: 300px;"
+                            name="buttons"
+                        >
+                </div>
+                <group name="group_main">
+                    <field name="company_id" />
+                    <field name="name" />
+                    <field name="taxform_year_id" />
+                    <field name="lock_nomor_seri" />
+                    <field name="branch_id" />
+                </group>
+                <notebook>
+                    <page name="page_invoice" string="Invoices">
+                        <group name="group_invoice">
+                            <field name="invoice_ids" nolabel="1" />
+                        </group>
+                    </page>
+                </notebook>
+            </sheet>
         </form>
     </field>
 </record>
@@ -40,10 +70,11 @@
 </record>
 
 <menuitem
-        id="nomor_seri_faktur_pajak_menu"
-        name="Nomor Seri Faktur Pajak"
-        parent="l10n_id_taxform_faktur_pajak_common.taxform_faktur_pajak_configuration_menu"
-        action="nomor_seri_faktur_pajak_action"
-        sequence="1"
-    />
-</odoo>
+            id="nomor_seri_faktur_pajak_menu"
+            name="Nomor Seri Faktur Pajak"
+            parent="l10n_id_taxform_faktur_pajak_common.taxform_faktur_pajak_configuration_menu"
+            action="nomor_seri_faktur_pajak_action"
+            sequence="1"
+        />
+</data>
+</openerp>

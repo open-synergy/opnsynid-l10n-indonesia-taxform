@@ -1,5 +1,6 @@
-# Copyright 2017 OpenSynergy Indonesia
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# Copyright 2022 OpenSynergy Indonesia
+# Copyright 2022 PT. Simetri Sinergi Indonesia
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html).
 
 from openerp import api, fields, models
 
@@ -14,12 +15,17 @@ class NomorSeriFakturPajak(models.Model):
         readonly=False,
         required=True,
     )
-    faktur_pajak_id = fields.Many2one(
+    invoice_ids = fields.One2many(
+        sting="Invoices",
         comodel_name="account.invoice",
-        string="# Invoice",
+        inverse_name="nomor_seri_id",
         readonly=True,
-        ondelete="restrict",
-        required=False,
+    )
+    lock_nomor_seri = fields.Boolean(
+        string="Lock Nomor Seri",
+        readonly=True,
+        default=False,
+        copy=False,
     )
     taxform_year_id = fields.Many2one(
         string="Tahun Pajak",
@@ -65,11 +71,53 @@ class NomorSeriFakturPajak(models.Model):
         return result
 
     @api.multi
-    def mark_used(self, fp):
-        self.ensure_one()
-        self.faktur_pajak_id = fp
+    def action_lock_nomor_seri(self):
+        for doc in self:
+            doc._lock_nomor_seri()
 
     @api.multi
-    def mark_unused(self):
+    def _lock_nomor_seri(self):
         self.ensure_one()
-        self.faktur_pajak_id = False
+        obj_account_invoice = self.env["account.invoice"]
+        criteria = self._prepare_criteria_invoice()
+        invoice_ids = obj_account_invoice.search(criteria)
+        if invoice_ids:
+            for invoice in invoice_ids:
+                invoice._lock_taxform()
+            self.write(self._prepare_lock_nomor_seri())
+
+    @api.multi
+    def _prepare_criteria_invoice(self):
+        self.ensure_one()
+        criteria = [("nomor_seri_id", "=", self.id)]
+        return criteria
+
+    @api.multi
+    def _prepare_lock_nomor_seri(self):
+        self.ensure_one()
+        return {
+            "lock_nomor_seri": True,
+        }
+
+    @api.multi
+    def action_unlock_nomor_seri(self):
+        for doc in self:
+            doc._unlock_nomor_seri()
+
+    @api.multi
+    def _unlock_nomor_seri(self):
+        self.ensure_one()
+        obj_account_invoice = self.env["account.invoice"]
+        criteria = self._prepare_criteria_invoice()
+        invoice_ids = obj_account_invoice.search(criteria)
+        if invoice_ids:
+            for invoice in invoice_ids:
+                invoice._unlock_taxform()
+            self.write(self._prepare_unlock_nomor_seri())
+
+    @api.multi
+    def _prepare_unlock_nomor_seri(self):
+        self.ensure_one()
+        return {
+            "lock_nomor_seri": False,
+        }

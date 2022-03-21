@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2017 OpenSynergy Indonesia
-     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-<odoo>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html). -->
+<openerp>
+<data>
 <record id="faktur_pajak_transaction_type_view_tree" model="ir.ui.view">
     <field name="name">Faktur Pajak Transaction Type</field>
     <field name="model">l10n_id.faktur_pajak_transaction_type</field>
@@ -37,10 +39,11 @@
 </record>
 
 <menuitem
-        id="faktur_pajak_transaction_type_menu"
-        name="Transaction Type"
-        parent="taxform_faktur_pajak_configuration_menu"
-        action="faktur_pajak_transaction_type_action"
-        sequence="1"
-    />
-</odoo>
+            id="faktur_pajak_transaction_type_menu"
+            name="Transaction Type"
+            parent="taxform_faktur_pajak_configuration_menu"
+            action="faktur_pajak_transaction_type_action"
+            sequence="1"
+        />
+</data>
+</openerp>

@@ -1,7 +1,8 @@
-# Copyright 2017 OpenSynergy Indonesia
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# Copyright 2022 OpenSynergy Indonesia
+# Copyright 2022 PT. Simetri Sinergi Indonesia
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html).
 
-from odoo import api, fields, models
+from openerp import api, fields, models
 
 
 class AccountInvoiceLine(models.Model):
@@ -41,7 +42,7 @@ class AccountInvoiceLine(models.Model):
     @api.depends(
         "price_unit",
         "quantity",
-        "invoice_line_tax_ids",
+        "invoice_line_tax_id",
     )
     @api.multi
     def _compute_harga_satuan(self):
@@ -71,7 +72,7 @@ class AccountInvoiceLine(models.Model):
     @api.depends(
         "price_unit",
         "quantity",
-        "invoice_line_tax_ids",
+        "invoice_line_tax_id",
     )
     @api.multi
     def _compute_harga_total(self):
@@ -98,7 +99,7 @@ class AccountInvoiceLine(models.Model):
     @api.depends(
         "price_unit",
         "quantity",
-        "invoice_line_tax_ids",
+        "invoice_line_tax_id",
     )
     @api.multi
     def _compute_dpp(self):
@@ -114,7 +115,7 @@ class AccountInvoiceLine(models.Model):
     @api.depends(
         "price_unit",
         "quantity",
-        "invoice_line_tax_ids",
+        "invoice_line_tax_id",
     )
     @api.multi
     def _compute_ppn(self):
@@ -130,7 +131,7 @@ class AccountInvoiceLine(models.Model):
     @api.depends(
         "price_unit",
         "quantity",
-        "invoice_line_tax_ids",
+        "invoice_line_tax_id",
     )
     @api.multi
     def _compute_tarif_ppnbm(self):
@@ -146,7 +147,7 @@ class AccountInvoiceLine(models.Model):
     @api.depends(
         "price_unit",
         "quantity",
-        "invoice_line_tax_ids",
+        "invoice_line_tax_id",
     )
     @api.multi
     def _compute_ppnbm(self):

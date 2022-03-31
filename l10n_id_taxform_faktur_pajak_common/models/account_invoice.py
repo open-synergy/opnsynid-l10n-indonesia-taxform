@@ -20,14 +20,14 @@ class AccountInvoice(models.Model):
 
     @api.depends(
         "type",
-        "date_taxform",
+        "taxform_year_id",
     )
     @api.multi
     def _compute_allowed_nomor_seri_ids(self):
         obj_nsfp = self.env["l10n_id.nomor_seri_faktur_pajak"]
         for fp in self:
             result = []
-            if fp.type == "out_invoice" and fp.date_taxform:
+            if fp.type == "out_invoice" and fp.taxform_year_id:
                 criteria = [
                     ("taxform_year_id", "=", fp.taxform_year_id.id),
                     ("faktur_pajak_id", "=", False),
@@ -157,7 +157,7 @@ class AccountInvoice(models.Model):
                     result = fp.nomor_seri_id.name
             else:
                 if fp.nomor_seri:
-                    result = fp.nomor_ser
+                    result = fp.nomor_seri
             fp.enofa_nomor_dokumen = result
 
     enofa_nomor_dokumen = fields.Char(

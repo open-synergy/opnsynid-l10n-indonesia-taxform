@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tax_year_user,l10n_id.taxform_year - user,model_l10n_id_tax_year,base.group_user,1,1,1,1
+access_tax_year_all,l10n_id.taxform_year - all,model_l10n_id_tax_year,,1,0,0,0
+access_tax_period_user,l10n_id.taxform_period - user,model_l10n_id_tax_period,base.group_user,1,1,1,1
+access_tax_period_all,l10n_id.taxform_period - all,model_l10n_id_tax_period,,1,0,0,0
+access_taxform_objek_pajak_user,l10n_id.taxform_objek_pajak -user,model_l10n_id_taxform_objek_pajak,base.group_user,1,1,1,1
+access_taxform_objek_pajak_all,l10n_id.taxform_objek_pajak - all,model_l10n_id_taxform_objek_pajak,,1,0,0,0

@@ -49,7 +49,9 @@
         id="l10n_id_taxform_objek_pajak_menu"
         name="Objek Pajak"
         parent="taxform_configuration_menu"
+        groups="l10n_id_object_pajak_configurator_group"
         action="taxform_objek_pajak_action"
+        sequence="2"
     />
 
 </odoo>

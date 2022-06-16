@@ -8,6 +8,7 @@
         id="taxform_period_conf_menu"
         name="Tax Periods"
         parent="taxform_configuration_menu"
+        sequence="1"
     />
 
 <record id="tax_year_view_search" model="ir.ui.view">
@@ -68,7 +69,9 @@
         id="tax_year_menu"
         name="Tax Years"
         parent="taxform_period_conf_menu"
+        groups="l10n_id_tax_year_configurator_group"
         action="tax_year_action"
+        sequence="1"
     />
 
 <record id="tax_period_view_search" model="ir.ui.view">
@@ -126,6 +129,8 @@
         id="tax_period_menu"
         name="Tax Periods"
         parent="taxform_period_conf_menu"
+        groups="l10n_id_tax_period_configurator_group"
         action="tax_period_action"
+        sequence="2"
     />
 </odoo>

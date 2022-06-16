@@ -7,6 +7,14 @@
     <field name="name">Indonesia Taxform</field>
 </record>
 
+<record
+        id="indonesia_taxform_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Indonesia Taxform - Ownership</field>
+    <field name="parent_id" ref="indonesia_taxform_module_category" />
+</record>
+
 <record id="indonesia_taxform_workflow_module_category" model="ir.module.category">
     <field name="name">Indonesia Taxform - Workflow</field>
     <field name="parent_id" ref="indonesia_taxform_module_category" />

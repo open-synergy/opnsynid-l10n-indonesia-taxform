@@ -9,7 +9,7 @@ from odoo.exceptions import Warning as UserError
 class BuktiPotongPPhf113306In(models.Model):
     _name = "l10n_id.bukti_potong_pph_f113306_in"
     _inherit = "l10n_id.bukti_potong_pph_mixin"
-    _description = "Bukti Potong PPh 23 f113306 In"
+    _description = "Bukti Potong PPh 23 f.1.1.33.06 In"
 
     def _get_type_id(self):
         type_id = self.env.ref(

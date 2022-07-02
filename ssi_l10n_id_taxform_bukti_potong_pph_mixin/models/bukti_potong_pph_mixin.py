@@ -118,31 +118,6 @@ class BuktiPotongPPhMixin(models.AbstractModel):
             else:
                 record.total_tax_final = record.manual_total_tax
 
-    name = fields.Char(
-        string="# Bukti Potong",
-        required=True,
-        default="/",
-        copy=False,
-        readonly=True,
-        states={
-            "draft": [
-                ("readonly", False),
-            ],
-        },
-    )
-    company_id = fields.Many2one(
-        string="Company",
-        comodel_name="res.company",
-        required=True,
-        default=lambda self: self._default_company_id(),
-        ondelete="restrict",
-        readonly=True,
-        states={
-            "draft": [
-                ("readonly", False),
-            ],
-        },
-    )
     type_id = fields.Many2one(
         string="Form Type",
         comodel_name="l10n_id.bukti_potong_pph_type",
@@ -301,9 +276,21 @@ class BuktiPotongPPhMixin(models.AbstractModel):
         ],
         required=True,
         default="auto",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     manual_total_tax = fields.Float(
         string="Total Tax (Manual)",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     total_tax_diff = fields.Float(
         string="Total Tax Diff.",
@@ -314,10 +301,22 @@ class BuktiPotongPPhMixin(models.AbstractModel):
     diff_debit_account_id = fields.Many2one(
         string="Diff. Debit Account",
         comodel_name="account.account",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     diff_credit_account_id = fields.Many2one(
         string="Diff. Credit Account",
         comodel_name="account.account",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     total_tax_final = fields.Float(
         string="Total Tax",
@@ -349,6 +348,38 @@ class BuktiPotongPPhMixin(models.AbstractModel):
             ],
         },
     )
+
+    @api.depends(
+        "type_id",
+        "wajib_pajak_id",
+        "pemotong_pajak_id",
+    )
+    def _compute_allowed_move_line(self):
+        AML = self.env["account.move.line"]
+        for record in self:
+            result = []
+            if record.type_id and record.wajib_pajak_id and record.pemotong_pajak_id:
+                criteria = record._prepare_domain_allowed_move_lines()
+                result = AML.search(criteria).ids
+            record.allowed_move_line_ids = result
+
+    def _prepare_domain_allowed_move_lines(self):
+        self.ensure_one()
+        result = [
+            ("account_id", "=", self.account_id.id),
+            ("reconciled", "=", False),
+        ]
+        if self.direction == "in":
+            result.append(("partner_id", "=", self.pemotong_pajak_id.id))
+        else:
+            result.append(("partner_id", "=", self.wajib_pajak_id.id))
+        return result
+
+    allowed_move_line_ids = fields.Many2many(
+        string="Allowed Move Lines",
+        comodel_name="account.move.line",
+        compute="_compute_allowed_move_line",
+    )
     move_id = fields.Many2one(
         string="Accounting Entry",
         comodel_name="account.move",
@@ -379,20 +410,24 @@ class BuktiPotongPPhMixin(models.AbstractModel):
         template_id = self._get_template_policy()
         self.policy_template_id = template_id
 
+    @api.constrains(
+        "total_tax_final",
+    )
+    def _constrains_total_tax_final(self):
+        for record in self:
+            if record.total_tax_final <= 0.0 and len(record.line_ids) > 0:
+                raise UserError(_("Total tax has to be greater than 0"))
+
     def action_done(self):
         _super = super(BuktiPotongPPhMixin, self)
         _super.action_done()
-        # Saat Done lakukan proses penjurnalan di account move dan aml
-        # run prepare_action_done on action_done
         for bukpot in self.sudo():
-            # create journal item (aml)
             bukpot._create_aml()
 
     def _prepare_done_data(self):
         self.ensure_one()
         _super = super(BuktiPotongPPhMixin, self)
         result = _super._prepare_done_data()
-        # Process create journal entry di account move
         move = self._create_journal_entry()
         result.update(
             {
@@ -403,11 +438,8 @@ class BuktiPotongPPhMixin(models.AbstractModel):
 
     def _create_journal_entry(self):
         self.ensure_one()
-        obj_move = self.env["account.move"]
-        if self.total_tax_final <= 0.0:
-            raise UserError(_("Total tax has to be greater than 0"))
-        # Prosess prepapre data
-        move = obj_move.create(self._prepare_journal_entry_data())
+        Move = self.env["account.move"]
+        move = Move.create(self._prepare_journal_entry_data())
         return move
 
     def _prepare_journal_entry_data(self):
@@ -421,91 +453,58 @@ class BuktiPotongPPhMixin(models.AbstractModel):
 
     def _create_aml(self):
         self.ensure_one()
-        obj_move_line = self.env["account.move.line"]
-        # Prosess prepare data aml header
-        obj_move_line.with_context(check_move_validity=False).create(
-            self._prepare_data_aml()
-        )
+        pairs = []
         for line in self.line_ids:
-            # process line on account move
-            line._create_aml()
-        if self.total_tax_diff != 0.0:
+            pairs.append(line._create_aml())
+
+        self.move_id.action_post()
+
+        for pair in pairs:
+            pair.reconcile()
+
+        if self.total_tax_computation == "manual" and self.total_tax_diff != 0.0:
             self._create_aml_diff()
-
-    def _prepare_data_aml(self):
-        self.ensure_one()
-        debit, credit = self._get_aml_amount()
-        result = {
-            "name": self.name,
-            "account_id": self.account_id.id,
-            "debit": debit,
-            "credit": credit,
-            "move_id": self.move_id.id,
-        }
-        return result
-
-    def _get_aml_amount(self):
-        self.ensure_one()
-        debit = credit = 0.0
-        if self.direction == "out":
-            debit = self.total_tax_final
-        else:
-            credit = self.total_tax_final
-        return debit, credit
 
     def action_cancel(self, cancel_reason=False):
         _super = super(BuktiPotongPPhMixin, self)
         res = _super.action_cancel(cancel_reason)
         for bukpot in self.sudo():
-            if bukpot._check_move():
-                bukpot.move_id.button_cancel()
-            bukpot.move_id.unlink()
+            bukpot.move_id.line_ids.remove_move_reconcile()
+            bukpot.move_id.with_context(force_delete=True).unlink()
         return res
-
-    def _check_move(self):
-        self.ensure_one()
-        result = False
-        if self.move_id.state == "posted":
-            result = True
-        return result
 
     def _create_aml_diff(self):
         self.ensure_one()
-        if self.direction == "in":
-            self.env["account.move.line"].with_context(
-                check_move_validity=False
-            ).create(self._prepare_credit_aml_diff())
-        else:
-            self.env["account.move.line"].with_context(
-                check_move_validity=False
-            ).create(self._prepare_debit_aml_diff())
+        AML = self.env["account.move.line"]
+        AML.with_context(check_move_validity=False).create(
+            self._prepare_credit_aml_diff()
+        )
+        AML.with_context(check_move_validity=False).create(
+            self._prepare_debit_aml_diff()
+        )
+
+    def _prepare_aml_diff(self, account):
+        self.ensure_one()
+        name = "Taxform diff %s" % (self.name)
+        amount = abs(self.total_tax_diff)
+        return {
+            "name": name,
+            "account_id": account.id,
+            "debit": amount,
+            "credit": amount,
+            "move_id": self.move_id.id,
+        }
 
     def _prepare_debit_aml_diff(self):
         self.ensure_one()
-        debit = abs(self.total_tax_diff)
-        credit = 0.0
-        name = "Taxform diff %s" % (self.name)
-        result = {
-            "name": name,
-            "account_id": self._get_diff_debit_account().id,
-            "debit": debit,
-            "credit": credit,
-            "move_id": self.move_id.id,
-        }
+        account = self._get_diff_debit_account()
+        result = self._prepare_aml_diff(account.id)
         return result
 
     def _prepare_credit_aml_diff(self):
         self.ensure_one()
-        debit = 0.0
-        credit = abs(self.total_tax_diff)
-        name = "Taxform diff %s" % (self.name)
-        result = {
-            "name": name,
-            "account_id": self._get_diff_credit_account().id,
-            "credit": credit,
-            "debit": debit,
-            "move_id": self.move_id.id,
-        }
+        account = self._get_diff_credit_account()
+        result = self._prepare_aml_diff(account.id)
         return result
 
     def _get_diff_debit_account(self):
@@ -533,22 +532,3 @@ class BuktiPotongPPhMixin(models.AbstractModel):
     @api.onchange("type_id", "company_id")
     def onchange_wajib_pajak_id(self):
         self.wajib_pajak_id = self._default_wajib_pajak_id()
-
-    def unlink(self):
-        strWarning = _("You can only delete data on draft state")
-        for bukti_potong in self:
-            if bukti_potong.state != "draft":
-                if not self.env.context.get("force_unlink", False):
-                    raise UserError(strWarning)
-        _super = super(BuktiPotongPPhMixin, self)
-        _super.unlink()
-
-    def name_get(self):
-        result = []
-        for record in self:
-            if record.name == "/":
-                name = "*" + str(record.id)
-            else:
-                name = record.name
-            result.append((record.id, name))
-        return result

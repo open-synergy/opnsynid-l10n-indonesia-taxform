@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="demo_account1" model="account.account">
+    <field name="name">Art. 23 Receivable No Taxform - (test)</field>
+    <field name="code">XPPH2301</field>
+    <field name="user_type_id" ref="account.data_account_type_current_assets" />
+    <field name="internal_type">other</field>
+    <field name="reconcile" eval="1" />
+</record>
+
+<record id="demo_account2" model="account.account">
+    <field name="name">Art. 23 Receivable - (test)</field>
+    <field name="code">XPPH2302</field>
+    <field name="user_type_id" ref="account.data_account_type_current_assets" />
+    <field name="internal_type">other</field>
+    <field name="reconcile" eval="1" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+
+<record id="demo_account3" model="account.account">
+    <field name="name">Art. 23 Payable No Taxform - (test)</field>
+    <field name="code">XPPH2303</field>
+    <field name="user_type_id" ref="account.data_account_type_current_liabilities" />
+    <field name="internal_type">other</field>
+    <field name="reconcile" eval="1" />
+</record>
+
+<record id="demo_account4" model="account.account">
+    <field name="name">Art. 23 Payable - (test)</field>
+    <field name="code">XPPH2304</field>
+    <field name="user_type_id" ref="account.data_account_type_current_liabilities" />
+    <field name="internal_type">other</field>
+    <field name="reconcile" eval="1" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+</odoo>

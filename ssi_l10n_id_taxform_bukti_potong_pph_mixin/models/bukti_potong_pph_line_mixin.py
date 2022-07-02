@@ -58,15 +58,34 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
     move_line_id = fields.Many2one(
         string="Move Line",
         comodel_name="account.move.line",
+        required=True,
         copy=False,
         ondelete="restrict",
+    )
+
+    @api.depends(
+        "move_line_id",
+    )
+    def _compute_allowed_income_move_line_ids(self):
+        AML = self.env["account.move.line"]
+        for record in self:
+            result = []
+            if record.move_line_id:
+                criteria = [
+                    ("move_id", "=", record.move_line_id.move_id.id),
+                    ("id", "!=", record.move_line_id.id),
+                ]
+                result = AML.search(criteria).ids
+            record.allowed_income_move_line_ids = result
+
+    allowed_income_move_line_ids = fields.Many2many(
+        string="Allowed Income Move Lines",
+        comodel_name="account.move.line",
+        compute="_compute_allowed_income_move_line_ids",
     )
     income_move_line_ids = fields.Many2many(
         string="Income Move Lines",
         comodel_name="account.move.line",
-        relation="rel_bukpot_line_2_income_move",
-        column1="bukpot_line_id",
-        column2="account_move_id",
     )
     amount = fields.Float(
         string="Amount",
@@ -81,57 +100,114 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         compute_sudo=True,
     )
 
+    @api.onchange(
+        "move_line_id",
+        "tax_id",
+    )
+    def onchange_name(self):
+        self.name = False
+        if self.move_line_id and self.tax_id:
+            name = "%s - %s" % (self.move_line_id.move_id.name, self.tax_id.name)
+            self.name = name
+
     def _create_aml(self):
         self.ensure_one()
-        obj_aml = self.env["account.move.line"]
+        AML = self.env["account.move.line"]
         pair = False
-        tax_aml = obj_aml.with_context(check_move_validity=False).create(
-            self._prepare_tax_aml_data()
+        debit_aml = AML.with_context(check_move_validity=False).create(
+            self._prepare_tax_debit_aml_data()
         )
-        if self.move_line_id:
-            pair = tax_aml + self.move_line_id
+        credit_aml = AML.with_context(check_move_validity=False).create(
+            self._prepare_tax_credit_aml_data()
+        )
+        pair = self._pair_aml(debit_aml, credit_aml)
         return pair
 
-    @api.model
+    def _pair_aml(self, debit_aml, credit_aml):
+        self.ensure_one()
+        result = False
+
+        if self.bukti_potong_id.direction == "in":
+            result = self.move_line_id + credit_aml
+        else:
+            result = self.move_line_id + debit_aml
+
+        return result
+
     def _prepare_aml_data(
         self,
-        name,
         account_id,
         debit,
         credit,
-        move_id,
+        partner_id=False,
     ):
         result = {
-            "name": name,
+            "name": self.name,
             "account_id": account_id,
             "debit": debit,
             "credit": credit,
-            "move_id": move_id,
+            "move_id": self.bukti_potong_id.move_id.id,
+            "partner_id": partner_id,
         }
         return result
 
-    def _get_tax_aml_amount(self):
+    def _get_debit_account(self):
         self.ensure_one()
-        bukpot = self.bukti_potong_id
-        debit = credit = 0.0
-        if bukpot.direction == "in":
-            debit = self.amount_tax
+        result = False
+        if self.bukti_potong_id.direction == "in":
+            result = self._select_tax_account()
         else:
-            credit = self.amount_tax
-        return debit, credit
-
-    def _prepare_tax_aml_data(self):
-        self.ensure_one()
-        bukpot = self.bukti_potong_id
-        debit, credit = self._get_tax_aml_amount()
-        result = self._prepare_aml_data(
-            name=self.name,
-            account_id=self._select_tax_account().id,
-            debit=debit,
-            credit=credit,
-            move_id=bukpot.move_id.id,
-        )
+            result = self.move_line_id.account_id
         return result
+
+    def _get_credit_account(self):
+        self.ensure_one()
+        result = False
+        if self.bukti_potong_id.direction == "out":
+            result = self._select_tax_account()
+        else:
+            result = self.move_line_id.account_id
+        return result
+
+    def _get_debit_partner(self):
+        self.ensure_one()
+        result = False
+        if self.bukti_potong_id.direction == "in":
+            result = self.bukti_potong_id.kpp_id
+        else:
+            result = self.move_line_id.partner_id
+        return result
+
+    def _get_credit_partner(self):
+        self.ensure_one()
+        result = False
+        if self.bukti_potong_id.direction == "out":
+            result = self.bukti_potong_id.kpp_id
+        else:
+            result = self.move_line_id.partner_id
+        return result
+
+    def _prepare_tax_debit_aml_data(self):
+        self.ensure_one()
+        account = self._get_debit_account()
+        partner = self._get_debit_partner()
+        return self._prepare_aml_data(
+            account_id=account.id,
+            debit=self.amount_tax,
+            credit=0.0,
+            partner_id=partner and partner.id or False,
+        )
+
+    def _prepare_tax_credit_aml_data(self):
+        self.ensure_one()
+        account = self._get_credit_account()
+        partner = self._get_credit_partner()
+        return self._prepare_aml_data(
+            account_id=account.id,
+            credit=self.amount_tax,
+            debit=0.0,
+            partner_id=partner and partner.id or False,
+        )
 
     def _select_tax_account(self):
         self.ensure_one()

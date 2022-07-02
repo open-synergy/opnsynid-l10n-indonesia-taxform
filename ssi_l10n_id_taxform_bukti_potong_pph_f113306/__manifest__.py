@@ -24,7 +24,13 @@
         "data/sequence_template_data.xml",
         "data/policy_template_data.xml",
         "data/approval_template_data.xml",
+        "views/bukti_potong_pph_type_views.xml",
         "views/bukti_potong_pph_f113306_in_views.xml",
-        # "views/bukti_potong_pph_views.xml",
+    ],
+    "demo": [
+        "demo/account_journal_demo.xml",
+        "demo/account_account_demo.xml",
+        "demo/account_tax_demo.xml",
+        "demo/l10n_id_bukti_potong_type_demo.xml",
     ],
 }

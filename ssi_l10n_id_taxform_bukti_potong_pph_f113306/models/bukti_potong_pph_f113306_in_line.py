@@ -8,7 +8,7 @@ from odoo import fields, models
 class BuktiPotongPPhf113306InLine(models.Model):
     _name = "l10n_id.bukti_potong_pph_f113306_in_line"
     _inherit = "l10n_id.bukti_potong_pph_line_mixin"
-    _description = "Bukti Potong PPh 23 f113306 In Line"
+    _description = "Bukti Potong PPh 23 f.1.1.33.06 In Line"
 
     bukti_potong_id = fields.Many2one(
         comodel_name="l10n_id.bukti_potong_pph_f113306_in",

@@ -12,7 +12,7 @@
     "installable": True,
     "application": True,
     "depends": [
-        "ssi_financial_accounting",
+        "account",
         "ssi_transaction_mixin",
         "ssi_transaction_confirm_mixin",
         "ssi_transaction_done_mixin",
@@ -23,6 +23,7 @@
         "security/res_group_data.xml",
         "security/ir.model.access.csv",
         "data/data_decimal_precision.xml",
+        "menu.xml",
         "views/bukti_potong_pph_type_views.xml",
         "views/bukti_potong_pph_mixin_views.xml",
     ],

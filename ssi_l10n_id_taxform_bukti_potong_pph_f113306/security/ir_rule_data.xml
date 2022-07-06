@@ -62,4 +62,64 @@
     <field name="perm_create" eval="1" />
 </record>
 
+<!-- f113306 out -->
+<record id="l10n_id_bukti_potong_pph_f113306_out_internal_user_rule" model="ir.rule">
+    <field name="name">Bukti Potong PPh f113306 Out - Internal Users</field>
+    <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113306_out" />
+    <field name="groups" eval="[(4, ref('base.group_user'))]" />
+    <field name="domain_force">[
+      ('user_id','=',user.id),
+    ]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113306_out_company_rule" model="ir.rule">
+    <field
+            name="name"
+        >Bukti Potong PPh f113306 Out - Responsible to company data</field>
+    <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113306_out" />
+    <field
+            name="groups"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113306_out_company_group'))]"
+        />
+    <field name="domain_force">[('company_id','=',user.company_id.id)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113306_out_companies_rule" model="ir.rule">
+    <field
+            name="name"
+        >Bukti Potong PPh f113306 Out - Responsible to company and all child companies data</field>
+    <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113306_out" />
+    <field
+            name="groups"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113306_out_companies_group'))]"
+        />
+    <field name="domain_force">[('company_id','=',user.company_id.id)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113306_out_all_rule" model="ir.rule">
+    <field name="name">Bukti Potong PPh f113306 Out - All</field>
+    <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113306_out" />
+    <field
+            name="groups"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113306_out_all_group'))]"
+        />
+    <field name="domain_force">[(1,'=',1)]</field>
+    <field name="perm_unlink" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_create" eval="1" />
+</record>
+
 </odoo>

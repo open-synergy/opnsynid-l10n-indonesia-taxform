@@ -4,6 +4,7 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
 <!-- Workflow -->
+<!-- In -->
 <record
         id="l10n_id_bukti_potong_pph_f113306_in_data_workflow_module_category"
         model="ir.module.category"
@@ -14,13 +15,36 @@
             ref="ssi_l10n_id_taxform.indonesia_taxform_workflow_module_category"
         />
 </record>
+<!-- Out -->
+<record
+        id="l10n_id_bukti_potong_pph_f113306_out_data_workflow_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Bukti Potong PPh 23 f113306 Out</field>
+    <field
+            name="parent_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_workflow_module_category"
+        />
+</record>
 
 <!-- Data Ownership -->
+<!-- In -->
 <record
         id="l10n_id_bukti_potong_pph_f113306_in_data_ownership_module_category"
         model="ir.module.category"
     >
     <field name="name">Bukti Potong PPh 23 f113306 In</field>
+    <field
+            name="parent_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_data_ownership_module_category"
+        />
+</record>
+<!-- Out -->
+<record
+        id="l10n_id_bukti_potong_pph_f113306_out_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Bukti Potong PPh 23 f113306 Out</field>
     <field
             name="parent_id"
             ref="ssi_l10n_id_taxform.indonesia_taxform_data_ownership_module_category"

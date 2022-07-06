@@ -11,6 +11,14 @@
     <field name="res_id" ref="bukti_potong_pph_type_f113306_in" />
 </record>
 
+<record id="bukti_potong_pph_type_f113306_out_action" model="ir.actions.act_window">
+    <field name="name">Bukti Potong PPh 23 (f.1.1.33.06) Out</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">l10n_id.bukti_potong_pph_type</field>
+    <field name="view_mode">form</field>
+    <field name="res_id" ref="bukti_potong_pph_type_f113306_out" />
+</record>
+
 <menuitem
         id="bukti_potong_pph_type_f113306_in_menu"
         name="Bukti Potong PPh 23 (f.1.1.33.06) In"
@@ -18,4 +26,12 @@
         action="bukti_potong_pph_type_f113306_in_action"
         sequence="3"
     />
+<menuitem
+        id="bukti_potong_pph_type_f113306_out_menu"
+        name="Bukti Potong PPh 23 (f.1.1.33.06) Out"
+        parent="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukpot_configuration_menu"
+        action="bukti_potong_pph_type_f113306_out_action"
+        sequence="4"
+    />
+
 </odoo>

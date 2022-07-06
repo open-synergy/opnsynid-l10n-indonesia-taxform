@@ -18,4 +18,21 @@
         />
 
 </record>
+
+<record id="bukti_potong_pph_type_f113306_out" model="l10n_id.bukti_potong_pph_type">
+    <field
+            name="journal_ids"
+            eval="[(6, 0, [ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.demo_journal2')])]"
+        />
+    <field
+            name="tax_ids"
+            eval="[(6, 0, [ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.demo_tax2')])]"
+        />
+    <field
+            name="account_ids"
+            eval="[(6, 0, [ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.demo_account3'),ref('l10n_generic_coa.1_payable')])]"
+        />
+
+</record>
+
 </odoo>

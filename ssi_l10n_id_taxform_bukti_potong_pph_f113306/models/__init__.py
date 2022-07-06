@@ -5,4 +5,6 @@
 from . import (
     bukti_potong_pph_f113306_in,
     bukti_potong_pph_f113306_in_line,
+    bukti_potong_pph_f113306_out,
+    bukti_potong_pph_f113306_out_line,
 )

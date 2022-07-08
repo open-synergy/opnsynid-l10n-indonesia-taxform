@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+<record id="bukti_potong_pph_f113301_out_view_tree" model="ir.ui.view">
+    <field name="name">l10n_id.bukti_potong_pph_f113301_out - Tree</field>
+    <field name="model">l10n_id.bukti_potong_pph_f113301_out</field>
+    <field name="mode">primary</field>
+    <field
+            name="inherit_id"
+            ref="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukti_potong_pph_mixin_view_tree"
+        />
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="bukti_potong_pph_f113301_out_view_form" model="ir.ui.view">
+    <field name="name">l10n_id.bukti_potong_pph_f113301_out - Form</field>
+    <field name="model">l10n_id.bukti_potong_pph_f113301_out</field>
+    <field name="mode">primary</field>
+    <field
+            name="inherit_id"
+            ref="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukti_potong_pph_mixin_view_form"
+        />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//sheet" position="inside">
+                <h1 name="form_name" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="bukti_potong_pph_f113301_out_view_search" model="ir.ui.view">
+    <field name="name">l10n_id.bukti_potong_pph_f113301_out - Search</field>
+    <field name="model">l10n_id.bukti_potong_pph_f113301_out</field>
+    <field name="mode">primary</field>
+    <field
+            name="inherit_id"
+            ref="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukti_potong_pph_mixin_search"
+        />
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="bukti_potong_pph_f113301_out_action" model="ir.actions.act_window">
+    <field name="name">Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01) Out</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">l10n_id.bukti_potong_pph_f113301_out</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="bukti_potong_pph_f113301_out_view_search" />
+    <field name="context">{'default_filter_draft':1, 'default_filter_confirm':1}</field>
+</record>
+
+<menuitem
+        id="bukti_potong_pph_2126_out_menu"
+        name="PPh 21/26 Tidak Final (f.1.1.33.01) Out"
+        parent="ssi_l10n_id_taxform.taxform_bukti_potong_menu"
+        groups="l10n_id_bukti_potong_pph_f113301_out_viewer_group"
+        action="bukti_potong_pph_f113301_out_action"
+        sequence="21"
+    />
+
+</odoo>

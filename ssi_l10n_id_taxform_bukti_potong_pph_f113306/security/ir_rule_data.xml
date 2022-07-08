@@ -41,7 +41,7 @@
             name="groups"
             eval="[(4, ref('l10n_id_bukti_potong_pph_f113306_in_companies_group'))]"
         />
-    <field name="domain_force">[('company_id','=',user.company_id.id)]</field>
+    <field name="domain_force">[('company_id','child_of',user.company_id.id)]</field>
     <field name="perm_unlink" eval="1" />
     <field name="perm_write" eval="1" />
     <field name="perm_read" eval="1" />
@@ -101,7 +101,7 @@
             name="groups"
             eval="[(4, ref('l10n_id_bukti_potong_pph_f113306_out_companies_group'))]"
         />
-    <field name="domain_force">[('company_id','=',user.company_id.id)]</field>
+    <field name="domain_force">[('company_id','child_of',user.company_id.id)]</field>
     <field name="perm_unlink" eval="1" />
     <field name="perm_write" eval="1" />
     <field name="perm_read" eval="1" />

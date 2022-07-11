@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+<record id="bukti_potong_pph_type_f113302_out" model="l10n_id.bukti_potong_pph_type">
+    <field
+            name="journal_ids"
+            eval="[(6, 0, [ref('ssi_l10n_id_taxform_bukti_potong_pph_f113302.demo_journal1')])]"
+        />
+    <field
+            name="tax_ids"
+            eval="[(6, 0, [ref('ssi_l10n_id_taxform_bukti_potong_pph_f113302.demo_tax1')])]"
+        />
+    <field
+            name="account_ids"
+            eval="[(6, 0, [ref('ssi_l10n_id_taxform_bukti_potong_pph_f113302.demo_account1'),ref('l10n_generic_coa.1_payable')])]"
+        />
+
+</record>
+
+</odoo>

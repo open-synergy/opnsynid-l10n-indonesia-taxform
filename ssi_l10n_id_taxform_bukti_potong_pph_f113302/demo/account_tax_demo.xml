@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+<record id="demo_tax1" model="account.tax">
+    <field name="name">PPh 21 Final 5% - (test)</field>
+    <field name="amount_type">percent</field>
+    <field name="type_tax_use">none</field>
+    <field name="amount" eval="5.0" />
+    <field name="description">PPh 21 Final Out</field>
+    <field name="company_id" ref="base.main_company" />
+    <field
+            name="invoice_repartition_line_ids"
+            eval="[(5, 0, 0),
+        (0,0, {
+            'factor_percent': 100,
+            'repartition_type': 'base',
+        }),
+        (0,0, {
+            'factor_percent': 100,
+            'repartition_type': 'tax',
+            'account_id': ref('demo_account1'),
+        }),
+    ]"
+        />
+</record>
+
+</odoo>

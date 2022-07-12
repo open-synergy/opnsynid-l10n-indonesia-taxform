@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<!-- Workflow -->
+<!-- In -->
+<record
+        id="l10n_id_bukti_potong_pph_f113304_in_data_workflow_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Bukti Potong PPh 22 (f.1.1.33.04) In</field>
+    <field
+            name="parent_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_workflow_module_category"
+        />
+</record>
+<!-- Out -->
+<record
+        id="l10n_id_bukti_potong_pph_f113304_out_data_workflow_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Bukti Potong PPh 22 (f.1.1.33.04) Out</field>
+    <field
+            name="parent_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_workflow_module_category"
+        />
+</record>
+
+<!-- Data Ownership -->
+<!-- In -->
+<record
+        id="l10n_id_bukti_potong_pph_f113304_in_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Bukti Potong PPh 22 (f.1.1.33.04) In</field>
+    <field
+            name="parent_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_data_ownership_module_category"
+        />
+</record>
+<!-- Out -->
+<record
+        id="l10n_id_bukti_potong_pph_f113304_out_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Bukti Potong PPh 22 (f.1.1.33.04) Out</field>
+    <field
+            name="parent_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_data_ownership_module_category"
+        />
+</record>
+
+</odoo>

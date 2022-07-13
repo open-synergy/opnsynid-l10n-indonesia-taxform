@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<data noupdate="1">
+<!-- f113308 in -->
+<record id="sequence_f113308_in" model="ir.sequence">
+    <field name="name">Default Bukti Potong f113308 In</field>
+    <field name="code">l10n_id.bukti_potong_pph_f113308_in</field>
+    <field name="prefix">F113308In/%(range_year)s/</field>
+    <field eval="1" name="number_next" />
+    <field eval="1" name="number_increment" />
+    <field name="padding" eval="6" />
+    <field name="use_date_range" eval="1" />
+    <field eval="False" name="company_id" />
+</record>
+
+<!-- f113308 out -->
+<record id="sequence_f113308_out" model="ir.sequence">
+    <field name="name">Default Bukti Potong f113308 Out</field>
+    <field name="code">l10n_id.bukti_potong_pph_f113308_out</field>
+    <field name="prefix">F113308Out/%(range_year)s/</field>
+    <field eval="1" name="number_next" />
+    <field eval="1" name="number_increment" />
+    <field name="padding" eval="6" />
+    <field name="use_date_range" eval="1" />
+    <field eval="False" name="company_id" />
+</record>
+</data>
+</odoo>

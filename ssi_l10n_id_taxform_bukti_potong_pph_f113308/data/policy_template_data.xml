@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<!-- f113308 In -->
+<data noupdate="0">
+<record id="policy_template_f113308_in" model="policy.template">
+    <field name="name">Standard</field>
+    <field
+                name="model_id"
+                ref="ssi_l10n_id_taxform_bukti_potong_pph_f113308.model_l10n_id_bukti_potong_pph_f113308_in"
+            />
+    <field
+                name="state_field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','state')]"
+            />
+    <field name="sequence" eval="100" />
+    <field name="python_code">result=True</field>
+</record>
+
+<!-- f113308 in confirm_ok -->
+<record id="policy_template_f113308_in_confirm" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_in" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','confirm_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_in_user_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113308 In approve_ok -->
+<record id="policy_template_f113308_in_approve" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_in" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','approve_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<!-- f113308 In reject_ok -->
+<record id="policy_template_f113308_in_reject" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_in" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','reject_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<!-- f113308 In restart_approval_ok -->
+<record id="policy_template_f113308_in_restart_approval" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_in" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','restart_approval_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('value','in',['confirm'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_in_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if not document.approval_template_id:
+    result = True</field>
+</record>
+
+<!-- f113308 in cancel_ok -->
+<record id="policy_template_f113308_in_cancel" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_in" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','cancel_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('value','in',['draft','confirm','done'])]"
+            />
+      <field name="restrict_user" eval="1" />
+      <field name="computation_method">use_group</field>
+      <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_in_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113308 in restart_ok -->
+<record id="policy_template_f113308_in_restart" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_in" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','restart_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('value','in',['cancel','reject'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_in_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113308 In: manual_number_ok -->
+<record id="policy_template_f113308_in_manual_number" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_in" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('name','=','manual_number_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_in'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_in_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113308 Out -->
+<record id="policy_template_f113308_out" model="policy.template">
+    <field name="name">Standard</field>
+    <field
+                name="model_id"
+                ref="ssi_l10n_id_taxform_bukti_potong_pph_f113308.model_l10n_id_bukti_potong_pph_f113308_out"
+            />
+    <field
+                name="state_field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','state')]"
+            />
+    <field name="sequence" eval="100" />
+    <field name="python_code">result=True</field>
+</record>
+
+<!-- f113308 Out confirm_ok -->
+<record id="policy_template_f113308_out_confirm" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_out" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','confirm_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_out_user_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113308 Out approve_ok -->
+<record id="policy_template_f113308_out_approve" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_out" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','approve_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<!-- f113308 Out reject_ok -->
+<record id="policy_template_f113308_out_reject" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_out" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','reject_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<!-- f113308 Out restart_approval_ok -->
+<record
+            id="policy_template_f113308_out_restart_approval"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="policy_template_f113308_out" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','restart_approval_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('value','in',['confirm'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_out_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if not document.approval_template_id:
+    result = True</field>
+</record>
+
+<!-- f113308 Out cancel_ok -->
+<record id="policy_template_f113308_out_cancel" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_out" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','cancel_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('value','in',['draft','confirm','done'])]"
+            />
+      <field name="restrict_user" eval="1" />
+      <field name="computation_method">use_group</field>
+      <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_out_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113308 Out restart_ok -->
+<record id="policy_template_f113308_out_restart" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_out" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','restart_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('value','in',['cancel','reject'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_out_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113308 Out: manual_number_ok -->
+<record id="policy_template_f113308_out_manual_number" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113308_out" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('name','=','manual_number_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113308_out'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field
+                name="group_ids"
+                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_out_validator_group')])]"
+            />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+</data>
+</odoo>

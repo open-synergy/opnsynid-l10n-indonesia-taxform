@@ -6,7 +6,7 @@
 
 <!-- f113308 in -->
 <record id="l10n_id_bukti_potong_pph_f113308_in_internal_user_rule" model="ir.rule">
-    <field name="name">Bukti Potong PPh (f.1.1.33.08) In - Internal Users</field>
+    <field name="name">Bukti Potong PPh 26 (f.1.1.33.08) In - Internal Users</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_in" />
     <field name="groups" eval="[(4, ref('base.group_user'))]" />
     <field name="domain_force">[
@@ -21,7 +21,7 @@
 <record id="l10n_id_bukti_potong_pph_f113308_in_company_rule" model="ir.rule">
     <field
             name="name"
-        >Bukti Potong PPh (f.1.1.33.08) In - Responsible to company data</field>
+        >Bukti Potong PPh 26 (f.1.1.33.08) In - Responsible to company data</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_in" />
     <field
             name="groups"
@@ -37,7 +37,7 @@
 <record id="l10n_id_bukti_potong_pph_f113308_in_companies_rule" model="ir.rule">
     <field
             name="name"
-        >Bukti Potong PPh (f.1.1.33.08) In - Responsible to company and all child companies data</field>
+        >Bukti Potong PPh 26 (f.1.1.33.08) In - Responsible to company and all child companies data</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_in" />
     <field
             name="groups"
@@ -51,7 +51,7 @@
 </record>
 
 <record id="l10n_id_bukti_potong_pph_f113308_in_all_rule" model="ir.rule">
-    <field name="name">Bukti Potong PPh (f.1.1.33.08) In - All</field>
+    <field name="name">Bukti Potong PPh 26 (f.1.1.33.08) In - All</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_in" />
     <field
             name="groups"
@@ -66,7 +66,7 @@
 
 <!-- f113308 out -->
 <record id="l10n_id_bukti_potong_pph_f113308_out_internal_user_rule" model="ir.rule">
-    <field name="name">Bukti Potong PPh f113308 Out - Internal Users</field>
+    <field name="name">Bukti Potong PPh 26 (f.1.1.33.08) Out - Internal Users</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_out" />
     <field name="groups" eval="[(4, ref('base.group_user'))]" />
     <field name="domain_force">[
@@ -81,7 +81,7 @@
 <record id="l10n_id_bukti_potong_pph_f113308_out_company_rule" model="ir.rule">
     <field
             name="name"
-        >Bukti Potong PPh f113308 Out - Responsible to company data</field>
+        >Bukti Potong PPh 26 (f.1.1.33.08) Out - Responsible to company data</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_out" />
     <field
             name="groups"
@@ -97,7 +97,7 @@
 <record id="l10n_id_bukti_potong_pph_f113308_out_companies_rule" model="ir.rule">
     <field
             name="name"
-        >Bukti Potong PPh f113308 Out - Responsible to company and all child companies data</field>
+        >Bukti Potong PPh 26 (f.1.1.33.08) Out - Responsible to company and all child companies data</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_out" />
     <field
             name="groups"
@@ -111,7 +111,7 @@
 </record>
 
 <record id="l10n_id_bukti_potong_pph_f113308_out_all_rule" model="ir.rule">
-    <field name="name">Bukti Potong PPh f113308 Out - All</field>
+    <field name="name">Bukti Potong PPh 26 (f.1.1.33.08) Out - All</field>
     <field name="model_id" ref="model_l10n_id_bukti_potong_pph_f113308_out" />
     <field
             name="groups"

@@ -26,16 +26,23 @@ class AccountInvoiceLine(models.Model):
 
     @api.depends(
         "name",
+        "faktur_description",
     )
     @api.multi
     def _compute_nama(self):
-        for line in self:
-            line.enofa_nama = line.name or "-"
+        for document in self:
+            enofa_nama = document.name or "-"
+            if document.faktur_description:
+                enofa_nama = document.faktur_description
+            document.enofa_nama = enofa_nama
 
     enofa_nama = fields.Char(
         string="NAMA",
         compute="_compute_nama",
         store=False,
+    )
+    faktur_description = fields.Char(
+        string="e-Faktur Description",
     )
 
     @api.depends(

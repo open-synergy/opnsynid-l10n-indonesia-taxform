@@ -31,6 +31,16 @@
                             <group name="taxform_1_1" colspan="1" col="2">
                                 <field name="lock_taxform" />
                                 <field
+                                    name="allowed_taxform_address_ids"
+                                    widget="many2many_tags"
+                                    invisible="1"
+                                />
+                                <field
+                                    name="taxform_address_id"
+                                    attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    domain="[('id','in',allowed_taxform_address_ids)]"
+                                />
+                                <field
                                     name="transaction_type_id"
                                     attrs="{'readonly':[('lock_taxform','=',True)]}"
                                 />

@@ -77,6 +77,29 @@ class AccountInvoice(models.Model):
         ],
         copy=False,
     )
+
+    @api.depends(
+        "partner_id",
+    )
+    def _compute_allowed_taxform_address_ids(self):
+        ResParter = self.env["res.partner"]
+        for record in self:
+            result = []
+            if record.partner_id:
+                criteria = [("commercial_partner_id", "=", record.partner_id.id)]
+                result = ResParter.search(criteria).ids
+            record.allowed_taxform_address_ids = result
+
+    allowed_taxform_address_ids = fields.Many2many(
+        string="Allowed Taxform Address",
+        comodel_name="res.partner",
+        compute="_compute_allowed_taxform_address_ids",
+        store=False,
+    )
+    taxform_address_id = fields.Many2one(
+        string="Taxform Address",
+        comodel_name="res.partner",
+    )
     # Taxform Date and Period
     date_taxform = fields.Date(
         string="Document Date",
@@ -336,6 +359,10 @@ class AccountInvoice(models.Model):
         compute="_compute_jumlah_ppnbm",
         store=False,
     )
+
+    @api.onchange("partner_id")
+    def onchange_taxform_address_id(self):
+        self.taxform_address_id = False
 
     @api.multi
     def action_lock_taxform(self):

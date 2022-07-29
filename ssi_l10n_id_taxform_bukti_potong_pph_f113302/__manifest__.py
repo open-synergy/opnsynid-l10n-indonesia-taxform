@@ -4,13 +4,13 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia - Bukti Potong PPh 21 Final (f.1.1.33.02)",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.1.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
     "installable": True,
-    "application": True,
+    "application": False,
     "depends": [
         "ssi_l10n_id_taxform_bukti_potong_pph_mixin",
     ],

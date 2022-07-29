@@ -4,13 +4,13 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia - Mixin Feature for Bukti Potong PPh",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.1.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
     "installable": True,
-    "application": True,
+    "application": False,
     "depends": [
         "account",
         "ssi_transaction_mixin",

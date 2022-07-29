@@ -4,7 +4,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia's Taxform",
-    "version": "14.0.1.1.0",
+    "version": "14.0.1.2.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
@@ -21,6 +21,7 @@
         "security/ir.model.access.csv",
         "menu.xml",
         "data/taxform_objek_pajak_data.xml",
+        "views/res_config_settings_views.xml",
         "views/tax_period_views.xml",
         "views/taxform_objek_pajak_views.xml",
     ],

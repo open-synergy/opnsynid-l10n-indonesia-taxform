@@ -46,11 +46,35 @@
                             <group name="taxform_1_1" colspan="1" col="2">
                                 <field name="lock_taxform" />
                                 <field
+                                        name="allowed_taxform_address_ids"
+                                        widget="many2many_tags"
+                                        invisible="1"
+                                    />
+                                <field
+                                        name="taxform_address_id"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                        domain="[('id','in',allowed_taxform_address_ids[0][2])]"
+                                    />
+                                <field
                                         name="transaction_type_id"
                                         attrs="{'readonly':[('lock_taxform','=',True)]}"
                                     />
                                 <field
                                         name="fp_state"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
+                            </group>
+                            <group name="taxform_1_2" colspan="1" col="2">
+                                <field
+                                        name="date_taxform"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
+                                <field
+                                        name="taxform_year_id"
+                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
+                                    />
+                                <field
+                                        name="taxform_period_id"
                                         attrs="{'readonly':[('lock_taxform','=',True)]}"
                                     />
                                 <field
@@ -68,20 +92,20 @@
                                         attrs="{'readonly':[('lock_taxform','=',True)],'invisible':[('type','=','out_invoice')]}"
                                     />
                             </group>
-                            <group name="taxform_1_2" colspan="1" col="2">
-                                <field
-                                        name="date_taxform"
-                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                    />
-                                <field
-                                        name="taxform_year_id"
-                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                    />
-                                <field
-                                        name="taxform_period_id"
-                                        attrs="{'readonly':[('lock_taxform','=',True)]}"
-                                    />
-                            </group>
+                            <button
+                                    name="action_lock_nomor_seri"
+                                    type="object"
+                                    string="Lock Nomor Seri"
+                                    colspan="2"
+                                    attrs="{'invisible':[('lock_taxform','=',True)]}"
+                                />
+                            <button
+                                    name="action_unlock_nomor_seri"
+                                    type="object"
+                                    string="Unlock Nomor Seri"
+                                    colspan="2"
+                                    attrs="{'invisible':[('lock_taxform','=',False)]}"
+                                />
                         </group>
                         <group name="taxform_2" colspan="4" col="2">
                             <field name="enofa_jenis_transaksi" />

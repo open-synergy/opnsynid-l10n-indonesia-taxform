@@ -12,6 +12,7 @@
             <field name="name" />
             <field name="taxform_year_id" />
             <field name="branch_id" />
+            <field name="lock_nomor_seri" />
         </tree>
     </field>
 </record>

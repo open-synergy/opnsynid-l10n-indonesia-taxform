@@ -19,6 +19,29 @@ class AccountInvoice(models.Model):
     )
 
     @api.depends(
+        "partner_id",
+    )
+    def _compute_allowed_taxform_address_ids(self):
+        ResParter = self.env["res.partner"]
+        for record in self:
+            result = []
+            if record.partner_id:
+                criteria = [("commercial_partner_id", "=", record.partner_id.id)]
+                result = ResParter.search(criteria).ids
+            record.allowed_taxform_address_ids = result
+
+    allowed_taxform_address_ids = fields.Many2many(
+        string="Allowed Taxform Address",
+        comodel_name="res.partner",
+        compute="_compute_allowed_taxform_address_ids",
+        store=False,
+    )
+    taxform_address_id = fields.Many2one(
+        string="Taxform Address",
+        comodel_name="res.partner",
+    )
+
+    @api.depends(
         "type",
         "date_taxform",
     )
@@ -369,3 +392,13 @@ class AccountInvoice(models.Model):
                 doc.type != "out_invoice" and not doc.nomor_seri_id and doc.lock_taxform
             ):
                 raise UserError(error_msg)
+
+    @api.multi
+    def action_lock_nomor_seri(self):
+        for doc in self:
+            doc.nomor_seri_id._lock_nomor_seri()
+
+    @api.multi
+    def action_unlock_nomor_seri(self):
+        for doc in self:
+            doc.nomor_seri_id._unlock_nomor_seri()

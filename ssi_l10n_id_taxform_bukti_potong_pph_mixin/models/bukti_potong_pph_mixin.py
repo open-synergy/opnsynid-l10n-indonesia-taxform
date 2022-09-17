@@ -127,10 +127,6 @@ class BuktiPotongPPhMixin(models.AbstractModel):
     )
     direction = fields.Selection(
         string="Type",
-        selection=[
-            ("in", "In"),
-            ("out", "Out"),
-        ],
         related="type_id.direction",
         store=True,
         readonly=True,

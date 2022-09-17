@@ -18,7 +18,7 @@ class BuktiPotongPPhType(models.Model):
         translate=True,
     )
     direction = fields.Selection(
-        string="Type",
+        string="Direction",
         selection=[
             ("in", "In"),
             ("out", "Out"),

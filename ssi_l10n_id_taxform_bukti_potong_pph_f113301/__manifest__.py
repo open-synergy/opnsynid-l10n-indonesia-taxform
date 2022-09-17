@@ -24,6 +24,7 @@
         "data/sequence_template_data.xml",
         "data/policy_template_data.xml",
         "data/approval_template_data.xml",
+        "data/account_journal_data.xml",
         "views/bukti_potong_pph_type_views.xml",
         "views/bukti_potong_pph_f113301_out_views.xml",
     ],

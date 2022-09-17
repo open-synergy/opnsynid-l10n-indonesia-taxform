@@ -4,7 +4,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia - Bukti Potong PPh 23 (f.1.33.06)",
-    "version": "14.0.1.3.0",
+    "version": "14.0.1.4.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
@@ -24,6 +24,7 @@
         "data/sequence_template_data.xml",
         "data/policy_template_data.xml",
         "data/approval_template_data.xml",
+        "data/account_journal_data.xml",
         "views/bukti_potong_pph_type_views.xml",
         "views/bukti_potong_pph_f113306_in_views.xml",
         "views/bukti_potong_pph_f113306_out_views.xml",

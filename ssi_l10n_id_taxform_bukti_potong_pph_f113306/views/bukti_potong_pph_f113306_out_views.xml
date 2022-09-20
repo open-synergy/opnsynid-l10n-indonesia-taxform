@@ -8,6 +8,7 @@
     <field name="name">l10n_id.bukti_potong_pph_f113306_out - Tree</field>
     <field name="model">l10n_id.bukti_potong_pph_f113306_out</field>
     <field name="mode">primary</field>
+    <field name="priority">100</field>
     <field
             name="inherit_id"
             ref="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukti_potong_pph_mixin_view_tree"
@@ -21,6 +22,7 @@
     <field name="name">l10n_id.bukti_potong_pph_f113306_out - Form</field>
     <field name="model">l10n_id.bukti_potong_pph_f113306_out</field>
     <field name="mode">primary</field>
+    <field name="priority">100</field>
     <field
             name="inherit_id"
             ref="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukti_potong_pph_mixin_view_form"
@@ -38,6 +40,7 @@
     <field name="name">l10n_id.bukti_potong_pph_f113306_out - Search</field>
     <field name="model">l10n_id.bukti_potong_pph_f113306_out</field>
     <field name="mode">primary</field>
+    <field name="priority">100</field>
     <field
             name="inherit_id"
             ref="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukti_potong_pph_mixin_search"

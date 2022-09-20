@@ -3,6 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from odoo import api, fields, models
+from odoo.exceptions import Warning as UserError
 from odoo.tools.translate import _
 
 
@@ -107,7 +108,7 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
     def onchange_name(self):
         self.name = False
         if self.move_line_id and self.tax_id:
-            name = "%s - %s" % (self.move_line_id.move_id.name, self.tax_id.name)
+            name = "{} - {}".format(self.move_line_id.move_id.name, self.tax_id.name)
             self.name = name
 
     def _create_aml(self):
@@ -190,7 +191,13 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
     def _prepare_tax_debit_aml_data(self):
         self.ensure_one()
         account = self._get_debit_account()
+        if not account:
+            msgError = _("No account")
+            raise UserError(msgError)
         partner = self._get_debit_partner()
+        if not partner:
+            msgError = _("No partner")
+            raise UserError(msgError)
         return self._prepare_aml_data(
             account_id=account.id,
             debit=self.amount_tax,
@@ -212,10 +219,9 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
     def _select_tax_account(self):
         self.ensure_one()
         tax = self.tax_id
-        if tax.invoice_repartition_line_ids:
-            result = tax.invoice_repartition_line_ids[1].account_id
+        if tax.account_id:
+            result = tax.account_id
         else:
-            raise UserWarning(
-                _("Please configure invoice tax account for %s") % (tax.name)
-            )
+            msgError = _("Please configure invoice tax account for %s") % (tax.name)
+            raise UserError(msgError)
         return result

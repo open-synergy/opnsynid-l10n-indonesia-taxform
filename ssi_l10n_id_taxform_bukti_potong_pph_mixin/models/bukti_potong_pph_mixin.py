@@ -453,7 +453,7 @@ class BuktiPotongPPhMixin(models.AbstractModel):
         for line in self.line_ids:
             pairs.append(line._create_aml())
 
-        self.move_id.action_post()
+        self.move_id.post()
 
         for pair in pairs:
             pair.reconcile()

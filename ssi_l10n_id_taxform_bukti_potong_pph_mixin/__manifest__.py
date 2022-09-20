@@ -13,6 +13,7 @@
     "application": False,
     "depends": [
         "account",
+        "ssi_master_data_mixin",
         "ssi_transaction_mixin",
         "ssi_transaction_confirm_mixin",
         "ssi_transaction_done_mixin",

@@ -18,3 +18,9 @@ class BuktiPotongPPhf113306InLine(models.Model):
         column1="bukpot_line_id",
         column2="account_move_id",
     )
+    test_ids = fields.Many2many(
+        comodel_name="account.move.line",
+        relation="rel_test_ids_2_move_line",
+        column1="bukpot_line_id",
+        column2="account_move_id",
+    )

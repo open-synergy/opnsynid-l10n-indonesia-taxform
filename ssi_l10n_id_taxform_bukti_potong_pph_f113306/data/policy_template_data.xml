@@ -27,16 +27,8 @@
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','confirm_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','=','draft')]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_in_user_group')])]"
-            />
+    <field name="states">draft</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -48,10 +40,7 @@
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','approve_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','=','confirm')]"
-            />
+    <field name="states">confirm</field>
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -67,10 +56,7 @@ if env.user.id in document.active_approver_user_ids.ids:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','reject_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','=','confirm')]"
-            />
+    <field name="states">confirm</field>
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -86,16 +72,8 @@ if env.user.id in document.active_approver_user_ids.ids:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','restart_approval_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','in',['confirm'])]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_in_validator_group')])]"
-            />
+    <field name="states">confirm</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
 if not document.approval_template_id:
@@ -110,16 +88,8 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','cancel_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','in',['draft','confirm','done'])]"
-            />
-      <field name="restrict_user" eval="1" />
-      <field name="computation_method">use_group</field>
-      <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_in_validator_group')])]"
-            />
+    <field name="states">draft,confirm,done</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -131,16 +101,8 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','restart_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','in',['cancel','reject'])]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_in_validator_group')])]"
-            />
+    <field name="states">cancel,reject</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -152,16 +114,8 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','manual_number_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','=','draft')]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_in_validator_group')])]"
-            />
+    <field name="states">draft</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -188,16 +142,8 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','confirm_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','=','draft')]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_out_user_group')])]"
-            />
+    <field name="states">draft</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -209,10 +155,7 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','approve_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','=','confirm')]"
-            />
+    <field name="states">confirm</field>
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -228,10 +171,7 @@ if env.user.id in document.active_approver_user_ids.ids:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','reject_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','=','confirm')]"
-            />
+    <field name="states">confirm</field>
     <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
@@ -250,16 +190,8 @@ if env.user.id in document.active_approver_user_ids.ids:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','restart_approval_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','in',['confirm'])]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_out_validator_group')])]"
-            />
+    <field name="states">confirm</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="1" />
     <field name="additional_python_code">result = False
 if not document.approval_template_id:
@@ -274,16 +206,8 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','cancel_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','in',['draft','confirm','done'])]"
-            />
-      <field name="restrict_user" eval="1" />
-      <field name="computation_method">use_group</field>
-      <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_out_validator_group')])]"
-            />
+    <field name="states">draft,confirm,done</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -295,16 +219,8 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','restart_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','in',['cancel','reject'])]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_out_validator_group')])]"
-            />
+    <field name="states">cancel,reject</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 
@@ -316,16 +232,8 @@ if not document.approval_template_id:
                 search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','manual_number_ok')]"
             />
     <field name="restrict_state" eval="1" />
-    <field
-                name="state_ids"
-                search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','=','draft')]"
-            />
-    <field name="restrict_user" eval="1" />
-    <field name="computation_method">use_group</field>
-    <field
-                name="group_ids"
-                eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_out_validator_group')])]"
-            />
+    <field name="states">draft</field>
+    <field name="restrict_user" eval="0" />
     <field name="restrict_additional" eval="0" />
 </record>
 

@@ -30,6 +30,50 @@
             <xpath expr="//sheet" position="inside">
                 <h1 name="form_name" />
             </xpath>
+            <xpath expr="//field[@name='income_move_line_ids']" position="replace">
+                <field
+                        name="income_move_line_ids"
+                        nolabel="1"
+                        domain="[('id','in',allowed_income_move_line_ids)]"
+                    >
+                    <tree string="Journal Items">
+                        <field name="date" />
+                        <field
+                                name="move_id"
+                                required="0"
+                                groups="account.group_account_user"
+                            />
+                        <field name="journal_id" options='{"no_open":True}' />
+                        <field name="name" />
+                        <field name="ref" />
+                        <field name="statement_id" invisible="1" />
+                        <field name="partner_id" />
+                        <field
+                                name="account_id"
+                                options='{"no_open":True}'
+                                domain="[('company_id', '=', company_id)]"
+                                groups="account.group_account_user"
+                            />
+                        <field
+                                name="analytic_account_id"
+                                groups="account.group_account_user"
+                            />
+                        <field name="reconciled" invisible="1" />
+                        <field name="full_reconcile_id" />
+                        <field name="debit" sum="Total Debit" />
+                        <field name="credit" sum="Total Credit" />
+                        <field
+                                name="amount_currency"
+                                readonly="True"
+                                groups="base.group_multi_currency"
+                            />
+                        <field name="currency_id" readonly="True" invisible="1" />
+                        <field name="date_maturity" />
+                        <field name="company_currency_id" invisible="1" />
+                        <field name="company_id" invisible="1" />
+                    </tree>
+                </field>
+            </xpath>
         </data>
     </field>
 </record>
@@ -59,8 +103,7 @@
 <menuitem
         id="bukti_potong_pph_23_in_menu"
         name="PPh 23 (f.1.1.33.06) In"
-        parent="ssi_l10n_id_taxform.taxform_bukti_potong_menu"
-        groups="l10n_id_bukti_potong_pph_f113306_in_viewer_group"
+        parent="l10n_id_taxform.taxform_bukti_potong_menu"
         action="bukti_potong_pph_f113306_in_action"
         sequence="23"
     />

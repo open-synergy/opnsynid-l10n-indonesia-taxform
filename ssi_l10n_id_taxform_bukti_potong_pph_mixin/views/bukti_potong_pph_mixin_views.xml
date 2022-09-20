@@ -175,7 +175,7 @@
                                           <field
                                             name="allowed_income_move_line_ids"
                                             widget="many2many_tags"
-                                            invisible="1"
+                                            invisible="0"
                                         />
                                           <field
                                             name="tax_id"
@@ -194,7 +194,6 @@
                                         <field
                                             name="income_move_line_ids"
                                             nolabel="1"
-                                            domain="[('id','in',allowed_income_move_line_ids)]"
                                         />
                                     </page>
                                 </notebook>

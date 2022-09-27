@@ -3,8 +3,8 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 # pylint: disable=locally-disabled, manifest-required-author
 {
-    "name": "Indonesia - Bukti Potong PPh 23 (f.1.33.06)",
-    "version": "14.0.1.4.0",
+    "name": "Indonesia - Bukti Potong PPh 23 (f.1.1.33.06)",
+    "version": "14.0.1.5.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",

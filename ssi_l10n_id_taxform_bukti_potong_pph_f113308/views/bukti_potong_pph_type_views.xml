@@ -25,6 +25,7 @@
         parent="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukpot_configuration_menu"
         action="bukti_potong_pph_type_f113308_in_action"
         sequence="8"
+        groups="bukti_potong_pph_f113308i_configurator_group"
     />
 <menuitem
         id="bukti_potong_pph_type_f113308_out_menu"
@@ -32,6 +33,7 @@
         parent="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukpot_configuration_menu"
         action="bukti_potong_pph_type_f113308_out_action"
         sequence="9"
+        groups="bukti_potong_pph_f113308o_configurator_group"
     />
 
 </odoo>

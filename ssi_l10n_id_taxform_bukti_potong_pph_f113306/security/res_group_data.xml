@@ -3,6 +3,31 @@
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
+<!-- Configurator-->
+<record id="bukti_potong_pph_f113306o_configurator_group" model="res.groups">
+    <field name="name">Bukti Potong PPh 23 (f.1.1.33.06) Out</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<record id="bukti_potong_pph_f113306i_configurator_group" model="res.groups">
+    <field name="name">Bukti Potong PPh 23 (f.1.1.33.06) In</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
 <!-- Workflow -->
 <!-- f113306 in -->
 <record id="l10n_id_bukti_potong_pph_f113306_in_viewer_group" model="res.groups">

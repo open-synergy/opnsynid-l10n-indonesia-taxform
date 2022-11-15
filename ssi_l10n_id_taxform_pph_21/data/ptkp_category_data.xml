@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+<record id="ptkp_tk0" model="l10n_id.ptkp_category">
+    <field name="code">TK/0</field>
+    <field name="name">TK/0</field>
+</record>
+
+<record id="ptkp_tk1" model="l10n_id.ptkp_category">
+    <field name="code">TK/1</field>
+    <field name="name">TK/1</field>
+</record>
+
+<record id="ptkp_tk2" model="l10n_id.ptkp_category">
+    <field name="code">TK/2</field>
+    <field name="name">TK/2</field>
+</record>
+
+<record id="ptkp_tk3" model="l10n_id.ptkp_category">
+    <field name="code">TK/3</field>
+    <field name="name">TK/3</field>
+</record>
+
+<record id="ptkp_k0" model="l10n_id.ptkp_category">
+    <field name="code">K/0</field>
+    <field name="name">K/0</field>
+</record>
+
+<record id="ptkp_k1" model="l10n_id.ptkp_category">
+    <field name="code">K/1</field>
+    <field name="name">K/1</field>
+</record>
+
+<record id="ptkp_k2" model="l10n_id.ptkp_category">
+    <field name="code">K/2</field>
+    <field name="name">K/2</field>
+</record>
+
+<record id="ptkp_ki0" model="l10n_id.ptkp_category">
+    <field name="code">K/I/0</field>
+    <field name="name">K/I/0</field>
+</record>
+
+<record id="ptkp_ki1" model="l10n_id.ptkp_category">
+    <field name="code">K/I/1</field>
+    <field name="name">K/I/1</field>
+</record>
+
+<record id="ptkp_ki2" model="l10n_id.ptkp_category">
+    <field name="code">K/I/2</field>
+    <field name="name">K/I/2</field>
+</record>
+
+<record id="ptkp_ki3" model="l10n_id.ptkp_category">
+    <field name="code">K/I/3</field>
+    <field name="name">K/I/3</field>
+</record>
+
+<record id="ptkp_k3" model="l10n_id.ptkp_category">
+    <field name="code">K/3</field>
+    <field name="name">K/3</field>
+</record>
+</odoo>

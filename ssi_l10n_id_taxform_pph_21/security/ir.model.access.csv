@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ptkp_category_configurator,l10n_id.ptkp_category - configurator,model_l10n_id_ptkp_category,l10n_id_ptkp_category_configurator_group,1,1,1,1
+access_ptkp_category_all,l10n_id.ptkp_category - all,model_l10n_id_ptkp_category,,1,0,0,0
+access_pph_21_biaya_jabatan_configurator,l10n_id.pph_21_biaya_jabatan - configurator,model_l10n_id_pph_21_biaya_jabatan,l10n_id_pph_21_biaya_jabatan_configurator_group,1,1,1,1
+access_pph_21_biaya_jabatan_all,l10n_id.pph_21_biaya_jabatan - all,model_l10n_id_pph_21_biaya_jabatan,,1,0,0,0
+access_pph_21_npwp_rate_modifier_configurator,l10n_id.pph_21_npwp_rate_modifier - configurator,model_l10n_id_pph_21_npwp_rate_modifier,l10n_id_pph_21_npwp_rate_modifier_configurator_group,1,1,1,1
+access_pph_21_npwp_rate_modifier_all,l10n_id.pph_21_npwp_rate_modifier - all,model_l10n_id_pph_21_npwp_rate_modifier,,1,0,0,0
+access_ptkp_configurator,l10n_id.ptkp - configurator,model_l10n_id_ptkp,l10n_id_ptkp_configurator_group,1,1,1,1
+access_ptkp_all,l10n_id.ptkp - all,model_l10n_id_ptkp,,1,0,0,0
+access_ptkp_line_configurator,l10n_id.ptkp_line - configurator,model_l10n_id_ptkp_line,l10n_id_ptkp_configurator_group,1,1,1,1
+access_ptkp_line_all,l10n_id.ptkp_line - all,model_l10n_id_ptkp_line,,1,0,0,0
+access_pph_21_rate_configurator,l10n_id.pph_21_rate - configurator,model_l10n_id_pph_21_rate,l10n_id_pph_21_rate_configurator_group,1,1,1,1
+access_pph_21_rate_all,l10n_id.pph_21_rate - all,model_l10n_id_pph_21_rate,,1,0,0,0
+access_pph_21_rate_line_configurator,l10n_id.pph_21_rate_line - configurator,model_l10n_id_pph_21_rate_line,l10n_id_pph_21_rate_configurator_group,1,1,1,1
+access_pph_21_rate_line_all,l10n_id.pph_21_rate_line - all,model_l10n_id_pph_21_rate_line,,1,0,0,0

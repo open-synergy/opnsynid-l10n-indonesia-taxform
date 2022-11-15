@@ -1,7 +1,6 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-from datetime import datetime
 
 from odoo import api, fields, models
 
@@ -10,7 +9,8 @@ class HrPayslip(models.Model):
     _inherit = "hr.payslip"
 
     @api.depends(
-        "date_end",
+        "employee_id",
+        "date",
     )
     def _compute_payslip_tax_period(self):
         for payslip in self:
@@ -30,9 +30,9 @@ class HrPayslip(models.Model):
 
             employee = payslip.employee_id
             if employee.joining_tax_year_id == payslip.tax_year_id:
-                payslip.joining_tax_month = datetime.strptime(
-                    employee.joining_tax_period_id.date_start, "%Y-%m-%d"
-                ).month
+                payslip.joining_tax_month = (
+                    employee.joining_tax_period_id.date_start.month
+                )
 
     joining_tax_month = fields.Integer(
         string="Joining Tax Month",

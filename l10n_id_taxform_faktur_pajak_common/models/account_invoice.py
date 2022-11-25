@@ -30,7 +30,7 @@ class AccountInvoice(models.Model):
                     (
                         "commercial_partner_id",
                         "=",
-                        record.commercial_partner_id.partner_id.id,
+                        record.partner_id.commercial_partner_id.id,
                     )
                 ]
                 result = ResParter.search(criteria).ids

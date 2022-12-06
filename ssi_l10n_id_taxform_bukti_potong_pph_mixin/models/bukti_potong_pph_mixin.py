@@ -366,9 +366,17 @@ class BuktiPotongPPhMixin(models.AbstractModel):
             ("reconciled", "=", False),
         ]
         if self.direction == "in":
-            result.append(("partner_id", "=", self.pemotong_pajak_id.id))
+            result += [
+                "|",
+                ("partner_id", "=", self.pemotong_pajak_id.id),
+                ("partner_id", "=", False),
+            ]
         else:
-            result.append(("partner_id", "=", self.wajib_pajak_id.id))
+            result += [
+                "|",
+                ("partner_id", "=", self.wajib_pajak_id.id),
+                ("partner_id", "=", False),
+            ]
         return result
 
     allowed_move_line_ids = fields.Many2many(

@@ -449,7 +449,7 @@ class BuktiPotongPPhMixin(models.AbstractModel):
     def _prepare_journal_entry_data(self):
         self.ensure_one()
         data = {
-            "name": self.name,
+            "ref": self.name,
             "date": self.date,
             "journal_id": self.journal_id.id,
         }

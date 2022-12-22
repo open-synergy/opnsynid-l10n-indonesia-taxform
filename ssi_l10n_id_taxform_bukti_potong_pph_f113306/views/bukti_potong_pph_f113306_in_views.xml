@@ -100,7 +100,9 @@
     <field name="res_model">l10n_id.bukti_potong_pph_f113306_in</field>
     <field name="view_mode">tree,form</field>
     <field name="search_view_id" ref="bukti_potong_pph_f113306_in_view_search" />
-    <field name="context">{'default_filter_draft':1, 'default_filter_confirm':1}</field>
+    <field
+            name="context"
+        >{'default_filter_draft':1, 'default_filter_confirm':1, 'bypass_duplicate':1}</field>
 </record>
 
 <menuitem

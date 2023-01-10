@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html).
 {
     "name": "Indonesia - Faktur Pajak Common Feature",
-    "version": "8.0.1.0.2",
+    "version": "8.0.1.1.0",
     "license": "AGPL-3",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "website": "https://simetri-sinergi.id",

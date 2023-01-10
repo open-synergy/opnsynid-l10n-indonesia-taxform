@@ -2,7 +2,7 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html).
 
-from openerp import fields, models
+from openerp import api, fields, models
 
 
 class FakturPajakTransactionType(models.Model):
@@ -24,3 +24,11 @@ class FakturPajakTransactionType(models.Model):
         string="Active",
         default=True,
     )
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for document in self:
+            name = "[{}] - {}".format(document.code, document.name)
+            result.append((document.id, name))
+        return result

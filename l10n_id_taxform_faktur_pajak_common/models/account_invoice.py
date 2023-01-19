@@ -362,7 +362,14 @@ class AccountInvoice(models.Model):
 
     @api.onchange("partner_id")
     def onchange_taxform_address_id(self):
-        self.taxform_address_id = False
+        result = False
+        if self.partner_id:
+            taxform_address_ids = self.allowed_taxform_address_ids.filtered(
+                lambda x: x.type == "tax"
+            ).sorted("id")
+            if taxform_address_ids:
+                result = taxform_address_ids[0]
+        self.taxform_address_id = result
 
     @api.multi
     def action_lock_taxform(self):

@@ -29,3 +29,4 @@ class ResPartner(models.Model):
         compute="_compute_enofa_address",
         store=False,
     )
+    type = fields.Selection(selection_add=[("tax", "Tax Address")])

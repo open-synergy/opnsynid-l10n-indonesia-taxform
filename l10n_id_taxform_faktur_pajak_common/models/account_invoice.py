@@ -86,7 +86,7 @@ class AccountInvoice(models.Model):
         for record in self:
             result = []
             if record.partner_id:
-                criteria = [("commercial_partner_id", "=", record.partner_id.id)]
+                criteria = [("commercial_partner_id", "=", record.partner_id.commercial_partner_id.id)]
                 result = ResParter.search(criteria).ids
             record.allowed_taxform_address_ids = result
 

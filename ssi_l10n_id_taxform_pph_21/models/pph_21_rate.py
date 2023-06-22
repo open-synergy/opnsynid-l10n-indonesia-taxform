@@ -44,11 +44,10 @@ class Pph21Rate(models.Model):
     def compute_tax(self, penghasilan_kena_pajak):
         result = 0.0
         self.ensure_one()
-        for line in range(0, len(self.line_ids) - 1):
+        for line in range(0, len(self.line_ids)):
             if line < len(self.line_ids) - 1:
                 next_line = self.line_ids[line + 1]
             else:
                 next_line = False
-
             result += self.line_ids[line].compute_tax(penghasilan_kena_pajak, next_line)
         return result

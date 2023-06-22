@@ -2,4 +2,4 @@
 
 oca-server-tools https://github.com/OCA/server-tools.git 14.0
 ssi-mixin https://github.com/open-synergy/ssi-mixin.git 14.0
-ssi-hr-payroll https://github.com/open-synergy/ssi-hr-payroll.git 14.0
+opnsynid-hr-payroll https://github.com/open-synergy/opnsynid-hr-payroll.git 14.0

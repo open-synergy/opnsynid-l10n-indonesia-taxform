@@ -31,7 +31,7 @@ class Pph21RateLine(models.Model):
                 result = pph_rate * (penghasilan_kena_pajak - self.min_income)
             else:
                 if penghasilan_kena_pajak >= next_line.min_income:
-                    result = pph_rate * next_line.min_income
+                    result = pph_rate * (next_line.min_income - self.min_income)
                 else:
                     result = pph_rate * (penghasilan_kena_pajak - self.min_income)
         return result

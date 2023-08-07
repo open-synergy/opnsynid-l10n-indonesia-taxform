@@ -12,6 +12,7 @@
     "installable": True,
     "depends": [
         "ssi_l10n_id_taxform",
+        "account",
     ],
     "data": [
         "security/res_group_data.xml",

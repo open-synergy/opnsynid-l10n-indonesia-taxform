@@ -4,7 +4,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia's Taxform - PPh 21 Computation On Payslip",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",

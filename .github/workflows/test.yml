@@ -56,7 +56,6 @@ jobs:
       - name: Install addons and dependencies
         env:
           PIP_INDEX_URL: https://pypi.org/simple
-          EXCLUDE: l10n_generic_coa
         run: oca_install_addons
       - name: Check licenses
         run: manifestoo -d . check-licenses

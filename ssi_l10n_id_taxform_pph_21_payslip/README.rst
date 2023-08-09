@@ -123,7 +123,7 @@ Maintainer
 ----------
 
 .. image:: https://simetri-sinergi.id/logo.png
-  :alt: PT. Simetri Sinergi Indonesia
-  :target: https://simetri-sinergi.id.com
+   :alt: PT. Simetri Sinergi Indonesia
+   :target: https://simetri-sinergi.id
 
 This module is maintained by the PT. Simetri Sinergi Indonesia.

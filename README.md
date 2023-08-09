@@ -14,7 +14,19 @@ opnsynid-l10n-indonesia-taxform
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[ssi_l10n_id_taxform](ssi_l10n_id_taxform/) | 14.0.1.2.1 |  | Indonesia's Taxform
+[ssi_l10n_id_taxform_bukti_potong_pph_f113301](ssi_l10n_id_taxform_bukti_potong_pph_f113301/) | 14.0.1.3.1 |  | Indonesia - Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01)
+[ssi_l10n_id_taxform_bukti_potong_pph_f113302](ssi_l10n_id_taxform_bukti_potong_pph_f113302/) | 14.0.1.4.1 |  | Indonesia - Bukti Potong PPh 21 Final (f.1.1.33.02)
+[ssi_l10n_id_taxform_bukti_potong_pph_f113304](ssi_l10n_id_taxform_bukti_potong_pph_f113304/) | 14.0.1.4.1 |  | Indonesia - Bukti Potong PPh 22 (f.1.1.33.04)
+[ssi_l10n_id_taxform_bukti_potong_pph_f113306](ssi_l10n_id_taxform_bukti_potong_pph_f113306/) | 14.0.1.6.1 |  | Indonesia - Bukti Potong PPh 23 (f.1.1.33.06)
+[ssi_l10n_id_taxform_bukti_potong_pph_f113308](ssi_l10n_id_taxform_bukti_potong_pph_f113308/) | 14.0.1.3.1 |  | Indonesia - Bukti Potong PPh 26 (f.1.1.33.08)
+[ssi_l10n_id_taxform_bukti_potong_pph_mixin](ssi_l10n_id_taxform_bukti_potong_pph_mixin/) | 14.0.1.2.1 |  | Indonesia - Mixin Feature for Bukti Potong PPh
+[ssi_l10n_id_taxform_pph_21](ssi_l10n_id_taxform_pph_21/) | 14.0.1.0.2 |  | Indonesia's PPh 21 Taxform
+[ssi_l10n_id_taxform_pph_21_payslip](ssi_l10n_id_taxform_pph_21_payslip/) | 14.0.1.0.1 |  | Indonesia's Taxform - PPh 21 Computation On Payslip
 
 [//]: # (end addons)
 

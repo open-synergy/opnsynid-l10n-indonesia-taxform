@@ -494,13 +494,13 @@ class BuktiPotongPPhMixin(models.AbstractModel):
     def _prepare_debit_aml_diff(self):
         self.ensure_one()
         account = self._get_diff_debit_account()
-        result = self._prepare_aml_diff(account.id)
+        result = self._prepare_aml_diff(account)
         return result
 
     def _prepare_credit_aml_diff(self):
         self.ensure_one()
         account = self._get_diff_credit_account()
-        result = self._prepare_aml_diff(account.id)
+        result = self._prepare_aml_diff(account)
         return result
 
     def _get_diff_debit_account(self):

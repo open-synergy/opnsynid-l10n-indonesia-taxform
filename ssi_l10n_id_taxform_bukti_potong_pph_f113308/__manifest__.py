@@ -1,13 +1,13 @@
 # Copyright 2022 OpenSynergy Indonesia
 # Copyright 2022 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia - Bukti Potong PPh 26 (f.1.1.33.08)",
     "version": "14.0.1.3.1",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     "installable": True,
     "depends": [
         "ssi_l10n_id_taxform_bukti_potong_pph_mixin",

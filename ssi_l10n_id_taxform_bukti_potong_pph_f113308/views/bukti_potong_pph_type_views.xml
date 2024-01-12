@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
-     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
 <record id="bukti_potong_pph_type_f113308_in_action" model="ir.actions.act_window">
     <field name="name">Bukti Potong PPh 26 (f.1.1.33.08) In</field>

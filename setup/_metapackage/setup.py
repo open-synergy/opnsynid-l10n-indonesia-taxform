@@ -15,6 +15,7 @@ setuptools.setup(
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113306',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113308',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_mixin',
+        'odoo14-addon-ssi_l10n_id_taxform_faktur_pajak',
         'odoo14-addon-ssi_l10n_id_taxform_pph_21',
         'odoo14-addon-ssi_l10n_id_taxform_pph_21_payslip',
     ],

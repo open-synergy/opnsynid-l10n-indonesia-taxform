@@ -25,7 +25,7 @@ addon | version | maintainers | summary
 [ssi_l10n_id_taxform_bukti_potong_pph_f113306](ssi_l10n_id_taxform_bukti_potong_pph_f113306/) | 14.0.1.7.0 |  | Indonesia - Bukti Potong PPh 23 (f.1.1.33.06)
 [ssi_l10n_id_taxform_bukti_potong_pph_f113308](ssi_l10n_id_taxform_bukti_potong_pph_f113308/) | 14.0.1.4.0 |  | Indonesia - Bukti Potong PPh 26 (f.1.1.33.08)
 [ssi_l10n_id_taxform_bukti_potong_pph_mixin](ssi_l10n_id_taxform_bukti_potong_pph_mixin/) | 14.0.1.3.0 |  | Indonesia - Mixin Feature for Bukti Potong PPh
-[ssi_l10n_id_taxform_faktur_pajak](ssi_l10n_id_taxform_faktur_pajak/) | 14.0.1.0.1 |  | Faktur Pajak
+[ssi_l10n_id_taxform_faktur_pajak](ssi_l10n_id_taxform_faktur_pajak/) | 14.0.1.1.0 |  | Faktur Pajak
 [ssi_l10n_id_taxform_pph_21](ssi_l10n_id_taxform_pph_21/) | 14.0.1.1.0 |  | Indonesia's PPh 21 Taxform
 [ssi_l10n_id_taxform_pph_21_payslip](ssi_l10n_id_taxform_pph_21_payslip/) | 14.0.1.0.1 |  | Indonesia's Taxform - PPh 21 Computation On Payslip
 

@@ -2,6 +2,7 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import re
 
 from odoo import api, fields, models
 
@@ -229,6 +230,302 @@ class FakturPajakKeluaran(models.Model):
             ],
         },
     )
+    efaktur_kd_jenis_transaksi = fields.Char(
+        string="KD_JENIS_TRANSAKSI",
+        compute="_compute_efaktur_kd_jenis_transaksi",
+        store=False,
+        compute_sudo=True,
+    )
+    efaktur_fg_pengganti = fields.Char(
+        string="FG_PENGGANTI",
+        compute="_compute_efaktur_fg_pengganti",
+        store=False,
+        compute_sudo=True,
+    )
+    efaktur_nomor_faktur = fields.Char(
+        string="NOMOR_FAKTUR",
+        compute="_compute_efaktur_nomor_faktur",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "enofa_number_id",
+    )
+    def _compute_efaktur_nomor_faktur(self):
+        for record in self:
+            result = "-"
+            if record.enofa_number_id:
+                result = record.enofa_number_id.name.replace(".", "")
+            record.efaktur_nomor_faktur = result
+
+    efaktur_masa_pajak = fields.Char(
+        string="MASA_PAJAK",
+        compute="_compute_efaktur_masa_pajak",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("taxform_period_id")
+    def _compute_efaktur_masa_pajak(self):
+        for record in self:
+            result = "-"
+            if record.taxform_period_id:
+                result = str(record.taxform_period_id.date_start.month).zfill(2)
+            record.efaktur_masa_pajak = result
+
+    efaktur_tahun_pajak = fields.Char(
+        string="TAHUN_FAKTUR",
+        compute="_compute_efaktur_tahun_pajak",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("taxform_year_id")
+    def _compute_efaktur_tahun_pajak(self):
+        for record in self:
+            result = "-"
+            if record.taxform_year_id:
+                result = str(record.taxform_period_id.date_start.year)
+            record.efaktur_tahun_pajak = result
+
+    efaktur_tanggal_faktur = fields.Char(
+        string="TANGGAL_FAKTUR",
+        compute="_compute_efaktur_tanggal_faktur",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "date",
+    )
+    def _compute_efaktur_tanggal_faktur(self):
+        for record in self:
+            result = "-"
+            if record.date:
+                result = record.date.strftime("%d/%m/%Y")
+            record.efaktur_tanggal_faktur = result
+
+    efaktur_npwp = fields.Char(
+        string="NPWP",
+        compute="_compute_efaktur_npwp",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "partner_id",
+    )
+    def _compute_efaktur_npwp(self):
+        for record in self:
+            result = "000000000000000"
+            if record.partner_id and record.partner_id.vat:
+                npwp = record.partner_id.vat
+                result = ""
+                for s in re.findall(r"\d+", npwp):
+                    result += s
+            record.efaktur_npwp = result
+
+    efaktur_nama = fields.Char(
+        string="NAMA",
+        compute="_compute_efaktur_nama",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("partner_id")
+    def _compute_efaktur_nama(self):
+        for record in self:
+            result = "-"
+            if record.partner_id:
+                result = record.partner_id.name
+            record.efaktur_nama = result
+
+    efaktur_alamat_lengkap = fields.Char(
+        string="ALAMAT_LENGKAP",
+        compute="_compute_efaktur_alamat_lengkap",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "partner_id",
+        "contact_partner_id",
+    )
+    def _compute_efaktur_alamat_lengkap(self):
+        for record in self:
+            result = "-"
+            if record.partner_id:
+                result = ""
+                if record.contact_partner_id:
+                    partner = record.contact_partner_id
+                else:
+                    partner = record.partner_id
+
+                if partner.street:
+                    result += partner.street + ". "
+
+                if partner.street2:
+                    result += partner.street2 + ". "
+
+                if partner.city:
+                    result += partner.city + ". "
+
+                if partner.state_id:
+                    result += partner.state_id.name + ". "
+
+                if partner.zip:
+                    result += partner.zip + ". "
+
+            record.efaktur_alamat_lengkap = result
+
+    efaktur_jumlah_ppn = fields.Char(
+        string="JUMLAH_PPN",
+        compute="_compute_efaktur_jumlah_ppn",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_tax")
+    def _compute_efaktur_jumlah_ppn(self):
+        for record in self:
+            record.efaktur_jumlah_ppn = str(int(record.amount_tax))
+
+    efaktur_jumlah_dpp = fields.Char(
+        string="JUMLAH_DPP",
+        compute="_compute_efaktur_jumlah_dpp",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_untaxed")
+    def _compute_efaktur_jumlah_dpp(self):
+        for record in self:
+            record.efaktur_jumlah_dpp = str(int(record.amount_untaxed))
+
+    efaktur_referensi = fields.Char(
+        string="REFERENSI",
+        compute="_compute_efaktur_referensi",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "move_ids",
+    )
+    def _compute_efaktur_referensi(self):
+        for record in self:
+            result = "-"
+            if record.move_ids:
+                result = ", ".join(str(e) for e in record.move_ids.mapped("name"))
+            record.efaktur_referensi = result
+
+    @api.depends(
+        "move_ids",
+    )
+    def _compute_efaktur_of_name(self):
+        for record in self:
+            result = "-"
+            if record.move_ids:
+                result = ", ".join(str(e) for e in record.move_ids.mapped("name"))
+            record.efaktur_of_name = result
+
+    efaktur_of_name = fields.Char(
+        string="OF_NAMA",
+        compute="_compute_efaktur_of_name",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_untaxed")
+    def _compute_efaktur_of_harga_satuan(self):
+        for record in self:
+            record.efaktur_of_harga_satuan = str(int(record.amount_untaxed))
+
+    efaktur_of_harga_satuan = fields.Char(
+        string="OF_HARGA_SATUAN",
+        compute="_compute_efaktur_of_harga_satuan",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_untaxed")
+    def _compute_efaktur_of_jumlah_barang(self):
+        for record in self:
+            record.efaktur_of_jumlah_barang = 1
+
+    efaktur_of_jumlah_barang = fields.Char(
+        string="OF_JUMLAH_BARANG",
+        compute="_compute_efaktur_of_jumlah_barang",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_untaxed")
+    def _compute_efaktur_of_harga_total(self):
+        for record in self:
+            record.efaktur_of_harga_total = str(int(record.amount_untaxed))
+
+    efaktur_of_harga_total = fields.Char(
+        string="OF_HARGA_TOTAL",
+        compute="_compute_efaktur_of_harga_total",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_untaxed")
+    def _compute_efaktur_of_diskon(self):
+        for record in self:
+            record.efaktur_of_diskon = 0
+
+    efaktur_of_diskon = fields.Char(
+        string="OF_DISKON",
+        compute="_compute_efaktur_of_diskon",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_untaxed")
+    def _compute_efaktur_of_dpp(self):
+        for record in self:
+            record.efaktur_of_dpp = str(int(record.amount_untaxed))
+
+    efaktur_of_dpp = fields.Char(
+        string="OF_DPP",
+        compute="_compute_efaktur_of_dpp",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_tax")
+    def _compute_efaktur_of_ppn(self):
+        for record in self:
+            record.efaktur_of_ppn = str(int(record.amount_tax))
+
+    efaktur_of_ppn = fields.Char(
+        string="OF_PPN",
+        compute="_compute_efaktur_of_ppn",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "type_id",
+    )
+    def _compute_efaktur_kd_jenis_transaksi(self):
+        for record in self:
+            result = ""
+            if record.type_id:
+                result = record.type_id.code
+            record.efaktur_kd_jenis_transaksi = result
+
+    @api.depends(
+        "type_id",
+    )
+    def _compute_efaktur_fg_pengganti(self):
+        for record in self:
+            result = "0"
+            record.efaktur_fg_pengganti = result
 
     @api.depends("type_id")
     def _compute_allowed_fpk_journal_ids(self):

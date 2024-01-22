@@ -212,3 +212,32 @@ class ResPartner(models.Model):
         result["pph"] = pph
 
         return result
+
+    def compute_pph_21_ter(
+        self,
+        tanggal_pemotongan=False,
+        gaji=0.0,
+        tunjangan_pph=0.0,
+        tunjangan_lain=0.0,
+        jumlah_penghasilan_non_rutin=0.0,
+    ):
+        self.ensure_one()
+        result = {
+            "pph_category_ter": "",
+            "pph_rate": 0.0,
+            "pph": 0.0,
+        }
+        ptkp_category = self.ptkp_category_id
+
+        if not ptkp_category:
+            raise models.ValidationError(_("Partner's PTKP Category is not configured"))
+
+        bruto = gaji + tunjangan_pph + jumlah_penghasilan_non_rutin + tunjangan_lain
+        obj_pph = self.env["l10n_id.pph_21_ter"]
+        pph_21_ter = obj_pph.find(tanggal_pemotongan).compute_tax(
+            bruto, [ptkp_category.id]
+        )
+        result["pph_category_ter"] = pph_21_ter["ter"]
+        result["pph_rate"] = pph_21_ter["rate"]
+        result["pph"] = pph_21_ter["pph"]
+        return result

@@ -18,9 +18,10 @@
     <record id="pph_21_npwp_rate_modifier_view_tree" model="ir.ui.view">
         <field name="name">l10n_id.pph_21_npwp_rate_modifier - tree</field>
         <field name="model">l10n_id.pph_21_npwp_rate_modifier</field>
+        <field name="type">tree</field>
         <field
             name="inherit_id"
-            ref="ssi_master_data_mixin.mixin_master_data_view_search"
+            ref="ssi_master_data_mixin.mixin_master_data_view_tree"
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">

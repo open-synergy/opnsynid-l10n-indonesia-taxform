@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 OpenSynergy Indonesia
+     Copyright 2024 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="pph_21_ter_line_view_tree" model="ir.ui.view">
+        <field name="name">l10n_id.pph_21_ter_line - tree</field>
+        <field name="model">l10n_id.pph_21_ter_line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id" optional="hide" />
+                <field name="code" />
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+    <record id="pph_21_ter_line_view_form" model="ir.ui.view">
+        <field name="name">l10n_id.pph_21_ter_line - form</field>
+        <field name="model">l10n_id.pph_21_ter_line</field>
+        <field name="arch" type="xml">
+            <form>
+                <header />
+                <sheet>
+                    <div name="div_smart_buttons" class="oe_right oe_button_box" />
+                    <group name="group_1" colspan="4" col="2">
+                        <field name="name" />
+                        <field name="code" />
+                        <field name="ptkp_category_ids" widget="many2many_tags" />
+                    </group>
+                    <notebook>
+                        <page name="details" string="Details">
+                            <field name="line_ids" nolabel="1" colspan="4" mode="tree">
+                                <tree editable="top">
+                                    <field name="min_income" />
+                                    <field name="pph_rate" />
+                                </tree>
+                                <form>
+                                    <group name="group_line_1" colspan="4" col="2">
+                                        <field name="min_income" />
+                                        <field name="pph_rate" />
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

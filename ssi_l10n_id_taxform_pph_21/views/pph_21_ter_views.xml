@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2022 OpenSynergy Indonesia
-     Copyright 2022 PT. Simetri Sinergi Indonesia
+<!-- Copyright 2024 OpenSynergy Indonesia
+     Copyright 2024 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
-    <record id="ptkp_view_search" model="ir.ui.view">
-        <field name="name">l10n_id.ptkp - search</field>
-        <field name="model">l10n_id.ptkp</field>
+    <record id="pph_21_ter_view_search" model="ir.ui.view">
+        <field name="name">l10n_id.pph_21_ter - search</field>
+        <field name="model">l10n_id.pph_21_ter</field>
         <field
             name="inherit_id"
             ref="ssi_master_data_mixin.mixin_master_data_view_search"
@@ -15,9 +15,9 @@
             <data />
         </field>
     </record>
-    <record id="ptkp_view_tree" model="ir.ui.view">
-        <field name="name">l10n_id.ptkp - tree</field>
-        <field name="model">l10n_id.ptkp</field>
+    <record id="pph_21_ter_view_tree" model="ir.ui.view">
+        <field name="name">l10n_id.pph_21_ter - tree</field>
+        <field name="model">l10n_id.pph_21_ter</field>
         <field name="type">tree</field>
         <field
             name="inherit_id"
@@ -32,10 +32,9 @@
             </data>
         </field>
     </record>
-
-    <record id="ptkp_view_form" model="ir.ui.view">
-        <field name="name">l10n_id.ptkp - form</field>
-        <field name="model">l10n_id.ptkp</field>
+    <record id="pph_21_ter_view_form" model="ir.ui.view">
+        <field name="name">l10n_id.pph_21_ter - form</field>
+        <field name="model">l10n_id.pph_21_ter</field>
         <field
             name="inherit_id"
             ref="ssi_master_data_mixin.mixin_master_data_view_form"
@@ -48,30 +47,24 @@
                 </xpath>
                 <xpath expr="//page[@name='note']" position="before">
                     <page name="details" string="Details">
-                        <field name="line_ids" nolabel="1" mode="tree">
-                            <tree>
-                                <field name="ptkp_category_id" />
-                                <field name="ptkp_rate" />
-                            </tree>
-                        </field>
+                        <field name="line_ids" nolabel="1" colspan="4" />
                     </page>
                 </xpath>
             </data>
         </field>
     </record>
-
-    <record id="ptkp_action" model="ir.actions.act_window">
-        <field name="name">Tarif PTKP</field>
+    <record id="pph_21_ter_action" model="ir.actions.act_window">
+        <field name="name">Tarif Efektif Rata Rata</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">l10n_id.ptkp</field>
+        <field name="res_model">l10n_id.pph_21_ter</field>
         <field name="view_mode">tree,form</field>
     </record>
 
     <menuitem
-        id="ptkp_menu"
-        name="Tarif PTKP"
+        id="pph_21_ter_menu"
+        name="Tarif Efektif Rata Rata"
         parent="taxform_pph_21_conf_menu"
-        groups="l10n_id_ptkp_configurator_group"
-        action="ptkp_action"
+        groups="l10n_id_pph_21_ter_configurator_group"
+        action="pph_21_ter_action"
     />
 </odoo>

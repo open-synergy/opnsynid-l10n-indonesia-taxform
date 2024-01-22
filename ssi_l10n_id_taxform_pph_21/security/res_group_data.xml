@@ -36,6 +36,17 @@
             eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
         />
 </record>
+<record id="l10n_id_pph_21_ter_configurator_group" model="res.groups">
+    <field name="name">Tarif Efektif Rata Rata</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
 <record id="l10n_id_pph_21_biaya_jabatan_configurator_group" model="res.groups">
     <field name="name">Biaya Jabatan</field>
     <field

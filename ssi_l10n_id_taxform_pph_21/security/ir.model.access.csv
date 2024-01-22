@@ -13,3 +13,9 @@ access_pph_21_rate_configurator,l10n_id.pph_21_rate - configurator,model_l10n_id
 access_pph_21_rate_all,l10n_id.pph_21_rate - all,model_l10n_id_pph_21_rate,,1,0,0,0
 access_pph_21_rate_line_configurator,l10n_id.pph_21_rate_line - configurator,model_l10n_id_pph_21_rate_line,l10n_id_pph_21_rate_configurator_group,1,1,1,1
 access_pph_21_rate_line_all,l10n_id.pph_21_rate_line - all,model_l10n_id_pph_21_rate_line,,1,0,0,0
+access_pph_21_ter_configurator,l10n_id.pph_21_ter - configurator,model_l10n_id_pph_21_ter,l10n_id_pph_21_ter_configurator_group,1,1,1,1
+access_pph_21_ter_all,l10n_id.pph_21_ter - all,model_l10n_id_pph_21_ter,,1,0,0,0
+access_pph_21_ter_line_configurator,l10n_id.pph_21_ter_line - configurator,model_l10n_id_pph_21_ter_line,l10n_id_pph_21_ter_configurator_group,1,1,1,1
+access_pph_21_ter_line_all,l10n_id.pph_21_ter_line - all,model_l10n_id_pph_21_ter_line,,1,0,0,0
+access_pph_21_ter_line_categ_configurator,l10n_id.pph_21_ter_line_categ - configurator,model_l10n_id_pph_21_ter_line_categ,l10n_id_pph_21_ter_configurator_group,1,1,1,1
+access_pph_21_ter_line_categ_all,l10n_id.pph_21_ter_line_categ - all,model_l10n_id_pph_21_ter_line_categ,,1,0,0,0

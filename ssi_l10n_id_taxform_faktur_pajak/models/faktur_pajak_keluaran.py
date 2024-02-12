@@ -673,7 +673,7 @@ class FakturPajakKeluaran(models.Model):
                         "product_id": aml.product_id and aml.product_id.id,
                         "uom_quantity": aml.quantity or 1.0,
                         "uom_id": aml.product_uom_id and aml.product_uom_id.id,
-                        "price_unit": aml.credit,
+                        "price_unit": aml.credit / (aml.quantity or 1.0),
                         "tax_ids": [(6, 0, [self.tax_id.id])],
                     }
                     Detail.create(data)

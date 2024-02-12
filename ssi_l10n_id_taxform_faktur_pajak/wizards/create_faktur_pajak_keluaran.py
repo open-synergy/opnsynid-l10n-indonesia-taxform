@@ -71,7 +71,7 @@ class CreateFakturPajakKeluaran(models.TransientModel):
                 result = AM.search(criteria1)
                 criteria2 = [
                     ("faktur_pajak_keluaran_id", "!=", False),
-                    ("fp_keluaran_state", "in", ["cancelled"]),
+                    ("fp_keluaran_state", "in", ["cancel"]),
                     ("state", "=", "posted"),
                     ("journal_id", "in", record.allowed_fpk_journal_ids.ids),
                     ("id", "in", record.move_ids.ids),

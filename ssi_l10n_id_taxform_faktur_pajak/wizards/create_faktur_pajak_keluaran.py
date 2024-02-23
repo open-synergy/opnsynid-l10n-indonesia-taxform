@@ -153,6 +153,7 @@ class CreateFakturPajakKeluaran(models.TransientModel):
         ENofaNumber = self.env["enofa_number"]
         criteria = [("state", "=", "open")]
         enofas = ENofa.search(criteria)
+        number = False
 
         if len(enofas) == 0:
             str_error = _("No E-NOFA found")
@@ -160,14 +161,20 @@ class CreateFakturPajakKeluaran(models.TransientModel):
 
         enofa = enofas[0]
 
-        criteria = [
-            ("enofa_id", "=", enofa.id),
-            ("state", "=", "unused"),
-        ]
-        numbers = ENofaNumber.search(criteria)
+        for enofa in enofas:
 
-        if len(numbers) == 0:
+            criteria = [
+                ("enofa_id", "=", enofa.id),
+                ("state", "=", "unused"),
+            ]
+            numbers = ENofaNumber.search(criteria)
+
+            if len(numbers) > 0:
+                number = numbers[0]
+                break
+
+        if not number:
             str_error = _("No E-NOFA number found")
             raise UserError(str_error)
 
-        return numbers[0]
+        return number

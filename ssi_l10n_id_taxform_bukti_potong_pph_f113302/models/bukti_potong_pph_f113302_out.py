@@ -5,6 +5,8 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
 
+from odoo.addons.ssi_decorator import ssi_decorator
+
 
 class BuktiPotongPPhf113302Out(models.Model):
     _name = "l10n_id.bukti_potong_pph_f113302_out"
@@ -32,3 +34,9 @@ class BuktiPotongPPhf113302Out(models.Model):
     line_ids = fields.One2many(
         comodel_name="l10n_id.bukti_potong_pph_f113302_out_line",
     )
+
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch

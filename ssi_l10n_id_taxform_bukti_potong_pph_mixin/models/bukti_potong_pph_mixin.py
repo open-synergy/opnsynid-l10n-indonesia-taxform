@@ -12,9 +12,9 @@ from odoo.tools.translate import _
 class BuktiPotongPPhMixin(models.AbstractModel):
     _name = "l10n_id.bukti_potong_pph_mixin"
     _inherit = [
-        "mixin.transaction_confirm",
-        "mixin.transaction_done",
         "mixin.transaction_cancel",
+        "mixin.transaction_done",
+        "mixin.transaction_confirm",
     ]
     _description = "Bukti Potong PPh"
 

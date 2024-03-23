@@ -15,15 +15,20 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         "income_move_line_ids",
         "income_move_line_ids.debit",
         "income_move_line_ids.credit",
+        "amount_computation_method",
+        "manual_amount",
     )
     def _compute_amount(self):
         for line in self:
-            line.amount = 0.0
-            for move_line in line.income_move_line_ids:
-                if line.bukti_potong_id.direction == "in":
-                    line.amount += move_line.credit
-                else:
-                    line.amount += move_line.debit
+            line.amount = line.amount_tax = 0.0
+            if line.amount_computation_method == "auto":
+                for move_line in line.income_move_line_ids:
+                    if line.bukti_potong_id.direction == "in":
+                        line.amount += move_line.credit
+                    else:
+                        line.amount += move_line.debit
+            else:
+                line.amount = line.manual_amount
             if line.amount != 0.0:
                 taxes = line.tax_id.compute_all(
                     line.amount,
@@ -92,6 +97,25 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         compute="_compute_amount",
         store=True,
         compute_sudo=True,
+    )
+    amount_computation_method = fields.Selection(
+        string="Amount Computation",
+        selection=[
+            ("auto", "Automatic"),
+            ("manual", "Manual"),
+        ],
+        required=True,
+        default="auto",
+        readonly=False,
+    )
+    manual_amount = fields.Float(
+        string="Amount (Manual)",
+        readonly=False,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     amount_tax = fields.Float(
         string="Tax Amount",

@@ -521,10 +521,21 @@ class FakturPajakKeluaran(models.Model):
 
     @api.depends(
         "type_id",
+        "enofa_number_id",
+        "enofa_number_id.faktur_pajak_keluaran_ids",
+        "enofa_number_id.faktur_pajak_keluaran_ids.state",
     )
     def _compute_efaktur_fg_pengganti(self):
         for record in self:
             result = "0"
+            if record.enofa_number_id:
+                criteria = [
+                    ("enofa_number_id", "=", record.enofa_number_id.id),
+                ]
+                FPKs = self.env["faktur_pajak_keluaran"].search(criteria)
+                if len(FPKs) > 1:
+                    if record.id == FPKs[-1].id:
+                        result = "1"
             record.efaktur_fg_pengganti = result
 
     @api.depends("type_id")
@@ -587,7 +598,7 @@ class FakturPajakKeluaran(models.Model):
                 result = AM.search(criteria1)
                 criteria2 = [
                     ("faktur_pajak_keluaran_id", "!=", False),
-                    ("fp_keluaran_state", "in", ["cancelled"]),
+                    ("fp_keluaran_state", "in", ["draft", "cancelled"]),
                     ("state", "=", "posted"),
                     ("journal_id", "in", record.allowed_fpk_journal_ids.ids),
                     ("partner_id.commercial_partner_id.id", "=", record.partner_id.id),

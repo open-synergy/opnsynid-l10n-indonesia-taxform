@@ -48,6 +48,6 @@ class ENofa(models.Model):
                     result = "open"
                 elif fpk.state == "done":
                     result = "issued"
-                elif fpk.state == "cancel":
+                elif fpk.state == "terminate":
                     result = "cancelled"
             record.state = result

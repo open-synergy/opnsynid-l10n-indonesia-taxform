@@ -18,6 +18,7 @@ class FakturPajakKeluaran(models.Model):
         "mixin.transaction_open",
         "mixin.transaction_confirm",
         "mixin.transaction_partner",
+        "mixin.transaction_tax_address",
         "mixin.transaction_untaxed_with_field",
         "mixin.transaction_total_with_field",
         "mixin.transaction_tax_with_field",
@@ -366,8 +367,8 @@ class FakturPajakKeluaran(models.Model):
             result = "-"
             if record.partner_id:
                 result = ""
-                if record.contact_partner_id:
-                    partner = record.contact_partner_id
+                if record.tax_address_id:
+                    partner = record.tax_address_id
                 else:
                     partner = record.partner_id
 

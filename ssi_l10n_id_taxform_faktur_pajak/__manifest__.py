@@ -20,6 +20,7 @@
         "ssi_transaction_open_mixin",
         "ssi_transaction_confirm_mixin",
         "ssi_transaction_partner_mixin",
+        "ssi_transaction_tax_address_mixin",
         "ssi_transaction_total_mixin",
         "ssi_company_currency_mixin",
         "ssi_accounting_entry_mixin",

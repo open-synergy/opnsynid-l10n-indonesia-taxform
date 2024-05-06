@@ -87,7 +87,22 @@
                 <field name="company_currency_id" invisible="1" />
                 <field name="currency_id" invisible="1" />
                 <field name="type_id" />
-                <field name="partner_id" widget="many2one_avatar" />
+                <field
+                        name="partner_id"
+                        context="{'show_address': 1, 'show_vat': True}"
+                        options='{"always_reload": True}'
+                    />
+                <field
+                        name="allowed_tax_address_ids"
+                        widget="many2many_avatar"
+                        invisible="1"
+                    />
+                <field
+                        name="tax_address_id"
+                        domain="[('id','in',allowed_tax_address_ids)]"
+                        context="{'show_address': 1}"
+                        options='{"always_reload": True}'
+                    />
                 <field
                         name="allowed_contact_ids"
                         widget="many2many_avatar"

@@ -125,6 +125,7 @@ class CreateFakturPajakKeluaran(models.TransientModel):
                 "enofa_number_id": self._get_enofa_number().id,
                 "tax_id": self.type_id.tax_id.id,
                 "move_ids": [(6, 0, [am.id])],
+                "efaktur_mode": self.type_id.efaktur_mode,
             }
             fpk = FPK.create(data)
             fpk.action_reload_detail()

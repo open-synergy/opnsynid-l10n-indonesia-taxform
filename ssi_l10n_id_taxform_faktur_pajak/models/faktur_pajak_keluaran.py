@@ -230,6 +230,15 @@ class FakturPajakKeluaran(models.Model):
             ],
         },
     )
+    efaktur_mode = fields.Selection(
+        string="E-Faktur Mode",
+        selection=[
+            ("header", "Header"),
+            ("detail", "Detail"),
+        ],
+        required=True,
+        default="header",
+    )
     efaktur_kd_jenis_transaksi = fields.Char(
         string="KD_JENIS_TRANSAKSI",
         compute="_compute_efaktur_kd_jenis_transaksi",
@@ -660,6 +669,14 @@ class FakturPajakKeluaran(models.Model):
             fp.taxform_year_id = False
             if fp.taxform_period_id:
                 fp.taxform_year_id = fp.taxform_period_id.year_id.id
+
+    @api.onchange(
+        "type_id",
+    )
+    def onchange_efaktur_mode(self):
+        self.efaktur_mode = False
+        if self.type_id:
+            self.efaktur_mode = self.type_id.efaktur_mode
 
     @api.onchange(
         "type_id",

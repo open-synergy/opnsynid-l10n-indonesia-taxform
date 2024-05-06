@@ -12,6 +12,15 @@ class FakturPajakTransactionType(models.Model):
     ]
     _description = "Type of Faktur Pajak Transaction"
 
+    efaktur_mode = fields.Selection(
+        string="E-Faktur Mode",
+        selection=[
+            ("header", "Header"),
+            ("detail", "Detail"),
+        ],
+        required=True,
+        default="header",
+    )
     fpk_journal_selection_method = fields.Selection(
         default="domain",
         selection=[("manual", "Manual"), ("domain", "Domain"), ("code", "Python Code")],

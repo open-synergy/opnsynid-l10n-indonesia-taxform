@@ -35,6 +35,7 @@
         <data>
             <xpath expr="//field[@name='active']" position="after">
                 <field name="tax_id" />
+                <field name="efaktur_mode" />
             </xpath>
             <xpath expr="//page[1]" position="before">
                 <page name="fpk" string="Faktur Pajak Keluaran">

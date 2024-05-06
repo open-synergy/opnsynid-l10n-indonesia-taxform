@@ -171,6 +171,51 @@
                             <field name="tax_ids" widget="many2many_tags" />
                             <field name="price_subtotal" string="Subtotal" />
                         </tree>
+                        <form>
+                            <group name="detail_form_1" colspan="4" col="2">
+                                <group name="detail_form_1_1" colspan="1" col="2">
+                                    <field name="product_id" />
+                                    <field name="name" />
+                                </group>
+                                <group name="detail_form_1_2" colspan="1" col="2">
+                                    <label for="uom_quantity" />
+                                    <div>
+                                        <field name="uom_quantity" />
+                                        <field name="uom_id" />
+                                    </div>
+                                    <field name="price_unit" />
+                                    <field name="price_subtotal" />
+                                    <field name="tax_ids" widget="many2many_tag" />
+                                    <field name="price_tax" />
+                                    <field name="price_total" />
+                                </group>
+                            </group>
+                            <notebook>
+                                <page name="ol" string="OL">
+                                    <group name="ol_1" colspan="4" col="2">
+                                        <field name="efaktur_of_name" string="NAME" />
+                                        <field
+                                                name="efaktur_of_harga_satuan"
+                                                string="HARGA_SATUAN"
+                                            />
+                                        <field
+                                                name="efaktur_of_jumlah_barang"
+                                                string="HARGA_SATUAN"
+                                            />
+                                        <field
+                                                name="efaktur_of_harga_total"
+                                                string="HARGA_TOTAL"
+                                            />
+                                        <field
+                                                name="efaktur_of_diskon"
+                                                string="DISKON"
+                                            />
+                                        <field name="efaktur_of_dpp" string="DPP" />
+                                        <field name="efaktur_of_ppn" string="PPN" />
+                                    </group>
+                                </page>
+                            </notebook>
+                        </form>
                     </field>
                     <field name="tax_ids">
                         <tree editable="top">
@@ -202,6 +247,9 @@
                     </group>
                 </page>
                 <page name="efaktur" string="E-Faktur">
+                    <group name="efaktur_2" colspan="4" col="2">
+                        <field name="efaktur_mode" />
+                    </group>
                     <group name="efaktur_1" string="FK" colspan="4" col="2">
                         <field name="efaktur_kd_jenis_transaksi" />
                         <field name="efaktur_fg_pengganti" />

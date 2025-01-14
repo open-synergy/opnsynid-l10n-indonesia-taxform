@@ -14,6 +14,7 @@ class BuktiPotongPPh1721A1(models.Model):
         "mixin.transaction_cancel",
         "mixin.transaction_done",
         "mixin.transaction_confirm",
+        "mixin.print_document",
     ]
     _description = "Bukti Potong PPh 21 1721 A1"
 
@@ -100,23 +101,30 @@ class BuktiPotongPPh1721A1(models.Model):
         },
     )
 
-    @api.depends(
-        "date",
-    )
-    def _compute_tax_period(self):
-        obj_tax_period = self.env["l10n_id.tax_period"]
-        for bukpot in self:
-            try:
-                bukpot.tax_period_id = obj_tax_period._find_period(bukpot.date)
-            except Exception:
-                bukpot.tax_period_id = False
-
-    tax_period_id = fields.Many2one(
-        string="Tax Period",
+    start_tax_period_id = fields.Many2one(
+        string="Period Awal",
         comodel_name="l10n_id.tax_period",
-        compute="_compute_tax_period",
-        store=True,
-        compute_sudo=True,
+        required=True,
+        readonly=True,
+        ondelete="restrict",
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
+    end_tax_period_id = fields.Many2one(
+        string="Period Akhir",
+        comodel_name="l10n_id.tax_period",
+        compute=False,
+        required=True,
+        readonly=True,
+        ondelete="restrict",
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
 
     @api.model
@@ -631,7 +639,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_penghasilan_01(self):
         self.penghasilan_01 = 0.0
@@ -662,7 +671,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_penghasilan_02(self):
         self.penghasilan_02 = 0.0
@@ -693,7 +703,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_penghasilan_03(self):
         self.penghasilan_03 = 0.0
@@ -724,7 +735,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_penghasilan_04(self):
         self.penghasilan_04 = 0.0
@@ -755,7 +767,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_penghasilan_05(self):
         self.penghasilan_05 = 0.0
@@ -786,7 +799,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_penghasilan_06(self):
         self.penghasilan_06 = 0.0
@@ -819,7 +833,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_penghasilan_07(self):
         self.penghasilan_07 = 0.0
@@ -872,7 +887,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_pengurang_10(self):
         self.pengurang_10 = 0.0
@@ -903,7 +919,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_perhitungan_13(self):
         self.perhitungan_13 = 0.0
@@ -934,7 +951,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_perhitungan_18(self):
         self.perhitungan_18 = 0.0
@@ -965,7 +983,8 @@ class BuktiPotongPPh1721A1(models.Model):
     @api.onchange(
         "company_id",
         "wajib_pajak_id",
-        "tax_period_id",
+        "start_tax_period_id",
+        "end_tax_period_id",
     )
     def onchange_perhitungan_20(self):
         self.perhitungan_20 = 0.0
@@ -992,3 +1011,10 @@ class BuktiPotongPPh1721A1(models.Model):
                     )
                     raise UserError(_("%s") % (msg_err))
                 self.perhitungan_20 = result
+
+    @api.onchange(
+        "tax_year_id",
+    )
+    def onchange_tax_year_id(self):
+        self.start_tax_period_id = False
+        self.end_tax_period_id = False

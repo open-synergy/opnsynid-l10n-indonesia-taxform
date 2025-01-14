@@ -20,6 +20,9 @@
         "ssi_partner",
         "ssi_l10n_id_partner_identification_kependudukan",
         "ssi_l10n_id_taxform_pph_21",
+        "report_py3o",
+        "ssi_print_mixin",
+        "partner_contact_in_several_companies",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -30,6 +33,7 @@
         "data/sequence_template_data.xml",
         "data/policy_template_data.xml",
         "data/approval_template_data.xml",
+        "reports/bukti_potong_pph_1721_a1_report.xml",
         "views/bukti_potong_pph_1721_a1_views.xml",
         "views/bukti_potong_pph_1721_a1_config_views.xml",
         "views/res_company_views.xml",

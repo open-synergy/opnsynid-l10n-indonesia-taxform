@@ -13,7 +13,8 @@
         <data>
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="date" />
-                <field name="tax_period_id" />
+                <field name="start_tax_period_id" />
+                <field name="end_tax_period_id" />
                 <field name="wajib_pajak_id" />
                 <field name="pemotong_pajak_id" />
             </xpath>
@@ -39,7 +40,8 @@
             <xpath expr="//group[@name='header_right']" position="inside">
                 <field name="pemotong_pajak_id" domain="[('is_company','=',True)]" />
                 <field name="date" />
-                <field name="tax_period_id" />
+                <field name="start_tax_period_id" />
+                <field name="end_tax_period_id" />
                 <field
                         name="ttd_id"
                         domain="[('is_company','=',False),('parent_id','=',company_partner_id)]"
@@ -113,7 +115,8 @@
     <field name="arch" type="xml">
         <data>
             <xpath expr="//field[@name='company_id']" position="after">
-                <field name="tax_period_id" />
+                <field name="start_tax_period_id" />
+                <field name="end_tax_period_id" />
                 <field name="wajib_pajak_id" />
                 <field name="pemotong_pajak_id" />
                 <field name="ttd_id" />
@@ -121,9 +124,14 @@
             <xpath expr="//group[@name='group_by']" position="inside">
                 <filter name="grp_date" string="Date" context="{'group_by':'date'}" />
                 <filter
-                        name="filter_grp_tax_period"
-                        string="Tax Period"
-                        context="{'group_by':'tax_period_id'}"
+                        name="filter_grp_start_tax_period_id"
+                        string="Start Tax Period"
+                        context="{'group_by':'start_tax_period_id'}"
+                    />
+                <filter
+                        name="filter_grp_end_tax_period_id"
+                        string="End Tax Period"
+                        context="{'group_by':'end_tax_period_id'}"
                     />
                 <filter
                         name="filter_grp_wp"

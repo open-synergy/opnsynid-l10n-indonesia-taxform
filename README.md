@@ -19,6 +19,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_l10n_id_taxform](ssi_l10n_id_taxform/) | 14.0.1.3.0 |  | Indonesia's Taxform
+[ssi_l10n_id_taxform_bukti_potong_pph_1721_a1](ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/) | 14.0.1.0.0 |  | Indonesia - Bukti Potong PPh 21 Formulir 1721 A1
 [ssi_l10n_id_taxform_bukti_potong_pph_f113301](ssi_l10n_id_taxform_bukti_potong_pph_f113301/) | 14.0.1.5.0 |  | Indonesia - Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01)
 [ssi_l10n_id_taxform_bukti_potong_pph_f113301_work_log](ssi_l10n_id_taxform_bukti_potong_pph_f113301_work_log/) | 14.0.1.0.0 |  | Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01) - Work Log Integration
 [ssi_l10n_id_taxform_bukti_potong_pph_f113302](ssi_l10n_id_taxform_bukti_potong_pph_f113302/) | 14.0.1.6.0 |  | Indonesia - Bukti Potong PPh 21 Final (f.1.1.33.02)

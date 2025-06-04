@@ -1,4 +1,2 @@
 # addons listed in this file are ignored by
 # setuptools-odoo-make-default (one addon per line)
-
-- "ssi_l10n_id_taxform_pph_21_payslip"

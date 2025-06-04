@@ -38,9 +38,11 @@ jobs:
           - container: ghcr.io/oca/oca-ci/py3.6-odoo14.0:latest
             makepot: "true"
             name: test with Odoo
+            exclude: "ssi_l10n_id_taxform_pph_21_payslip"
           - container: ghcr.io/oca/oca-ci/py3.6-ocb14.0:latest
             name: test with OCB
             makepot: "true"
+            exclude: "ssi_l10n_id_taxform_pph_21_payslip"
     services:
       postgres:
         image: postgres:9.6

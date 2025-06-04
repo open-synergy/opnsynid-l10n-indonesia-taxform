@@ -167,23 +167,17 @@ class BuktiPotongPPhMixin(models.AbstractModel):
         },
     )
 
-    @api.depends(
-        "date",
-    )
-    def _compute_tax_period(self):
-        obj_tax_period = self.env["l10n_id.tax_period"]
-        for bukpot in self:
-            try:
-                bukpot.tax_period_id = obj_tax_period._find_period(bukpot.date)
-            except Exception:
-                bukpot.tax_period_id = False
-
     tax_period_id = fields.Many2one(
         string="Tax Period",
         comodel_name="l10n_id.tax_period",
-        compute="_compute_tax_period",
-        store=True,
-        compute_sudo=True,
+        required=True,
+        ondelete="restrict",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     journal_id = fields.Many2one(
         string="Journal",
@@ -398,6 +392,16 @@ class BuktiPotongPPhMixin(models.AbstractModel):
         ]
         res += policy_field
         return res
+
+    @api.onchange(
+        "date",
+    )
+    def onchange_tax_period(self):
+        obj_tax_period = self.env["l10n_id.tax_period"]
+        try:
+            self.tax_period_id = obj_tax_period._find_period(self.date)
+        except Exception:
+            self.tax_period_id = False
 
     @api.onchange(
         "type_id",

@@ -70,6 +70,8 @@ jobs:
           EXCLUDE: ssi_l10n_id_taxform_pph_21_payslip
         run: oca_init_test_database
       - name: Run tests
+        env:
+          EXCLUDE: ssi_l10n_id_taxform_pph_21_payslip
         run: oca_run_tests
       - uses: codecov/codecov-action@v1
       - name: Update .pot files

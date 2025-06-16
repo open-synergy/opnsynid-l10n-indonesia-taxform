@@ -87,6 +87,29 @@
                 <field name="company_currency_id" invisible="1" />
                 <field name="currency_id" invisible="1" />
                 <field name="type_id" />
+                <field name="need_add_info" invisible="1" />
+                <field name="need_facility_stamp" invisible="1" />
+                <field
+                        name="allowed_add_info_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                <field
+                        name="add_info_id"
+                        domain="[('id','in',allowed_add_info_ids)]"
+                        attrs="{'required':[('need_add_info','=',True)]}"
+                    />
+                <field
+                        name="allowed_facility_stamp_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                <field
+                        name="facility_stamp_id"
+                        domain="[('id','in',allowed_facility_stamp_ids)]"
+                        attrs="{'required':[('need_facility_stamp','=',True)]}"
+                    />
+                <field name="buyer_document_id" />
                 <field
                         name="partner_id"
                         context="{'show_address': 1, 'show_vat': True}"
@@ -208,14 +231,16 @@
                             <notebook>
                                 <page name="ol" string="OL">
                                     <group name="ol_1" colspan="4" col="2">
+                                        <field name="efaktur_of_opt" string="OPT" />
                                         <field name="efaktur_of_name" string="NAME" />
+                                        <field name="efaktur_of_unit" string="UNIT" />
                                         <field
                                                 name="efaktur_of_harga_satuan"
                                                 string="HARGA_SATUAN"
                                             />
                                         <field
                                                 name="efaktur_of_jumlah_barang"
-                                                string="HARGA_SATUAN"
+                                                string="JUMLAH_BARANG"
                                             />
                                         <field
                                                 name="efaktur_of_harga_total"
@@ -266,23 +291,36 @@
                         <field name="efaktur_mode" />
                     </group>
                     <group name="efaktur_1" string="FK" colspan="4" col="2">
-                        <field name="efaktur_kd_jenis_transaksi" />
-                        <field name="efaktur_fg_pengganti" />
-                        <field name="efaktur_nomor_faktur" />
-                        <field name="efaktur_masa_pajak" />
-                        <field name="efaktur_tahun_pajak" />
-                        <field name="efaktur_tanggal_faktur" />
-                        <field name="efaktur_npwp" />
-                        <field name="efaktur_nama" />
-                        <field name="efaktur_alamat_lengkap" />
-                        <field name="efaktur_jumlah_ppn" />
-                        <field name="efaktur_jumlah_dpp" />
-                        <field name="efaktur_referensi" />
+                        <group name="efaktur_1_1">
+                            <field name="efaktur_kd_jenis_transaksi" />
+                            <field name="efaktur_fg_pengganti" />
+                            <field name="efaktur_nomor_faktur" />
+                            <field name="efaktur_masa_pajak" />
+                            <field name="efaktur_tahun_pajak" />
+                            <field name="efaktur_tanggal_faktur" />
+                            <field name="efaktur_npwp" />
+                            <field name="efaktur_company_npwp" />
+                            <field name="efaktur_nama" />
+                            <field name="efaktur_alamat_lengkap" />
+                            <field name="efaktur_jumlah_ppn" />
+                            <field name="efaktur_jumlah_dpp" />
+                            <field name="efaktur_referensi" />
+                        </group>
+                        <group name="efaktur_1_2">
+                            <field name="efaktur_of_add_info" />
+                            <field name="efaktur_of_facility_stamp" />
+                            <field name="efaktur_seller_id_tku" />
+                            <field name="efaktur_of_buyer_document" />
+                            <field name="efaktur_country" />
+                            <field name="efaktur_email" />
+                            <field name="efaktur_buyer_id_tku" />
+                        </group>
                     </group>
                     <group name="efaktur_2" string="OL" colspan="4" col="2">
+                        <field name="efaktur_of_opt" string="OPT" />
                         <field name="efaktur_of_name" string="NAME" />
                         <field name="efaktur_of_harga_satuan" string="HARGA_SATUAN" />
-                        <field name="efaktur_of_jumlah_barang" string="HARGA_SATUAN" />
+                        <field name="efaktur_of_jumlah_barang" string="JUMLAH_BARANG" />
                         <field name="efaktur_of_harga_total" string="HARGA_TOTAL" />
                         <field name="efaktur_of_diskon" string="DISKON" />
                         <field name="efaktur_of_dpp" string="DPP" />

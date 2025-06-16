@@ -15,6 +15,41 @@
             eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
         />
 </record>
+<record id="additional_info_configurator_group" model="res.groups">
+    <field name="name">Additional Info</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<record id="facility_stamp_configurator_group" model="res.groups">
+    <field name="name">Facility Stamp</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<record id="buyer_document_configurator_group" model="res.groups">
+    <field name="name">Buyer Document</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
 
 <!-- Workflow -->
 <record id="enofa_viewer_group" model="res.groups">

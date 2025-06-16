@@ -11,6 +11,23 @@
         <form>
             <group name="group_1" colspan="4" col="2">
                 <field name="type_id" />
+                <field name="efaktur_mode" />
+                <field
+                        name="allowed_add_info_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                <field name="add_info_id" domain="[('id','in',allowed_add_info_ids)]" />
+                <field
+                        name="allowed_facility_stamp_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                <field
+                        name="facility_stamp_id"
+                        domain="[('id','in',allowed_facility_stamp_ids)]"
+                    />
+                <field name="buyer_document_id" />
                 <field
                         name="allowed_fpk_journal_ids"
                         widget="many2many_tags"

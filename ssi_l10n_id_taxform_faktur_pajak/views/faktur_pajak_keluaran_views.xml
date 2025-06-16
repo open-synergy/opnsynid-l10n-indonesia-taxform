@@ -12,7 +12,7 @@
     <field name="arch" type="xml">
         <data>
             <xpath expr="//field[@name='company_id']" position="after">
-                <field name="enofa_number_id" />
+                <field name="enofa_number_id" optional="hide" />
                 <field name="date" />
                 <field name="partner_id" widget="many2one_avatar" />
                 <field

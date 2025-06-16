@@ -4,7 +4,8 @@
 
 import re
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 from odoo.addons.ssi_decorator import ssi_decorator
 
@@ -74,7 +75,8 @@ class FakturPajakKeluaran(models.Model):
     ]
 
     # Sequence attribute
-    _create_sequence_state = "open"
+    # do not create document number since e-faktur number will be given by coretax
+    # _create_sequence_state = "open"
 
     # mixin.transaction_untaxed attributes
     _detail_object_name = "detail_ids"
@@ -98,6 +100,15 @@ class FakturPajakKeluaran(models.Model):
     _price_unit_field_name = "price_unit"
     _quantity_field_name = "uom_quantity"
 
+    name = fields.Char(
+        required=True,
+        readonly=True,
+        states={
+            "open": [
+                ("readonly", False),
+            ],
+        },
+    )
     date = fields.Date(
         string="Date",
         copy=False,
@@ -162,13 +173,8 @@ class FakturPajakKeluaran(models.Model):
     enofa_number_id = fields.Many2one(
         string="# E-NOFA",
         comodel_name="enofa_number",
-        required=True,
+        required=False,
         readonly=True,
-        states={
-            "draft": [
-                ("readonly", False),
-            ],
-        },
     )
     tax_id = fields.Many2one(
         string="Tax",
@@ -330,7 +336,7 @@ class FakturPajakKeluaran(models.Model):
             ("detail", "Detail"),
         ],
         required=True,
-        default="header",
+        default="detail",
     )
     efaktur_kd_jenis_transaksi = fields.Char(
         string="KD_JENIS_TRANSAKSI",
@@ -963,7 +969,7 @@ class FakturPajakKeluaran(models.Model):
 
     @api.model
     def _get_policy_field(self):
-        res = super(FakturPajakKeluaran, self)._get_policy_field()
+        res = super()._get_policy_field()
         policy_field = [
             "confirm_ok",
             "approve_ok",
@@ -978,6 +984,22 @@ class FakturPajakKeluaran(models.Model):
         ]
         res += policy_field
         return res
+
+    @ssi_decorator.pre_done_check()
+    def _check_document_number(self):
+        self.ensure_one()
+        if self.name == "/":
+            error_message = """
+            Document Type: %s
+            Context: Finish document
+            Database ID: %s
+            Problem: Missing FPK number from coretax
+            Solution: Fill document number with coretax's FPK number
+            """ % (
+                self._description.lower(),
+                self.id,
+            )
+            raise UserError(_(error_message))
 
     @ssi_decorator.insert_on_form_view()
     def _insert_form_element(self, view_arch):

@@ -79,3 +79,11 @@ class FakturPajakTransactionType(models.Model):
         string="Tax",
         comodel_name="account.tax",
     )
+    need_add_info = fields.Boolean(
+        string="Need Additional Info",
+        default=False,
+    )
+    need_facility_stamp = fields.Boolean(
+        string="Need Facility Stamp",
+        default=False,
+    )

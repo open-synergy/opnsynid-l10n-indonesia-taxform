@@ -4,7 +4,8 @@
 
 import re
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 from odoo.addons.ssi_decorator import ssi_decorator
 
@@ -74,7 +75,8 @@ class FakturPajakKeluaran(models.Model):
     ]
 
     # Sequence attribute
-    _create_sequence_state = "open"
+    # do not create document number since e-faktur number will be given by coretax
+    # _create_sequence_state = "open"
 
     # mixin.transaction_untaxed attributes
     _detail_object_name = "detail_ids"
@@ -98,6 +100,15 @@ class FakturPajakKeluaran(models.Model):
     _price_unit_field_name = "price_unit"
     _quantity_field_name = "uom_quantity"
 
+    name = fields.Char(
+        required=True,
+        readonly=True,
+        states={
+            "open": [
+                ("readonly", False),
+            ],
+        },
+    )
     date = fields.Date(
         string="Date",
         copy=False,
@@ -162,13 +173,8 @@ class FakturPajakKeluaran(models.Model):
     enofa_number_id = fields.Many2one(
         string="# E-NOFA",
         comodel_name="enofa_number",
-        required=True,
+        required=False,
         readonly=True,
-        states={
-            "draft": [
-                ("readonly", False),
-            ],
-        },
     )
     tax_id = fields.Many2one(
         string="Tax",
@@ -181,6 +187,98 @@ class FakturPajakKeluaran(models.Model):
             ],
         },
     )
+
+    @api.depends(
+        "type_id",
+    )
+    def _compute_allowed_add_info_ids(self):
+        for record in self:
+            result = False
+            AddInfo = self.env["additional_info"]
+            if record.type_id:
+                criteria = [
+                    ("type_id", "=", record.type_id.id),
+                ]
+                result = AddInfo.search(criteria).ids
+            record.allowed_add_info_ids = result
+
+    allowed_add_info_ids = fields.Many2many(
+        string="Allowed Additional Info",
+        comodel_name="additional_info",
+        compute="_compute_allowed_add_info_ids",
+        store=False,
+        compute_sudo=True,
+    )
+
+    add_info_id = fields.Many2one(
+        string="Additional Info",
+        comodel_name="additional_info",
+        required=False,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
+
+    @api.depends(
+        "type_id",
+    )
+    def _compute_allowed_facility_stamp_ids(self):
+        for record in self:
+            result = False
+            FacilityStamp = self.env["facility_stamp"]
+            if record.type_id:
+                criteria = [
+                    ("type_id", "=", record.type_id.id),
+                ]
+                result = FacilityStamp.search(criteria).ids
+            record.allowed_facility_stamp_ids = result
+
+    allowed_facility_stamp_ids = fields.Many2many(
+        string="Allowed Facility Stamp",
+        comodel_name="facility_stamp",
+        compute="_compute_allowed_facility_stamp_ids",
+        store=False,
+        compute_sudo=True,
+    )
+
+    facility_stamp_id = fields.Many2one(
+        string="Facility Stamp",
+        comodel_name="facility_stamp",
+        required=False,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
+
+    @api.model
+    def _default_buyer_document_id(self):
+        try:
+            result = self.env.ref(
+                "ssi_l10n_id_taxform_faktur_pajak.fp_buyer_document_tin"
+            ).id
+        except Exception:
+            result = False
+        return result
+
+    buyer_document_id = fields.Many2one(
+        string="Buyer Document",
+        comodel_name="buyer_document",
+        required=True,
+        readonly=True,
+        default=lambda self: self._default_buyer_document_id(),
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
+
     allowed_enofa_number_ids = fields.Many2many(
         string="Allowed E-NOFA Numbers",
         comodel_name="enofa_number",
@@ -238,24 +336,24 @@ class FakturPajakKeluaran(models.Model):
             ("detail", "Detail"),
         ],
         required=True,
-        default="header",
+        default="detail",
     )
     efaktur_kd_jenis_transaksi = fields.Char(
         string="KD_JENIS_TRANSAKSI",
         compute="_compute_efaktur_kd_jenis_transaksi",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
     efaktur_fg_pengganti = fields.Char(
         string="FG_PENGGANTI",
         compute="_compute_efaktur_fg_pengganti",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
     efaktur_nomor_faktur = fields.Char(
         string="NOMOR_FAKTUR",
         compute="_compute_efaktur_nomor_faktur",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -272,7 +370,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_masa_pajak = fields.Char(
         string="MASA_PAJAK",
         compute="_compute_efaktur_masa_pajak",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -287,7 +385,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_tahun_pajak = fields.Char(
         string="TAHUN_FAKTUR",
         compute="_compute_efaktur_tahun_pajak",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -302,7 +400,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_tanggal_faktur = fields.Char(
         string="TANGGAL_FAKTUR",
         compute="_compute_efaktur_tanggal_faktur",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -315,13 +413,6 @@ class FakturPajakKeluaran(models.Model):
             if record.date:
                 result = record.date.strftime("%d/%m/%Y")
             record.efaktur_tanggal_faktur = result
-
-    efaktur_npwp = fields.Char(
-        string="NPWP",
-        compute="_compute_efaktur_npwp",
-        store=False,
-        compute_sudo=True,
-    )
 
     @api.depends(
         "partner_id",
@@ -336,10 +427,56 @@ class FakturPajakKeluaran(models.Model):
                     result += s
             record.efaktur_npwp = result
 
+    efaktur_npwp = fields.Char(
+        string="NPWP",
+        compute="_compute_efaktur_npwp",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "company_id",
+        "company_id.partner_id",
+        "company_id.partner_id.vat",
+    )
+    def _compute_efaktur_company_npwp(self):
+        for record in self:
+            result = "000000000000000"
+            if record.company_id and record.company_id.partner_id.vat:
+                npwp = record.company_id.partner_id.vat
+                result = ""
+                for s in re.findall(r"\d+", npwp):
+                    result += s
+            record.efaktur_company_npwp = result
+
+    efaktur_company_npwp = fields.Char(
+        string="Company NPWP",
+        compute="_compute_efaktur_company_npwp",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "efaktur_company_npwp",
+    )
+    def _compute_efaktur_seller_id_tku(self):
+        for record in self:
+            result = "0000000000000000"
+            if record.efaktur_company_npwp:
+                result = record.efaktur_company_npwp
+            record.efaktur_seller_id_tku = result + "000000"
+
+    efaktur_seller_id_tku = fields.Char(
+        string="SELLER_ID_TKU",
+        compute="_compute_efaktur_seller_id_tku",
+        store=True,
+        compute_sudo=True,
+    )
+
     efaktur_nama = fields.Char(
         string="NAMA",
         compute="_compute_efaktur_nama",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -354,7 +491,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_alamat_lengkap = fields.Char(
         string="ALAMAT_LENGKAP",
         compute="_compute_efaktur_alamat_lengkap",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -392,7 +529,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_jumlah_ppn = fields.Char(
         string="JUMLAH_PPN",
         compute="_compute_efaktur_jumlah_ppn",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -404,7 +541,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_jumlah_dpp = fields.Char(
         string="JUMLAH_DPP",
         compute="_compute_efaktur_jumlah_dpp",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -416,7 +553,116 @@ class FakturPajakKeluaran(models.Model):
     efaktur_referensi = fields.Char(
         string="REFERENSI",
         compute="_compute_efaktur_referensi",
-        store=False,
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends("add_info_id")
+    def _compute_efaktur_of_add_info(self):
+        for record in self:
+            result = "-"
+            if record.add_info_id:
+                result = record.add_info_id.code
+            record.efaktur_of_add_info = result
+
+    efaktur_of_add_info = fields.Char(
+        string="ADD_INFO",
+        compute="_compute_efaktur_of_add_info",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends("facility_stamp_id")
+    def _compute_efaktur_of_facility_stamp(self):
+        for record in self:
+            result = "-"
+            if record.facility_stamp_id:
+                result = record.facility_stamp_id.code
+            record.efaktur_of_facility_stamp = result
+
+    efaktur_of_facility_stamp = fields.Char(
+        string="FACILITY_STAMP",
+        compute="_compute_efaktur_of_facility_stamp",
+        store=True,
+        compute_sudo=True,
+    )
+
+    need_add_info = fields.Boolean(
+        related="type_id.need_add_info",
+    )
+    need_facility_stamp = fields.Boolean(
+        related="type_id.need_facility_stamp",
+    )
+
+    @api.depends("buyer_document_id")
+    def _compute_efaktur_of_buyer_document(self):
+        for record in self:
+            result = "-"
+            if record.buyer_document_id:
+                result = record.buyer_document_id.code
+            record.efaktur_of_buyer_document = result
+
+    efaktur_of_buyer_document = fields.Char(
+        string="BUYER DOCUMENT",
+        compute="_compute_efaktur_of_buyer_document",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "partner_id",
+        "partner_id.country_id",
+    )
+    def _compute_efaktur_country(self):
+        for record in self:
+            result = "-"
+            if record.partner_id:
+                if record.partner_id.country_id:
+                    result = record.partner_id.country_id.name
+
+            record.efaktur_country = result
+
+    efaktur_country = fields.Char(
+        string="BUYER COUNTRY",
+        compute="_compute_efaktur_country",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "partner_id",
+        "partner_id.email",
+    )
+    def _compute_efaktur_email(self):
+        for record in self:
+            result = "-"
+            if record.partner_id:
+                if record.partner_id.email:
+                    result = record.partner_id.email
+
+            record.efaktur_email = result
+
+    efaktur_email = fields.Char(
+        string="BUYER EMAIL",
+        compute="_compute_efaktur_email",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "efaktur_npwp",
+    )
+    def _compute_efaktur_buyer_id_tku(self):
+        for record in self:
+            result = "0000000000000000"
+            if record.efaktur_npwp:
+                result = record.efaktur_npwp
+            record.efaktur_buyer_id_tku = result + "000000"
+
+    efaktur_buyer_id_tku = fields.Char(
+        string="BUYER_ID_TKU",
+        compute="_compute_efaktur_buyer_id_tku",
+        store=True,
         compute_sudo=True,
     )
 
@@ -429,6 +675,19 @@ class FakturPajakKeluaran(models.Model):
             if record.move_ids:
                 result = ", ".join(str(e) for e in record.move_ids.mapped("name"))
             record.efaktur_referensi = result
+
+    efaktur_of_opt = fields.Selection(
+        string="OF_OPT",
+        selection=[("A", "Barang"), ("B", "Jasa")],
+        required=True,
+        readonly=True,
+        default="A",
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
 
     @api.depends(
         "move_ids",
@@ -443,7 +702,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_of_name = fields.Char(
         string="OF_NAMA",
         compute="_compute_efaktur_of_name",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -455,7 +714,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_of_harga_satuan = fields.Char(
         string="OF_HARGA_SATUAN",
         compute="_compute_efaktur_of_harga_satuan",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -467,7 +726,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_of_jumlah_barang = fields.Char(
         string="OF_JUMLAH_BARANG",
         compute="_compute_efaktur_of_jumlah_barang",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -479,7 +738,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_of_harga_total = fields.Char(
         string="OF_HARGA_TOTAL",
         compute="_compute_efaktur_of_harga_total",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -491,7 +750,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_of_diskon = fields.Char(
         string="OF_DISKON",
         compute="_compute_efaktur_of_diskon",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -503,7 +762,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_of_dpp = fields.Char(
         string="OF_DPP",
         compute="_compute_efaktur_of_dpp",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -515,7 +774,7 @@ class FakturPajakKeluaran(models.Model):
     efaktur_of_ppn = fields.Char(
         string="OF_PPN",
         compute="_compute_efaktur_of_ppn",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -710,7 +969,7 @@ class FakturPajakKeluaran(models.Model):
 
     @api.model
     def _get_policy_field(self):
-        res = super(FakturPajakKeluaran, self)._get_policy_field()
+        res = super()._get_policy_field()
         policy_field = [
             "confirm_ok",
             "approve_ok",
@@ -725,6 +984,22 @@ class FakturPajakKeluaran(models.Model):
         ]
         res += policy_field
         return res
+
+    @ssi_decorator.pre_done_check()
+    def _check_document_number(self):
+        self.ensure_one()
+        if self.name == "/":
+            error_message = """
+            Document Type: %s
+            Context: Finish document
+            Database ID: %s
+            Problem: Missing FPK number from coretax
+            Solution: Fill document number with coretax's FPK number
+            """ % (
+                self._description.lower(),
+                self.id,
+            )
+            raise UserError(_(error_message))
 
     @ssi_decorator.insert_on_form_view()
     def _insert_form_element(self, view_arch):

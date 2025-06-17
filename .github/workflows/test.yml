@@ -43,7 +43,6 @@ jobs:
             exclude: "ssi_l10n_id_taxform_pph_21_payslip"
             name: test with OCB
             makepot: "true"
-
     services:
       postgres:
         image: postgres:9.6

@@ -9,7 +9,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Kepada Pihak Yang Bukan Pemungut PPn</field>
+    <field name="name">Kepada Selain Pemungut PPN</field>
     <field name="code">01</field>
 </record>
 
@@ -18,7 +18,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Kepada Pemungut Bendaharawan</field>
+    <field name="name">Kepada Pemungut PPN Instansi Pemerintah</field>
     <field name="code">02</field>
 </record>
 
@@ -27,7 +27,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Kepada Pemungut Selain Bendaharawan</field>
+    <field name="name">Kepada Pemungut PPN Selain Instansi Pemerintah</field>
     <field name="code">03</field>
 </record>
 
@@ -41,11 +41,23 @@
 </record>
 
 <record
+            id="fp_transaction_type_05"
+            forcecreate="True"
+            model="faktur_pajak_transaction_type"
+        >
+    <field name="name">Besaran Tertentu</field>
+    <field name="code">05</field>
+</record>
+
+
+<record
             id="fp_transaction_type_06"
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Penyerahan Lainnya</field>
+    <field
+                name="name"
+            >Kepada Orang Pribadi Pemegang Paspor Luar Negeri (16E UU PPN)</field>
     <field name="code">06</field>
 </record>
 
@@ -54,8 +66,12 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Penyerahan yang PPn-nya Tidak Dipungut</field>
+    <field
+                name="name"
+            >Penyerahan Dengan Fasilitas PPN atau PPN dan PPnBM Tidak Dipungut/Ditanggung Pemerintah</field>
     <field name="code">07</field>
+    <field name="need_add_info">True</field>
+    <field name="need_facility_stamp">True</field>
 </record>
 
 <record
@@ -63,8 +79,12 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Penyerahan yang PPn-nya Dibebeaskan</field>
+    <field
+                name="name"
+            >Penyerahan Dengan Fasilitas Dibebaskan PPN atau PPN dan PPnBM</field>
     <field name="code">08</field>
+    <field name="need_add_info">True</field>
+    <field name="need_facility_stamp">True</field>
 </record>
 
 <record
@@ -72,7 +92,9 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Penyerahan Aktiva (Pasal 16D UU PPn)</field>
+    <field
+                name="name"
+            >Penyerahan Aktiva Yang Menurut Tujuan Semula Tidak Diperjualbelikan (16D UU PPN)</field>
     <field name="code">09</field>
 </record>
 
@@ -81,7 +103,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Import BKP Berwujud</field>
+    <field name="name">Penyerahan lainnya</field>
     <field name="code">10</field>
 </record>
 

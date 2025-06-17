@@ -34,6 +34,44 @@ class CreateFakturPajakKeluaran(models.TransientModel):
         comodel_name="faktur_pajak_transaction_type",
         required=True,
     )
+    efaktur_mode = fields.Selection(
+        string="E-Faktur Mode",
+        selection=[
+            ("header", "Header"),
+            ("detail", "Detail"),
+        ],
+        required=True,
+        default="detail",
+    )
+    allowed_add_info_ids = fields.Many2many(
+        string="Allowed Additional Info",
+        comodel_name="additional_info",
+        compute="_compute_allowed_add_info_ids",
+        store=False,
+        compute_sudo=True,
+    )
+    add_info_id = fields.Many2one(
+        string="Additional Info",
+        comodel_name="additional_info",
+        required=False,
+    )
+    facility_stamp_id = fields.Many2one(
+        string="Facility Stamp",
+        comodel_name="facility_stamp",
+        required=False,
+    )
+    allowed_facility_stamp_ids = fields.Many2many(
+        string="Allowed Facility Stamp",
+        comodel_name="facility_stamp",
+        compute="_compute_allowed_facility_stamp_ids",
+        store=False,
+        compute_sudo=True,
+    )
+    buyer_document_id = fields.Many2one(
+        string="Buyer Document",
+        comodel_name="buyer_document",
+        required=True,
+    )
     allowed_fpk_journal_ids = fields.Many2many(
         string="Allowed FP Keluaran Journal",
         comodel_name="account.journal",
@@ -52,6 +90,34 @@ class CreateFakturPajakKeluaran(models.TransientModel):
     @api.model
     def _default_move_ids(self):
         return self.env.context.get("active_ids", [])
+
+    @api.depends(
+        "type_id",
+    )
+    def _compute_allowed_add_info_ids(self):
+        for record in self:
+            result = False
+            AddInfo = self.env["additional_info"]
+            if record.type_id:
+                criteria = [
+                    ("type_id", "=", record.type_id.id),
+                ]
+                result = AddInfo.search(criteria).ids
+            record.allowed_add_info_ids = result
+
+    @api.depends(
+        "type_id",
+    )
+    def _compute_allowed_facility_stamp_ids(self):
+        for record in self:
+            result = False
+            FacilityStamp = self.env["facility_stamp"]
+            if record.type_id:
+                criteria = [
+                    ("type_id", "=", record.type_id.id),
+                ]
+                result = FacilityStamp.search(criteria).ids
+            record.allowed_facility_stamp_ids = result
 
     @api.depends(
         "type_id",
@@ -103,6 +169,12 @@ class CreateFakturPajakKeluaran(models.TransientModel):
                 )
             record.partner_ids = result
 
+    @api.onchange(
+        "type_id",
+    )
+    def onchange_facility_stamp_id(self):
+        self.facility_stamp_id = False
+
     def action_confirm(self):
         for record in self.sudo():
             record._confirm()
@@ -122,7 +194,6 @@ class CreateFakturPajakKeluaran(models.TransientModel):
                 "partner_id": am.partner_id.commercial_partner_id.id,
                 "type_id": self.type_id.id,
                 "date": am.invoice_date,
-                "enofa_number_id": self._get_enofa_number().id,
                 "tax_id": self.type_id.tax_id.id,
                 "move_ids": [(6, 0, [am.id])],
                 "efaktur_mode": self.type_id.efaktur_mode,
@@ -141,7 +212,6 @@ class CreateFakturPajakKeluaran(models.TransientModel):
                 "partner_id": partner.id,
                 "type_id": self.type_id.id,
                 "date": ams[0].invoice_date,
-                "enofa_number_id": self._get_enofa_number().id,
                 "tax_id": self.type_id.tax_id.id,
                 "move_ids": [(6, 0, ams.ids)],
             }

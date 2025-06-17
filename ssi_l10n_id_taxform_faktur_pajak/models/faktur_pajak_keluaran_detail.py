@@ -30,7 +30,25 @@ class FakturPajakKeluaranDetail(models.Model):
     efaktur_of_name = fields.Char(
         string="OF_NAMA",
         compute="_compute_efaktur_of_name",
-        store=False,
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "product_id",
+        "product_id.code",
+    )
+    def _compute_efaktur_of_code(self):
+        for record in self:
+            result = "-"
+            if record.product_id and record.product_id.code:
+                result = record.product_id.code
+            record.efaktur_of_code = result
+
+    efaktur_of_code = fields.Char(
+        string="OF_KODE",
+        compute="_compute_efaktur_of_code",
+        store=True,
         compute_sudo=True,
     )
 
@@ -42,7 +60,7 @@ class FakturPajakKeluaranDetail(models.Model):
     efaktur_of_harga_satuan = fields.Char(
         string="OF_HARGA_SATUAN",
         compute="_compute_efaktur_of_harga_satuan",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -54,7 +72,7 @@ class FakturPajakKeluaranDetail(models.Model):
     efaktur_of_jumlah_barang = fields.Char(
         string="OF_JUMLAH_BARANG",
         compute="_compute_efaktur_of_jumlah_barang",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -66,7 +84,7 @@ class FakturPajakKeluaranDetail(models.Model):
     efaktur_of_harga_total = fields.Char(
         string="OF_HARGA_TOTAL",
         compute="_compute_efaktur_of_harga_total",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -78,7 +96,7 @@ class FakturPajakKeluaranDetail(models.Model):
     efaktur_of_diskon = fields.Char(
         string="OF_DISKON",
         compute="_compute_efaktur_of_diskon",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -90,7 +108,7 @@ class FakturPajakKeluaranDetail(models.Model):
     efaktur_of_dpp = fields.Char(
         string="OF_DPP",
         compute="_compute_efaktur_of_dpp",
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -102,6 +120,44 @@ class FakturPajakKeluaranDetail(models.Model):
     efaktur_of_ppn = fields.Char(
         string="OF_PPN",
         compute="_compute_efaktur_of_ppn",
-        store=False,
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "product_id",
+        "product_id.type",
+    )
+    def _compute_efaktur_of_opt(self):
+        for record in self:
+            result = "-"
+            if record.product_id:
+                if record.product_id.type == "service":
+                    result = "B"
+                else:
+                    result = "A"
+            record.efaktur_of_opt = result
+
+    efaktur_of_opt = fields.Char(
+        string="OF_OPT",
+        compute="_compute_efaktur_of_opt",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "uom_id",
+    )
+    def _compute_efaktur_of_unit(self):
+        for record in self:
+            result = "-"
+            if record.uom_id:
+                result = record.uom_id.efaktur_code
+            record.efaktur_of_unit = result
+
+    efaktur_of_unit = fields.Char(
+        string="OF_OPT",
+        compute="_compute_efaktur_of_unit",
+        store=True,
         compute_sudo=True,
     )

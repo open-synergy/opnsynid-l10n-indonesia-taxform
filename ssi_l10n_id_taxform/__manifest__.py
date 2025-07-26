@@ -24,5 +24,6 @@
         "views/res_config_settings_views.xml",
         "views/tax_period_views.xml",
         "views/taxform_objek_pajak_views.xml",
+        "views/res_partner_views.xml",
     ],
 }

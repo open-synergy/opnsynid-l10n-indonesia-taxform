@@ -7,4 +7,5 @@ from . import (
     res_config_settings,
     tax_period,
     taxform_objek_pajak,
+    res_partner,
 )

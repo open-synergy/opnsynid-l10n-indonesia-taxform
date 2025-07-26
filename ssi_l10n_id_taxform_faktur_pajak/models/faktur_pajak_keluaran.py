@@ -457,14 +457,20 @@ class FakturPajakKeluaran(models.Model):
     )
 
     @api.depends(
-        "efaktur_company_npwp",
+        "company_id",
+        "company_id.partner_id",
+        "company_id.partner_id.nitku",
     )
     def _compute_efaktur_seller_id_tku(self):
         for record in self:
             result = "0000000000000000"
-            if record.efaktur_company_npwp:
-                result = record.efaktur_company_npwp
-            record.efaktur_seller_id_tku = result + "000000"
+            if (
+                record.company_id
+                and record.company_id.partner_id
+                and record.company_id.partner_id.nitku
+            ):
+                result = record.company_id.partner_id.nitku
+            record.efaktur_seller_id_tku = result
 
     efaktur_seller_id_tku = fields.Char(
         string="SELLER_ID_TKU",
@@ -650,14 +656,15 @@ class FakturPajakKeluaran(models.Model):
     )
 
     @api.depends(
-        "efaktur_npwp",
+        "partner_id",
+        "partner_id.nitku",
     )
     def _compute_efaktur_buyer_id_tku(self):
         for record in self:
             result = "0000000000000000"
-            if record.efaktur_npwp:
-                result = record.efaktur_npwp
-            record.efaktur_buyer_id_tku = result + "000000"
+            if record.partner_id and record.partner_id.nitku:
+                result = record.partner_id.nitku
+            record.efaktur_buyer_id_tku = result
 
     efaktur_buyer_id_tku = fields.Char(
         string="BUYER_ID_TKU",

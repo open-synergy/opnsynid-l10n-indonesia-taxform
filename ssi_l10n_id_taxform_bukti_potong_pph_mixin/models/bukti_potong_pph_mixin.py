@@ -379,7 +379,7 @@ class BuktiPotongPPhMixin(models.AbstractModel):
 
     @api.model
     def _get_policy_field(self):
-        res = super(BuktiPotongPPhMixin, self)._get_policy_field()
+        res = super()._get_policy_field()
         policy_field = [
             "confirm_ok",
             "approve_ok",
@@ -419,14 +419,14 @@ class BuktiPotongPPhMixin(models.AbstractModel):
                 raise UserError(_("Total tax has to be greater than 0"))
 
     def action_done(self):
-        _super = super(BuktiPotongPPhMixin, self)
+        _super = super()
         _super.action_done()
         for bukpot in self.sudo():
             bukpot._create_aml()
 
     def _prepare_done_data(self):
         self.ensure_one()
-        _super = super(BuktiPotongPPhMixin, self)
+        _super = super()
         result = _super._prepare_done_data()
         move = self._create_journal_entry()
         result.update(
@@ -466,7 +466,7 @@ class BuktiPotongPPhMixin(models.AbstractModel):
             self._create_aml_diff()
 
     def action_cancel(self, cancel_reason=False):
-        _super = super(BuktiPotongPPhMixin, self)
+        _super = super()
         res = _super.action_cancel(cancel_reason)
         for bukpot in self.sudo():
             bukpot.move_id.line_ids.remove_move_reconcile()

@@ -601,7 +601,7 @@ class BuktiPotongPPh1721A1(models.Model):
 
     @api.model
     def _get_policy_field(self):
-        res = super(BuktiPotongPPh1721A1, self)._get_policy_field()
+        res = super()._get_policy_field()
         policy_field = [
             "confirm_ok",
             "approve_ok",

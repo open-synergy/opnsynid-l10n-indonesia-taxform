@@ -624,7 +624,7 @@ class FakturPajakKeluaran(models.Model):
             result = "-"
             if record.partner_id:
                 if record.partner_id.country_id:
-                    result = record.partner_id.country_id.name
+                    result = record.partner_id.country_id.efaktur_code
 
             record.efaktur_country = result
 

@@ -4,7 +4,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Faktur Pajak",
-    "version": "14.0.3.2.0",
+    "version": "14.0.3.3.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
@@ -27,6 +27,7 @@
         "ssi_m2o_configurator_mixin",
         "ssi_product_line_account_mixin",
         "report_xml",
+        "base_automation",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -41,6 +42,8 @@
         "data/additional_info.csv",
         "data/facility_stamp.csv",
         "data/buyer_document_data.xml",
+        "data/ir_actions_server_data.xml",
+        "data/base_automation_data.xml",
         # "data/res.country.csv",
         # "data/uom.uom.csv",
         "menu.xml",

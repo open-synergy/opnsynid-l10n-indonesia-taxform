@@ -61,6 +61,7 @@ class FakturPajakKeluaran(models.Model):
         "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
         "%(ssi_transaction_cancel_mixin.base_select_terminate_reason_action)d",
         "action_restart",
+        "action_recompute_all_fields",
     ]
 
     # Attributes related to add element on search view automatically
@@ -624,7 +625,7 @@ class FakturPajakKeluaran(models.Model):
             result = "-"
             if record.partner_id:
                 if record.partner_id.country_id:
-                    result = record.partner_id.country_id.name
+                    result = record.partner_id.country_id.efaktur_code
 
             record.efaktur_country = result
 
@@ -973,6 +974,49 @@ class FakturPajakKeluaran(models.Model):
                     }
                     Detail.create(data)
         self._recompute_standard_tax()
+
+    def action_recompute_efaktur_fields(self):
+        for record in self:
+            record.invalidate_cache()
+
+            record._compute_efaktur_kd_jenis_transaksi()
+            record._compute_efaktur_fg_pengganti()
+            record._compute_efaktur_nomor_faktur()
+            record._compute_efaktur_masa_pajak()
+            record._compute_efaktur_tahun_pajak()
+            record._compute_efaktur_tanggal_faktur()
+            record._compute_efaktur_npwp()
+            record._compute_efaktur_company_npwp()
+            record._compute_efaktur_seller_id_tku()
+            record._compute_efaktur_nama()
+            record._compute_efaktur_alamat_lengkap()
+            record._compute_efaktur_jumlah_ppn()
+            record._compute_efaktur_jumlah_dpp()
+            record._compute_efaktur_referensi()
+            record._compute_efaktur_of_add_info()
+            record._compute_efaktur_of_facility_stamp()
+            record._compute_efaktur_of_buyer_document()
+            record._compute_efaktur_country()
+            record._compute_efaktur_email()
+            record._compute_efaktur_buyer_id_tku()
+            record._compute_efaktur_of_name()
+            record._compute_efaktur_of_harga_satuan()
+            record._compute_efaktur_of_jumlah_barang()
+            record._compute_efaktur_of_harga_total()
+            record._compute_efaktur_of_diskon()
+            record._compute_efaktur_of_dpp()
+            record._compute_efaktur_of_ppn()
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Success"),
+                "message": _("All E-Faktur fields have been recomputed successfully."),
+                "type": "success",
+                "sticky": False,
+            },
+        }
 
     @api.model
     def _get_policy_field(self):

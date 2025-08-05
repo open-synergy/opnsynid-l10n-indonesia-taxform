@@ -351,4 +351,5 @@
         action="faktur_pajak_keluaran_action"
         sequence="120"
     />
+
 </odoo>

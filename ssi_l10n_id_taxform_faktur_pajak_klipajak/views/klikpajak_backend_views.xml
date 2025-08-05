@@ -100,10 +100,6 @@
                                 password="True"
                                 attrs="{'invisible': [('auth_method', '!=', 'hmac')], 'required': [('auth_method', '=', 'hmac')]}"
                             />
-                        <field
-                                name="python_code"
-                                attrs="{'invisible': [('auth_method', '!=', 'hmac')], 'required': [('auth_method', '=', 'hmac')]}"
-                            />
                     </group>
                 </page>
                 <page name="params" string="Parameters">

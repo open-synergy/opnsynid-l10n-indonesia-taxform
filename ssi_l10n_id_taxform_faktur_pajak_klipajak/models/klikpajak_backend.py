@@ -10,7 +10,6 @@ from wsgiref.handlers import format_date_time
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-from odoo.tools.safe_eval import test_python_expr
 
 
 class KlikpajakBackend(models.Model):
@@ -20,11 +19,6 @@ class KlikpajakBackend(models.Model):
     ]
     _description = "Klik Pajak Backend"
     _automatically_insert_print_button = False
-
-    DEFAULT_PYTHON_CODE = """# Available variables:
-#  - env: Odoo Environment on which the action is triggered.
-#  - document: record on which the action is triggered; may be void.
-#  - result: Return result, the value is boolean."""
 
     @api.model
     def _default_company_id(self):
@@ -127,11 +121,6 @@ class KlikpajakBackend(models.Model):
         string="Client Secret",
         copy=False,
     )
-    python_code = fields.Text(
-        string="Python Code",
-        default=DEFAULT_PYTHON_CODE,
-        copy=False,
-    )
 
     def _get_klikpajak_date_header(self):
         self.ensure_one()
@@ -190,8 +179,9 @@ class KlikpajakBackend(models.Model):
 
     def _get_hmac(self):
         self.ensure_one()
+        date = format_date_time(datetime.now().timestamp())
         api_url = self.base_url + self.sale_invoice_api
-        result = self._get_signature(api_url, "POST")
+        result = self._get_signature(date, api_url, "POST")
         return result
 
     def action_get_hmac(self):
@@ -217,13 +207,3 @@ class KlikpajakBackend(models.Model):
         for record in self:
             record.company_id.write({"klikpajak_backend_id": False})
             record.write({"state": "draft"})
-
-    @api.constrains(
-        "python_code",
-    )
-    def _check_python_code(self):
-        for action in self.sudo().filtered("python_code"):
-            msg = test_python_expr(expr=action.python_code.strip(), mode="exec")
-            if msg:
-                msg1 = "Template:\n"
-                raise ValidationError(msg1 + msg)

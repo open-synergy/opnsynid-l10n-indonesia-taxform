@@ -8,7 +8,7 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 
-class GitScriptParameter(models.Model):
+class KlikPajakBackendParameter(models.Model):
     _name = "klikpajak_backend.parameter"
     _description = "Klikpajak Backend Parameter Definition"
 

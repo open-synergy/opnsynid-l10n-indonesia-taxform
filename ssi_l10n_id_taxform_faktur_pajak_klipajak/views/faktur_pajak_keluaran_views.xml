@@ -11,6 +11,9 @@
             ref="ssi_l10n_id_taxform_faktur_pajak.faktur_pajak_keluaran_view_form"
         />
     <field name="arch" type="xml">
+        <xpath expr="//field[@name='manual_number_ok']" position="after">
+            <field name="change_backend_ok" order="100" />
+        </xpath>
         <xpath expr="//page[@name='efaktur']" position="after">
             <page
                     name="klikpajak"
@@ -55,10 +58,9 @@
                         attrs="{'invisible':[('klik_pajak_resubmit_ok','=',False)]}"
                     />
                 <group name="klikpajak_1" colspan="4" col="2">
-                    <field name="is_admin" invisible="1" />
                     <field
                             name="klikpajak_backend_id"
-                            attrs="{'invisible': [('is_admin', '=', False )]}"
+                            attrs="{'invisible': [('change_backend_ok', '=', False )]}"
                         />
                     <field name="klikpajak_id" string="ID" />
                     <field name="klik_pajak_submit_ok" invisible="1" />

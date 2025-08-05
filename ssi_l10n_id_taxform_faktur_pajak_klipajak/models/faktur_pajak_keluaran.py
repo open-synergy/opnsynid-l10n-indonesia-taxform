@@ -20,16 +20,12 @@ class FakturPajakKeluaran(models.Model):
         "faktur_pajak_keluaran",
     ]
 
-    @api.model
-    def _get_is_admin(self):
-        result = False
-        if self.env.user.has_group("base.group_system"):
-            result = True
-        return result
-
-    is_admin = fields.Boolean(
-        string="Is Admin?",
-        default=lambda self: self._get_is_admin(),
+    change_backend_ok = fields.Boolean(
+        string="Can Change Backend",
+        compute="_compute_policy",
+        compute_sudo=True,
+        help="""Change Backend policy
+* If active user can see and change 'Backend' field""",
     )
 
     @api.model
@@ -107,6 +103,19 @@ class FakturPajakKeluaran(models.Model):
         compute="_compute_klikpajak_state",
         store=False,
     )
+
+    @api.model
+    def _get_policy_field(self):
+        res = super()._get_policy_field()
+        policy_field = [
+            "change_backend_ok",
+        ]
+        res += policy_field
+        return res
+
+    def _compute_policy(self):
+        _super = super()
+        _super._compute_policy()
 
     @api.depends(
         "klikpajak_id",

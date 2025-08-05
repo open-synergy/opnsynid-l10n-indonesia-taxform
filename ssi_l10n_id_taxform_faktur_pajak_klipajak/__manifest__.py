@@ -15,6 +15,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "data/policy_template_data.xml",
         "menu.xml",
         "views/res_company_views.xml",
         "views/klikpajak_backend_views.xml",

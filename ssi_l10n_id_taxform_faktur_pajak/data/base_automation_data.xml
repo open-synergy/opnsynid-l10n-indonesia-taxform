@@ -10,7 +10,7 @@
                 name="trigger_field_ids"
                 eval="[(6, 0, [ref('ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__name')])]"
             />
-    <field name="filter_pre_domain">[]</field>
+    <field name="filter_pre_domain">[('name', '=', '/')]</field>
     <field name="filter_domain">[('name', '!=', '/')]</field>
 </record>
 </data>

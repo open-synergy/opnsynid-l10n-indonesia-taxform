@@ -9,7 +9,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Kepada Selain Pemungut PPN</field>
+    <field name="name">1 - Kepada Selain Pemungut PPN</field>
     <field name="code">01</field>
 </record>
 
@@ -18,7 +18,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Kepada Pemungut PPN Instansi Pemerintah</field>
+    <field name="name">2 - Kepada Pemungut PPN Instansi Pemerintah</field>
     <field name="code">02</field>
 </record>
 
@@ -27,7 +27,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Kepada Pemungut PPN Selain Instansi Pemerintah</field>
+    <field name="name">3 - Kepada Pemungut PPN Selain Instansi Pemerintah</field>
     <field name="code">03</field>
 </record>
 
@@ -36,7 +36,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">DPP Nilai Lain</field>
+    <field name="name">4 - DPP Nilai Lain</field>
     <field name="code">04</field>
 </record>
 
@@ -45,7 +45,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Besaran Tertentu</field>
+    <field name="name">5 - Besaran Tertentu</field>
     <field name="code">05</field>
 </record>
 
@@ -57,7 +57,7 @@
         >
     <field
                 name="name"
-            >Kepada Orang Pribadi Pemegang Paspor Luar Negeri (16E UU PPN)</field>
+            >6 - Kepada Orang Pribadi Pemegang Paspor Luar Negeri (16E UU PPN)</field>
     <field name="code">06</field>
 </record>
 
@@ -68,7 +68,7 @@
         >
     <field
                 name="name"
-            >Penyerahan Dengan Fasilitas PPN atau PPN dan PPnBM Tidak Dipungut/Ditanggung Pemerintah</field>
+            >7 - Penyerahan Dengan Fasilitas PPN atau PPN dan PPnBM Tidak Dipungut/Ditanggung Pemerintah</field>
     <field name="code">07</field>
     <field name="need_add_info">True</field>
     <field name="need_facility_stamp">True</field>
@@ -81,7 +81,7 @@
         >
     <field
                 name="name"
-            >Penyerahan Dengan Fasilitas Dibebaskan PPN atau PPN dan PPnBM</field>
+            >8 - Penyerahan Dengan Fasilitas Dibebaskan PPN atau PPN dan PPnBM</field>
     <field name="code">08</field>
     <field name="need_add_info">True</field>
     <field name="need_facility_stamp">True</field>
@@ -94,7 +94,7 @@
         >
     <field
                 name="name"
-            >Penyerahan Aktiva Yang Menurut Tujuan Semula Tidak Diperjualbelikan (16D UU PPN)</field>
+            >9 - Penyerahan Aktiva Yang Menurut Tujuan Semula Tidak Diperjualbelikan (16D UU PPN)</field>
     <field name="code">09</field>
 </record>
 
@@ -103,7 +103,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Penyerahan lainnya</field>
+    <field name="name">10 - Penyerahan lainnya</field>
     <field name="code">10</field>
 </record>
 
@@ -112,7 +112,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Import BKP Tidak Berwujud</field>
+    <field name="name">11 - Import BKP Tidak Berwujud</field>
     <field name="code">11</field>
 </record>
 
@@ -121,7 +121,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Import JKP</field>
+    <field name="name">12 - Import JKP</field>
     <field name="code">12</field>
 </record>
 
@@ -130,7 +130,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Eksport BKP Berwujud</field>
+    <field name="name">13 - Eksport BKP Berwujud</field>
     <field name="code">13</field>
 </record>
 
@@ -139,7 +139,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Eksport BKP Tidak Berwujud</field>
+    <field name="name">14 - Eksport BKP Tidak Berwujud</field>
     <field name="code">14</field>
 </record>
 
@@ -148,7 +148,7 @@
             forcecreate="True"
             model="faktur_pajak_transaction_type"
         >
-    <field name="name">Eksport JKP</field>
+    <field name="name">15 - Eksport JKP</field>
     <field name="code">15</field>
 </record>
 </data>

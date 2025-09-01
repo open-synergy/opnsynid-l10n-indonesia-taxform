@@ -41,7 +41,14 @@ class CreateFakturPajakKeluaran(models.TransientModel):
             ("detail", "Detail"),
         ],
         required=True,
-        default="detail",
+    )
+    efaktur_opt = fields.Selection(
+        string="OPT",
+        selection=[
+            ("A", "Barang"),
+            ("B", "Jasa"),
+        ],
+        required=False,
     )
     allowed_add_info_ids = fields.Many2many(
         string="Allowed Additional Info",
@@ -175,6 +182,14 @@ class CreateFakturPajakKeluaran(models.TransientModel):
     def onchange_facility_stamp_id(self):
         self.facility_stamp_id = False
 
+    @api.onchange(
+        "type_id",
+    )
+    def onchange_efaktur_mode(self):
+        self.efaktur_mode = False
+        if self.type_id.efaktur_mode:
+            self.efaktur_mode = self.type_id.efaktur_mode
+
     def action_confirm(self):
         for record in self.sudo():
             record._confirm()
@@ -196,8 +211,10 @@ class CreateFakturPajakKeluaran(models.TransientModel):
                 "date": am.invoice_date,
                 "tax_id": self.type_id.tax_id.id,
                 "move_ids": [(6, 0, [am.id])],
-                "efaktur_mode": self.type_id.efaktur_mode,
+                "efaktur_mode": self.efaktur_mode,
             }
+            if self.efaktur_mode == "header":
+                data["efaktur_of_opt"] = self.efaktur_opt
             fpk = FPK.create(data)
             fpk.action_reload_detail()
 
@@ -214,7 +231,10 @@ class CreateFakturPajakKeluaran(models.TransientModel):
                 "date": ams[0].invoice_date,
                 "tax_id": self.type_id.tax_id.id,
                 "move_ids": [(6, 0, ams.ids)],
+                "efaktur_mode": self.efaktur_mode,
             }
+            if self.efaktur_mode == "header":
+                data["efaktur_of_opt"] = self.efaktur_opt
             fpk = FPK.create(data)
             fpk.action_reload_detail()
 

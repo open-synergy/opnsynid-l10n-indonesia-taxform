@@ -412,7 +412,7 @@ class FakturPajakKeluaran(models.Model):
         for record in self:
             result = "-"
             if record.date:
-                result = record.date.strftime("%d/%m/%Y")
+                result = record.date.strftime("%Y-%m-%d")
             record.efaktur_tanggal_faktur = result
 
     @api.depends(
@@ -567,7 +567,7 @@ class FakturPajakKeluaran(models.Model):
     @api.depends("add_info_id")
     def _compute_efaktur_of_add_info(self):
         for record in self:
-            result = "-"
+            result = False
             if record.add_info_id:
                 result = record.add_info_id.code
             record.efaktur_of_add_info = result
@@ -582,7 +582,7 @@ class FakturPajakKeluaran(models.Model):
     @api.depends("facility_stamp_id")
     def _compute_efaktur_of_facility_stamp(self):
         for record in self:
-            result = "-"
+            result = False
             if record.facility_stamp_id:
                 result = record.facility_stamp_id.code
             record.efaktur_of_facility_stamp = result
@@ -604,7 +604,7 @@ class FakturPajakKeluaran(models.Model):
     @api.depends("buyer_document_id")
     def _compute_efaktur_of_buyer_document(self):
         for record in self:
-            result = "-"
+            result = False
             if record.buyer_document_id:
                 result = record.buyer_document_id.code
             record.efaktur_of_buyer_document = result
@@ -622,7 +622,7 @@ class FakturPajakKeluaran(models.Model):
     )
     def _compute_efaktur_country(self):
         for record in self:
-            result = "-"
+            result = False
             if record.partner_id:
                 if record.partner_id.country_id:
                     result = record.partner_id.country_id.efaktur_code
@@ -642,7 +642,7 @@ class FakturPajakKeluaran(models.Model):
     )
     def _compute_efaktur_email(self):
         for record in self:
-            result = "-"
+            result = False
             if record.partner_id:
                 if record.partner_id.email:
                     result = record.partner_id.email
@@ -679,9 +679,11 @@ class FakturPajakKeluaran(models.Model):
     )
     def _compute_efaktur_referensi(self):
         for record in self:
-            result = "-"
+            result = False
             if record.move_ids:
-                result = ", ".join(str(e) for e in record.move_ids.mapped("name"))
+                result = ", ".join(
+                    str(e) for e in record.move_ids.mapped(".move_id.name")
+                )
             record.efaktur_referensi = result
 
     efaktur_of_opt = fields.Selection(
@@ -702,7 +704,7 @@ class FakturPajakKeluaran(models.Model):
     )
     def _compute_efaktur_of_name(self):
         for record in self:
-            result = "-"
+            result = False
             if record.move_ids:
                 result = ", ".join(str(e) for e in record.move_ids.mapped("name"))
             record.efaktur_of_name = result
@@ -791,7 +793,7 @@ class FakturPajakKeluaran(models.Model):
     )
     def _compute_efaktur_kd_jenis_transaksi(self):
         for record in self:
-            result = ""
+            result = False
             if record.type_id:
                 result = record.type_id.code
             record.efaktur_kd_jenis_transaksi = result

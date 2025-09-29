@@ -22,7 +22,7 @@ class FakturPajakKeluaranDetail(models.Model):
     )
     def _compute_efaktur_of_name(self):
         for record in self:
-            result = "-"
+            result = False
             if record.name:
                 result = record.name
             record.efaktur_of_name = result
@@ -40,7 +40,7 @@ class FakturPajakKeluaranDetail(models.Model):
     )
     def _compute_efaktur_of_code(self):
         for record in self:
-            result = "-"
+            result = False
             if record.product_id and record.product_id.code:
                 result = record.product_id.code
             record.efaktur_of_code = result
@@ -130,7 +130,7 @@ class FakturPajakKeluaranDetail(models.Model):
     )
     def _compute_efaktur_of_opt(self):
         for record in self:
-            result = "-"
+            result = False
             if record.product_id:
                 if record.product_id.type == "service":
                     result = "B"
@@ -150,7 +150,7 @@ class FakturPajakKeluaranDetail(models.Model):
     )
     def _compute_efaktur_of_unit(self):
         for record in self:
-            result = "-"
+            result = False
             if record.uom_id:
                 result = record.uom_id.efaktur_code
             record.efaktur_of_unit = result

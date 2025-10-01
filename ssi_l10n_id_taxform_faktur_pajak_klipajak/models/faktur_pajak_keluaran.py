@@ -125,9 +125,9 @@ class FakturPajakKeluaran(models.Model):
     )
     def _compute_klikpajak_state(self):
         for record in self:
-            record.klik_pajak_submit_ok = (
-                record.klik_pajak_cancel_ok
-            ) = record.klik_pajak_approve_ok = record.klik_pajak_resubmit_ok = False
+            record.klik_pajak_submit_ok = record.klik_pajak_cancel_ok = (
+                record.klik_pajak_approve_ok
+            ) = record.klik_pajak_resubmit_ok = False
 
             # if record.klikpajak_id == 0 and record.lock_taxform:
             #     record.klik_pajak_submit_ok = True
@@ -317,9 +317,9 @@ class FakturPajakKeluaran(models.Model):
             "klikpajak_approval_status": data["approval_status"],
             "klikpajak_qrcode_link": data["qr_code"],
             "klikpajak_invoice_link": data["tax_invoice_link"],
-            "name": data["tax_invoice_number"]
-            if data["tax_invoice_number"]
-            else self.name,
+            "name": (
+                data["tax_invoice_number"] if data["tax_invoice_number"] else self.name
+            ),
         }
 
     def _prepare_klikpajak_customer_json_data(self):

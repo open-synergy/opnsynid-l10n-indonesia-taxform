@@ -682,7 +682,7 @@ class FakturPajakKeluaran(models.Model):
             result = False
             if record.move_ids:
                 result = ", ".join(
-                    str(e) for e in record.move_ids.mapped(".move_id.name")
+                    str(e) for e in record.move_ids.mapped("move_id.name")
                 )
             record.efaktur_referensi = result
 

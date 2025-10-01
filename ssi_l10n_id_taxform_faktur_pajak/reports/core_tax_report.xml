@@ -13,7 +13,7 @@
                     <CustomDocMonthYear
                         t-esc="doc.efaktur_masa_pajak + doc.efaktur_tahun_pajak"
                     />
-                    <RefDesc />
+                    <RefDesc t-esc="doc.efaktur_referensi" />
                     <FacilityStamp t-esc="doc.efaktur_of_facility_stamp" />
                     <SellerIDTKU t-esc="doc.efaktur_seller_id_tku" />
                     <BuyerTin t-esc="doc.efaktur_npwp" />

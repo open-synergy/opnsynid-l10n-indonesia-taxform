@@ -681,9 +681,7 @@ class FakturPajakKeluaran(models.Model):
         for record in self:
             result = False
             if record.move_ids:
-                result = ", ".join(
-                    str(e) for e in record.move_ids.mapped("move_id.name")
-                )
+                result = ", ".join(str(e) for e in record.move_ids.mapped("name"))
             record.efaktur_referensi = result
 
     efaktur_of_opt = fields.Selection(

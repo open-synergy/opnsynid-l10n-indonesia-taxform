@@ -2,7 +2,7 @@
 <odoo>
     <template id="core_tax_xml_view">
         <TaxInvoiceBulk t-foreach="docs" t-as="doc">
-            <TIN t-esc="doc.efaktur_npwp" />
+            <TIN t-esc="doc.efaktur_company_npwp" />
             <ListOfTaxInvoice>
                 <TaxInvoice>
                     <TaxInvoiceDate t-esc="doc.efaktur_tanggal_faktur" />

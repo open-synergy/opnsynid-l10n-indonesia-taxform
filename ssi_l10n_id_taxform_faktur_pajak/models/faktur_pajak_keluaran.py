@@ -543,7 +543,7 @@ class FakturPajakKeluaran(models.Model):
     @api.depends("amount_tax")
     def _compute_efaktur_jumlah_ppn(self):
         for record in self:
-            record.efaktur_jumlah_ppn = str(int(record.amount_tax))
+            record.efaktur_jumlah_ppn = str(int(round(record.amount_tax)))
 
     efaktur_jumlah_dpp = fields.Char(
         string="JUMLAH_DPP",
@@ -697,13 +697,26 @@ class FakturPajakKeluaran(models.Model):
         },
     )
 
+    header_product_name = fields.Char(
+        string="Header Product Name",
+        required=False,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
+
     @api.depends(
         "move_ids",
     )
     def _compute_efaktur_of_name(self):
         for record in self:
             result = False
-            if record.move_ids:
+            if record.header_product_name:
+                result = record.header_product_name
+            elif record.move_ids:
                 result = ", ".join(str(e) for e in record.move_ids.mapped("name"))
             record.efaktur_of_name = result
 

@@ -710,6 +710,7 @@ class FakturPajakKeluaran(models.Model):
 
     @api.depends(
         "move_ids",
+        "header_product_name",
     )
     def _compute_efaktur_of_name(self):
         for record in self:
@@ -790,7 +791,7 @@ class FakturPajakKeluaran(models.Model):
     @api.depends("amount_tax")
     def _compute_efaktur_of_ppn(self):
         for record in self:
-            record.efaktur_of_ppn = str(int(record.amount_tax))
+            record.efaktur_of_ppn = str(int(round(record.amount_tax)))
 
     efaktur_of_ppn = fields.Char(
         string="OF_PPN",

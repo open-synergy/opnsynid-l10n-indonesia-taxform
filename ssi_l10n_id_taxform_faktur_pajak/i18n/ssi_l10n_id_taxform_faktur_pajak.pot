@@ -876,6 +876,11 @@ msgid "Header"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__header_product_name
+msgid "Header Product Name"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_account_move__id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_additional_info__id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_buyer_document__id

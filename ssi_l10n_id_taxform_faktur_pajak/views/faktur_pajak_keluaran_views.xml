@@ -289,6 +289,7 @@
                 <page name="efaktur" string="E-Faktur">
                     <group name="efaktur_2" colspan="4" col="2">
                         <field name="efaktur_mode" />
+                        <field name="header_product_name" />
                     </group>
                     <group name="efaktur_1" string="FK" colspan="4" col="2">
                         <group name="efaktur_1_1">

@@ -505,6 +505,19 @@ class FakturPajakKeluaran(models.Model):
     @api.depends(
         "partner_id",
         "contact_partner_id",
+        "contact_partner_id.street",
+        "contact_partner_id.street2",
+        "contact_partner_id.city",
+        "contact_partner_id.state_id",
+        "contact_partner_id.state_id.name",
+        "contact_partner_id.zip",
+        "tax_address_id",
+        "tax_address_id.street",
+        "tax_address_id.street2",
+        "tax_address_id.city",
+        "tax_address_id.state_id",
+        "tax_address_id.state_id.name",
+        "tax_address_id.zip",
     )
     def _compute_efaktur_alamat_lengkap(self):
         for record in self:

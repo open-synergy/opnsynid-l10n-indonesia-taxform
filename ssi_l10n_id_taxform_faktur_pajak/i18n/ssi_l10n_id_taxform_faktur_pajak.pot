@@ -49,8 +49,509 @@ msgid "# Request"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_01
+msgid "1 - Kepada Selain Pemungut PPN"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00501
+msgid ""
+"1 - PPN Dibebaskan Sesuai PP Nomor 146 Tahun 2000 Sebagaimana Telah Diubah "
+"Dengan PP Nomor 38 Tahun 2003"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00501
+msgid ""
+"1 - Pajak Pertambahan Nilai Tidak Dipungut berdasarkan PP Nomor 10 Tahun "
+"2012"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01101
+msgid "1 - Untuk BKP dan JKP Tertentu"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01101
+msgid "1 – Untuk Kawasan Bebas"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00510
+msgid "10  -PPN Dibebaskan berdasarkan PP Nomor 49 Tahun 2022"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01110
+msgid "10 - BKP dan JKP tertentu"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00510
+msgid "10 - PPN Tidak Dipungut Berdasarkan PP Nomor 106 Tahun 2015"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_10
+msgid "10 - Penyerahan lainnya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01110
+msgid "10 – Untuk BKP tertentu yang bersifat strategis berupa anode slime"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_11
+msgid "11 - Import BKP Tidak Berwujud"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00511
+msgid "11 - PPN Tidak Dipungut Sesuai PP Nomor 50 Tahun 2019"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01111
+msgid ""
+"11 – Untuk Penyerahan alat angkutan tertentu dan/atau Jasa Kena Pajak "
+"terkait alat angkutan tertentu"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.core_tax_xml_view
 msgid "12"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_12
+msgid "12 - Import JKP"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00512
+msgid ""
+"12 - PPN atau PPN dan PPnBM Tidak Dipungut Sesuai Dengan PP Nomor 27 Tahun "
+"2017"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01112
+msgid ""
+"12 – Untuk Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti "
+"ketentuan Peraturan Pemerintah Nomor 27 Tahun 2017"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_13
+msgid "13 - Eksport BKP Berwujud"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00513
+msgid "13 - PPN ditanggung PEMERINTAH EX PMK 21/PMK.010/21"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01113
+msgid ""
+"13 - Penyerahan Rumah Tapak dan Satuan Rumah Susun Rumah Susun Ditanggung "
+"Pemerintah Tahun Anggaran 2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_14
+msgid "14 - Eksport BKP Tidak Berwujud"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00514
+msgid "14 - PPN DITANGGUNG PEMERINTAH EKS PMK 102/PMK.010/2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01114
+msgid ""
+"14 - Penyerahan Jasa Sewa Ruangan atau Bangunan Kepada Pedagang Eceran yang "
+"Ditanggung Pemerintah Tahun Anggaran 2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_15
+msgid "15 - Eksport JKP"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00515
+msgid "15 - PPN DITANGGUNG PEMERINTAH EKS PMK 239/PMK.03/2020"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01115
+msgid ""
+"15 - Penyerahan Barang dan Jasa Dalam Rangka Penanganan Pandemi COVID-19 "
+"(PMK 239/PMK. 03/2020)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01116
+msgid ""
+"16 - Insentif PMK-103/PMK.010/2021 berupa PPN atas Penyerahan Rumah Tapak "
+"dan Unit Hunian Rumah Susun yang Ditanggung Pemerintah Tahun Anggaran 2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00516
+msgid ""
+"16 - Insentif PPN DITANGGUNG PEMERINTAH EKSEKUSI PMK NOMOR 103/PMK.010/2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01117
+msgid "17 - Kawasan Ekonomi Khusus PP nomor 40 Tahun 2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00517
+msgid ""
+"17 - PAJAK PERTAMBAHAN NILAI TIDAK DIPUNGUT BERDASARKAN PP NOMOR 40 TAHUN "
+"2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01118
+msgid "18 - Kawasan Bebas PP nomor 41 Tahun 2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00518
+msgid ""
+"18 - PAJAK PERTAMBAHAN NILAI TIDAK DIPUNGUT BERDASARKAN PP NOMOR 41 TAHUN "
+"2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00519
+msgid "19 - PPN DITANGGUNG PEMERINTAH EKS PMK 6/PMK.010/2022"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01119
+msgid ""
+"19 - Penyerahan Rumah Tapak dan Unit Hunian Rumah Susun yang Ditanggung "
+"Pemerintah Tahun Anggaran 2022"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_02
+msgid "2 - Kepada Pemungut PPN Instansi Pemerintah"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00502
+msgid ""
+"2 - PPN Dibebaskan Sesuai PP Nomor 12 Tahun 2001 Sebagaimana Telah Beberapa "
+"Kali Diubah Terakhir Dengan PP Nomor 31 Tahun 2007"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00502
+msgid ""
+"2 - Pajak Pertambahan Nilai atau Pajak Pertambahan Nilai dan Pajak Penjualan"
+" atas Barang Mewah tidak dipungut"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01102
+msgid "2 - Untuk BKP Tertentu yang Bersifat Strategis"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01102
+msgid "2 – Untuk Tempat Penimbunan Berikat"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00520
+msgid "20 - PPN DITANGGUNG PEMERINTAH EKSEKUSI PMK NOMOR 226/PMK.03/2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01120
+msgid ""
+"20 - PPN Ditanggung Pemerintah dalam rangka Penanganan Pandemi Corona Virus"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00521
+msgid ""
+"21 - PPN ATAU PPN DAN PPnBM TIDAK DIPUNGUT SESUAI DENGAN PP NOMOR 53 TAHUN "
+"2017"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01121
+msgid ""
+"21 - Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan "
+"Peraturan Pemerintah Nomor 53 Tahun 2017"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01122
+msgid "22 - BKP strategis tertentu dalam bentuk anode slime dan emas butiran"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00522
+msgid "22 - PPN tidak dipungut berdasarkan PP Nomor 70 Tahun 2021"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00523
+msgid "23 - PPN ditanggung Pemerintah Ex PMK-125/PMK.01/2020"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01123
+msgid "23 - Untuk penyerahan kertas koran dan/atau majalah"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00524
+msgid "24 - (Tidak ada Cap)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01124
+msgid "24 - PPN tidak dipungut oleh Pemerintah lainnya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01125
+msgid "25 - BKP dan JKP tertentu"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00525
+msgid "25 - PPN tidak dipungut berdasarkan PP Nomor 49 Tahun 2022"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00526
+msgid "26 - PPN tidak dipungut berdasarkan PP Nomor 12 Tahun 2023"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01126
+msgid "26 - Penyerahan BKP dan JKP di Ibu Kota Negara baru"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00527
+msgid "27 - PPN ditanggung Pemerintah berdasarkan PMK Nomor 38 Tahun 2023"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01127
+msgid "27 - Penyerahan kendaraan listrik berbasis baterai"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_03
+msgid "3 - Kepada Pemungut PPN Selain Instansi Pemerintah"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00503
+msgid ""
+"3 - PPN dibebaskan berdasarkan Peraturan Pemerintah Nomor 28 Tahun 2009"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00503
+msgid ""
+"3 - Pajak Pertambahan Nilai dan Pajak Penjualan atas Barang Mewah Tidak "
+"Dipungut"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01103
+msgid "3 - Untuk Jasa Kebandarudaraan"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01103
+msgid "3 – Untuk Hibah dan Bantuan Luar Negeri"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00504
+msgid "4 - (Tidak ada cap)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_04
+msgid "4 - DPP Nilai Lain"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00504
+msgid ""
+"4 - Pajak Pertambahan Nilai Tidak Dipungut Sesuai PP Nomor 71 Tahun 2012"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01104
+msgid "4 - Untuk Lainnya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01104
+msgid "4 – Untuk Avtur"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00505
+msgid "5 - (Tidak ada Cap)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_05
+msgid "5 - Besaran Tertentu"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00505
+msgid "5 - PPN Dibebaskan Sesuai Dengan PP Nomor 81 Tahun 2015"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01105
+msgid ""
+"5 - Untuk BKP Tertentu yang Bersifat Strategis sesuai PP Nomor 81 Tahun 2015"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01105
+msgid "5 – Untuk Lainnya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_06
+msgid "6 - Kepada Orang Pribadi Pemegang Paspor Luar Negeri (16E UU PPN)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00506
+msgid "6 - PPN Dibebaskan Berdasarkan PP Nomor 74 Tahun 2015"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00506
+msgid ""
+"6 - PPN dan/atau PPnBM tidak dipungut berdasarkan PMK No. 194/PMK.03/2012"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01106
+msgid ""
+"6 - Untuk Penyerahan Jasa Kepelabuhan Tertentu Untuk kegiatan angkutan laut "
+"Luar Negeri"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01106
+msgid ""
+"6 – Untuk Kontraktor Perjanjian Karya Pengusahaan Pertambangan Batubara "
+"Generasi I"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00507
+msgid "7 - (tanpa cap)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00507
+msgid "7 - PPN Tidak Dipungut Berdasarkan PP Nomor 15 Tahun 2015"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_07
+msgid ""
+"7 - Penyerahan Dengan Fasilitas PPN atau PPN dan PPnBM Tidak "
+"Dipungut/Ditanggung Pemerintah"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01107
+msgid "7 - Untuk Penyerahan Air Bersih"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01107
+msgid ""
+"7 – Untuk Penyerahan bahan bakar minyak Untuk Kapal Angkutan Laut Luar "
+"Negeri"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00508
+msgid ""
+"8 - PPN DIBEBASKAN SESUAI PP NOMOR 81 TAHUN 2015 SEBAGAIMANA TELAH DIUBAH "
+"DENGAN PP 48 TAHUN 2020"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00508
+msgid "8 - PPN Tidak Dipungut Berdasarkan PP Nomor 69 Tahun 2015"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01108
+msgid ""
+"8 - Penyerahan BKP tertentu yang bersifat strategis berdasarkan PP 48 Tahun "
+"2020"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_08
+msgid "8 - Penyerahan Dengan Fasilitas Dibebaskan PPN atau PPN dan PPnBM"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01108
+msgid "8 – Untuk Penyerahan jasa kena pajak terkait alat angkutan tertentu"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_08_00509
+msgid "9 - PPN DIBEBASKAN BERDASARKAN PP NOMOR 47 TAHUN 2020"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:additional_info,name:ssi_l10n_id_taxform_faktur_pajak.fp_additional_info_07_00509
+msgid "9 - PPN Tidak Dipungut Berdasarkan PP Nomor 96 Tahun 2015"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:faktur_pajak_transaction_type,name:ssi_l10n_id_taxform_faktur_pajak.fp_transaction_type_09
+msgid ""
+"9 - Penyerahan Aktiva Yang Menurut Tujuan Semula Tidak Diperjualbelikan (16D"
+" UU PPN)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_08_01109
+msgid ""
+"9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta "
+"Pejabatnya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:facility_stamp,name:ssi_l10n_id_taxform_faktur_pajak.fp_facility_stamp_07_01109
+msgid "9 – Untuk Penyerahan BKP Tertentu di KEK"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
@@ -623,6 +1124,11 @@ msgid "Display Name"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:buyer_document,name:ssi_l10n_id_taxform_faktur_pajak.fp_buyer_document_other_id
+msgid "Dokumen Lainnya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_faktur_pajak.selection__faktur_pajak_transaction_type__fpk_account_selection_method__domain
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_faktur_pajak.selection__faktur_pajak_transaction_type__fpk_journal_selection_method__domain
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_faktur_pajak.selection__faktur_pajak_transaction_type__fpk_tax_selection_method__domain
@@ -1161,11 +1667,17 @@ msgid "NAME"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:buyer_document,name:ssi_l10n_id_taxform_faktur_pajak.fp_buyer_document_national_id
+msgid "NIK"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__efaktur_nomor_faktur
 msgid "NOMOR_FAKTUR"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:buyer_document,name:ssi_l10n_id_taxform_faktur_pajak.fp_buyer_document_tin
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__efaktur_npwp
 msgid "NPWP"
 msgstr ""
@@ -1407,6 +1919,11 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_create_faktur_pajak_keluaran__partner_ids
 msgid "Partners"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:buyer_document,name:ssi_l10n_id_taxform_faktur_pajak.fp_buyer_document_passport
+msgid "Paspor"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak

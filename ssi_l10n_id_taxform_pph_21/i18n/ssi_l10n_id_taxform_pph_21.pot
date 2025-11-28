@@ -300,6 +300,46 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_k0
+msgid "K/0"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_k1
+msgid "K/1"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_k2
+msgid "K/2"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_k3
+msgid "K/3"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_ki0
+msgid "K/I/0"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_ki1
+msgid "K/I/1"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_ki2
+msgid "K/I/2"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_ki3
+msgid "K/I/3"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
 #: model:ir.actions.act_window,name:ssi_l10n_id_taxform_pph_21.ptkp_category_action
 #: model:ir.model,name:ssi_l10n_id_taxform_pph_21.model_l10n_id_ptkp_category
 #: model:ir.ui.menu,name:ssi_l10n_id_taxform_pph_21.ptkp_category_menu
@@ -696,6 +736,26 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_tk0
+msgid "TK/0"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_tk1
+msgid "TK/1"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_tk2
+msgid "TK/2"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp_category,name:ssi_l10n_id_taxform_pph_21.ptkp_tk3
+msgid "TK/3"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_pph_21.field_l10n_id_pph_21_biaya_jabatan__date_start
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_pph_21.field_l10n_id_pph_21_npwp_rate_modifier__date_start
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_pph_21.field_l10n_id_pph_21_rate__date_start
@@ -781,4 +841,24 @@ msgstr ""
 #: code:addons/ssi_l10n_id_taxform_pph_21/models/ptkp.py:0
 #, python-format
 msgid "Wes"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.pph_21_biaya_jabatan,name:ssi_l10n_id_taxform_pph_21.pph_21_biaya_jabatan
+msgid "X Biaya Jabatan"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.pph_21_npwp_rate_modifier,name:ssi_l10n_id_taxform_pph_21.pph_21_npwp_rate_modifier0
+msgid "X NPWP Rate Modifier"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.pph_21_rate,name:ssi_l10n_id_taxform_pph_21.pph_21_rate0
+msgid "X PPh 21 Rate"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model:l10n_id.ptkp,name:ssi_l10n_id_taxform_pph_21.ptkp0
+msgid "X PTKP"
 msgstr ""

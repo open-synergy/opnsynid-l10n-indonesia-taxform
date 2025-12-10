@@ -678,7 +678,9 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak
 #: code:addons/ssi_l10n_id_taxform_faktur_pajak/models/faktur_pajak_keluaran.py:0
 #, python-format
-msgid "All E-Faktur fields have been recomputed successfully."
+msgid ""
+"All E-Faktur fields have been recomputed successfully. \n"
+"Please reload or restart your browser to refresh the data."
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
@@ -1988,6 +1990,11 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__efaktur_referensi
 msgid "REFERENSI"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.faktur_pajak_keluaran_view_form
+msgid "Recompute"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak

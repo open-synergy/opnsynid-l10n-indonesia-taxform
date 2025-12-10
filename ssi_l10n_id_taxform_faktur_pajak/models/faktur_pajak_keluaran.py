@@ -1039,7 +1039,10 @@ class FakturPajakKeluaran(models.Model):
             "tag": "display_notification",
             "params": {
                 "title": _("Success"),
-                "message": _("All E-Faktur fields have been recomputed successfully."),
+                "message": _(
+                    "All E-Faktur fields have been recomputed successfully. \n"
+                    "Please reload or restart your browser to refresh the data."
+                ),
                 "type": "success",
                 "sticky": False,
             },

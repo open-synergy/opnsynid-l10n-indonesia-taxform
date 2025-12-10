@@ -287,6 +287,15 @@
                     </group>
                 </page>
                 <page name="efaktur" string="E-Faktur">
+                    <button
+                            name="action_recompute_efaktur_fields"
+                            string="Recompute"
+                            type="object"
+                            icon="fa-calculator"
+                            class="oe_highlight"
+                            style="margin-right:4px"
+                            attrs="{'invisible':[('state','not in',['open'])]}"
+                        />
                     <group name="efaktur_2" colspan="4" col="2">
                         <field name="efaktur_mode" />
                         <field name="header_product_name" />

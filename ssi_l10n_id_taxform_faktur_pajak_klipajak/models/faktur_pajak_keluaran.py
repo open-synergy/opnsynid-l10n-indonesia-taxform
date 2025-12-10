@@ -304,7 +304,7 @@ class FakturPajakKeluaran(models.Model):
             "total_vat": 0,
             "total_discount": 0,
         }
-        if self.efaktur_of_add_info != "-":
+        if self.efaktur_of_add_info:
             result["additional_trx_detail"] = self.efaktur_of_add_info
 
         return result
@@ -328,7 +328,7 @@ class FakturPajakKeluaran(models.Model):
             "id_type": self.buyer_document_id.klikpajak_code,
             "name": self.efaktur_nama,
             "country_code": self.efaktur_country,
-            "npwp": int(self.efaktur_npwp),
+            "npwp": self.efaktur_npwp,
             "address": self.efaktur_alamat_lengkap,
         }
 

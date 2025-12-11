@@ -360,7 +360,7 @@ class FakturPajakKeluaran(models.Model):
                 goods_service = "GOODS"
             else:
                 goods_service = "SERVICES"
-            uom_unit = self.env.ref("uom.product_uom_unit")
+            uom_unit = self.header_uom_id
             vals = {
                 "goods_service": goods_service,
                 "goods_service_name": self.efaktur_of_name,

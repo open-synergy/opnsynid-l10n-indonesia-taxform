@@ -720,6 +720,17 @@ class FakturPajakKeluaran(models.Model):
             ],
         },
     )
+    header_uom_id = fields.Many2one(
+        string="Header UoM",
+        comodel_name="uom.uom",
+        required=False,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
 
     @api.depends(
         "move_ids",

@@ -298,7 +298,16 @@
                         />
                     <group name="efaktur_2" colspan="4" col="2">
                         <field name="efaktur_mode" />
-                        <field name="header_product_name" />
+                        <field
+                                name="header_product_name"
+                                string="Product Name"
+                                attrs="{'invisible':[('efaktur_mode','&lt;&gt;', 'header')]}"
+                            />
+                        <field
+                                name="header_uom_id"
+                                string="UoM"
+                                attrs="{'invisible':[('efaktur_mode','&lt;&gt;', 'header')]}"
+                            />
                     </group>
                     <group name="efaktur_1" string="FK" colspan="4" col="2">
                         <group name="efaktur_1_1">

@@ -17,6 +17,10 @@
                         attrs="{'invisible': [('efaktur_mode', '=', 'detail')], 'required': [('efaktur_mode', '=', 'header')]}"
                     />
                 <field
+                        name="efaktur_uom_id"
+                        attrs="{'invisible': [('efaktur_mode', '=', 'detail')], 'required': [('efaktur_mode', '=', 'header')]}"
+                    />
+                <field
                         name="allowed_add_info_ids"
                         widget="many2many_tags"
                         invisible="1"

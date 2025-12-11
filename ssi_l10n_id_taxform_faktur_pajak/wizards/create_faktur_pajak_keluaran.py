@@ -42,6 +42,11 @@ class CreateFakturPajakKeluaran(models.TransientModel):
         ],
         required=True,
     )
+    efaktur_uom_id = fields.Many2one(
+        string="UoM",
+        comodel_name="uom.uom",
+        required=False,
+    )
     efaktur_opt = fields.Selection(
         string="OPT",
         selection=[
@@ -215,6 +220,7 @@ class CreateFakturPajakKeluaran(models.TransientModel):
             }
             if self.efaktur_mode == "header":
                 data["efaktur_of_opt"] = self.efaktur_opt
+                data["header_uom_id"] = self.efaktur_uom_id.id
             fpk = FPK.create(data)
             fpk.action_reload_detail()
 
@@ -235,6 +241,7 @@ class CreateFakturPajakKeluaran(models.TransientModel):
             }
             if self.efaktur_mode == "header":
                 data["efaktur_of_opt"] = self.efaktur_opt
+                data["header_uom_id"] = self.efaktur_uom_id.id
             fpk = FPK.create(data)
             fpk.action_reload_detail()
 

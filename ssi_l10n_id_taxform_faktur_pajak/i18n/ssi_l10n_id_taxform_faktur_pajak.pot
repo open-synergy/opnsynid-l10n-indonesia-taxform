@@ -1389,6 +1389,11 @@ msgid "Header Product Name"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__header_uom_id
+msgid "Header UoM"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_account_move__id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_additional_info__id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_buyer_document__id
@@ -1965,6 +1970,11 @@ msgid "Product Category"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.faktur_pajak_keluaran_view_form
+msgid "Product Name"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model,name:ssi_l10n_id_taxform_faktur_pajak.model_uom_uom
 msgid "Product Unit of Measure"
 msgstr ""
@@ -2335,7 +2345,9 @@ msgid "Unused"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_create_faktur_pajak_keluaran__efaktur_uom_id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran_detail__uom_id
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.faktur_pajak_keluaran_view_form
 msgid "UoM"
 msgstr ""
 

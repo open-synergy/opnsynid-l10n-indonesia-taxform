@@ -87,21 +87,25 @@ class FakturPajakKeluaran(models.Model):
         string="Klikpajak Submit Ok",
         compute="_compute_klikpajak_state",
         store=False,
+        compute_sudo=True,
     )
     klik_pajak_approve_ok = fields.Boolean(
         string="Klikpajak Approve Ok",
         compute="_compute_klikpajak_state",
         store=False,
+        compute_sudo=True,
     )
     klik_pajak_cancel_ok = fields.Boolean(
         string="Klikpajak Cancel Ok",
         compute="_compute_klikpajak_state",
         store=False,
+        compute_sudo=True,
     )
     klik_pajak_resubmit_ok = fields.Boolean(
         string="Klikpajak Resubmit Ok",
         compute="_compute_klikpajak_state",
         store=False,
+        compute_sudo=True,
     )
 
     @api.model

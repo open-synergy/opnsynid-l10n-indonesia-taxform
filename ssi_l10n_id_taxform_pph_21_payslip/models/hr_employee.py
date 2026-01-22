@@ -30,10 +30,12 @@ class HrEmployee(models.Model):
         comodel_name="l10n_id.tax_period",
         compute="_compute_tax_period",
         store=True,
+        compute_sudo=True,
     )
     joining_tax_year_id = fields.Many2one(
         string="Joining Tax Year",
         comodel_name="l10n_id.tax_year",
         compute="_compute_tax_period",
         store=True,
+        compute_sudo=True,
     )

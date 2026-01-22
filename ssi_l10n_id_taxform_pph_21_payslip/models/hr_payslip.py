@@ -38,16 +38,19 @@ class HrPayslip(models.Model):
         string="Joining Tax Month",
         compute="_compute_payslip_tax_period",
         store=True,
+        compute_sudo=True,
     )
     tax_period_id = fields.Many2one(
         string="Payslip Tax Period",
         comodel_name="l10n_id.tax_period",
         compute="_compute_payslip_tax_period",
         store=True,
+        compute_sudo=True,
     )
     tax_year_id = fields.Many2one(
         string="Payslip Tax Year",
         comodel_name="l10n_id.tax_year",
         compute="_compute_payslip_tax_period",
         store=True,
+        compute_sudo=True,
     )

@@ -32,6 +32,7 @@ class FakturPajakKeluaran(models.Model):
 
     efaktur_seller_id_tku = fields.Char(
         compute="_compute_efaktur_seller_id_tku",
+        compute_sudo=True,
     )
 
     @api.depends(

@@ -392,6 +392,7 @@ class BuktiPotongPPh1721A1(models.Model):
         compute="_compute_penghasilan",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
 
     # PENGURANG
@@ -414,6 +415,7 @@ class BuktiPotongPPh1721A1(models.Model):
         compute="_compute_jabatan",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
     pengurang_10 = fields.Float(
         string="IURAN PENSIUN ATAU IURAN THT/JHT",
@@ -440,6 +442,7 @@ class BuktiPotongPPh1721A1(models.Model):
         compute="_compute_pengurang",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
 
     # PERHITUNGAN
@@ -457,6 +460,7 @@ class BuktiPotongPPh1721A1(models.Model):
         compute="_compute_penghasilan_netto",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
     perhitungan_13 = fields.Float(
         string="PENGHASILAN NETO MASA SEBELUMNYA",
@@ -484,6 +488,7 @@ class BuktiPotongPPh1721A1(models.Model):
         compute="_compute_penghasilan_netto_setahun",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
 
     @api.depends(
@@ -503,6 +508,7 @@ class BuktiPotongPPh1721A1(models.Model):
         compute="_compute_ptkp",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
 
     @api.depends(
@@ -523,6 +529,7 @@ class BuktiPotongPPh1721A1(models.Model):
         compute="_compute_pkp",
         store=True,
         readonly=True,
+        compute_sudo=True,
     )
 
     @api.depends(

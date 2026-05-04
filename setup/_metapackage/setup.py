@@ -10,7 +10,9 @@ setuptools.setup(
     install_requires=[
         'odoo14-addon-ssi_l10n_id_taxform',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_1721_a1',
+        'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_1721_a1_operating_unit',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113301',
+        'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113301_operating_unit',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113301_work_log',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113302',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113302_work_log',

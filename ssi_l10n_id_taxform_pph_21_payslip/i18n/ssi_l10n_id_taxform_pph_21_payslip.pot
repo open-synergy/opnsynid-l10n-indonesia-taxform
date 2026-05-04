@@ -21,7 +21,7 @@ msgstr ""
 
 #. module: ssi_l10n_id_taxform_pph_21_payslip
 #: model:ir.model,name:ssi_l10n_id_taxform_pph_21_payslip.model_hr_employee
-msgid "Employee Input"
+msgid "Employee"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_pph_21_payslip

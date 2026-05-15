@@ -14,7 +14,14 @@ opnsynid-l10n-indonesia-taxform
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[l10n_id_taxform](l10n_id_taxform/) | 11.0.1.0.0 |  | Indonesia's Taxform
+[l10n_id_taxform_faktur_pajak_common](l10n_id_taxform_faktur_pajak_common/) | 11.0.1.6.0 |  | Indonesia - Faktur Pajak Common Feature
+[ssi_l10n_id_taxform_bukti_potong_pph_f113306](ssi_l10n_id_taxform_bukti_potong_pph_f113306/) | 11.0.1.0.2 |  | Indonesia - Bukti Potong PPh 23 (f.1.33.06)
+[ssi_l10n_id_taxform_bukti_potong_pph_mixin](ssi_l10n_id_taxform_bukti_potong_pph_mixin/) | 11.0.1.0.2 |  | Indonesia - Mixin Feature for Bukti Potong PPh
 
 [//]: # (end addons)
 

@@ -1,0 +1,65 @@
+scenarios:
+  - name: "PPh 21 Payslip - HR Employee joining tax period computation"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 Payslip"
+          code: "TY2024PS"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Create tax period January 2024"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "jan_period"
+        values:
+          name: "01/2024 Payslip"
+          code: "012024PS"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          year_id: "EVAL: registry['tax_year'].id"
+
+      - step: "Create department for hr employee"
+        action: "search"
+        model: "res.company"
+        domain: [["id", "=", 1]]
+        save_as: "company"
+        limit: 1
+
+      - step: "Create hr employee with joining date"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee PPh21"
+          date_join: 2024-01-15
+
+      - step: "Assert employee has joining_tax_period_id computed"
+        action: "assert"
+        target: "employee"
+        asserts:
+          joining_tax_period_id:
+            type: "is_truthy"
+          joining_tax_year_id:
+            type: "is_truthy"
+
+  - name: "PPh 21 Payslip - HR Employee no joining date"
+    steps:
+      - step: "Create hr employee without joining date"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_no_join"
+        values:
+          name: "Test Employee No Join"
+
+      - step: "Assert employee has no joining_tax_period_id"
+        action: "assert"
+        target: "employee_no_join"
+        asserts:
+          joining_tax_period_id:
+            type: "is_falsy"
+          joining_tax_year_id:
+            type: "is_falsy"

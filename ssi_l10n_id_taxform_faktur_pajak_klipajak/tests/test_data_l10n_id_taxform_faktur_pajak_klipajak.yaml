@@ -1,0 +1,42 @@
+scenarios:
+  - name: "Klik Pajak Backend - Create master data"
+    steps:
+      - step: "Create klikpajak backend"
+        action: "create"
+        model: "klikpajak_backend"
+        save_as: "backend"
+        values:
+          name: "Test Klik Pajak Backend"
+          code: "TKLP01"
+          auth_method: "hmac"
+
+      - step: "Assert backend created"
+        action: "assert"
+        target: "backend"
+        asserts:
+          name:
+            type: "value"
+            expected: "Test Klik Pajak Backend"
+          auth_method:
+            type: "value"
+            expected: "hmac"
+          state:
+            type: "value"
+            expected: "draft"
+          active:
+            type: "value"
+            expected: true
+
+      - step: "Update backend auth method"
+        action: "write"
+        target: "backend"
+        values:
+          auth_method: "jwt"
+
+      - step: "Assert backend updated"
+        action: "assert"
+        target: "backend"
+        asserts:
+          auth_method:
+            type: "value"
+            expected: "jwt"

@@ -5,7 +5,7 @@
 from odoo import api, fields, models
 
 
-class l10nidBuktiPotongPPH1721A1Config(models.Model):
+class L10nidBuktiPotongPPH1721A1Config(models.Model):
     _name = "l10n_id.bukti_potong_pph_1721_a1_config"
     _description = "Bukti Potong PPh 21 1721 A1 Config"
 

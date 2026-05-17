@@ -1,0 +1,102 @@
+scenarios:
+  - name: "Bukti Potong PPh F113306 Work Log - Create and verify work_log_ids"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 WL6"
+          code: "TY2024WL6"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "03/2024 WL6"
+          code: "032024WL6"
+          date_start: 2024-03-01
+          date_end: 2024-03-31
+          year_id: "EVAL: registry['tax_year'].id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 23 Payable WL6"
+          code: "XPPH23WL6"
+          user_type_id: "EVAL: registry['account_type'].id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 23 Journal WL6"
+          code: "XP23WL6"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test F113306 WL6"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test F113306 WL6"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak F113306 WL6"
+          is_company: false
+
+      - step: "Get f113306 type"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113306.bukti_potong_pph_type_f113306_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong F113306 with work log integration"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113306_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['bp_type'].id"
+          date: 2024-03-15
+          tax_period_id: "EVAL: registry['tax_period'].id"
+          journal_id: "EVAL: registry['journal'].id"
+          account_id: "EVAL: registry['account'].id"
+          kpp_id: "EVAL: registry['kpp'].id"
+          wajib_pajak_id: "EVAL: registry['wajib_pajak'].id"
+          pemotong_pajak_id: "EVAL: registry['pemotong_pajak'].id"
+
+      - step: "Assert bukpot created with work_log_ids accessible"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          work_log_ids:
+            type: "is_falsy"

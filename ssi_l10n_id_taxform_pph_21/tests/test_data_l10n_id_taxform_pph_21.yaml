@@ -1,0 +1,226 @@
+scenarios:
+  - name: "PPh 21 - PTKP Category creation"
+    steps:
+      - step: "Create PTKP category TK/0"
+        action: "create"
+        model: "l10n_id.ptkp_category"
+        save_as: "ptkp_categ_tk0"
+        values:
+          name: "TK/0"
+          code: "TK0"
+
+      - step: "Create PTKP category K/0"
+        action: "create"
+        model: "l10n_id.ptkp_category"
+        save_as: "ptkp_categ_k0"
+        values:
+          name: "K/0"
+          code: "K0"
+
+      - step: "Assert PTKP categories created"
+        action: "assert"
+        target: "ptkp_categ_tk0"
+        asserts:
+          name:
+            type: "value"
+            expected: "TK/0"
+          code:
+            type: "value"
+            expected: "TK0"
+
+  - name: "PPh 21 - Biaya Jabatan creation and find"
+    steps:
+      - step: "Create biaya jabatan"
+        action: "create"
+        model: "l10n_id.pph_21_biaya_jabatan"
+        save_as: "biaya_jabatan"
+        values:
+          name: "Biaya Jabatan 2024"
+          code: "BJ2024"
+          date_start: 2024-01-01
+          rate_biaya_jabatan: 5.0
+          max_biaya_jabatan: 6000000.0
+
+      - step: "Assert biaya jabatan created"
+        action: "assert"
+        target: "biaya_jabatan"
+        asserts:
+          rate_biaya_jabatan:
+            type: "value"
+            expected: 5.0
+          max_biaya_jabatan:
+            type: "value"
+            expected: 6000000.0
+
+      - step: "Call find method on biaya jabatan"
+        action: "call"
+        target: "biaya_jabatan"
+        method: "find"
+        kwargs:
+          dt: "2024-06-01"
+
+  - name: "PPh 21 - NPWP Rate Modifier"
+    steps:
+      - step: "Create NPWP rate modifier"
+        action: "create"
+        model: "l10n_id.pph_21_npwp_rate_modifier"
+        save_as: "npwp_modifier"
+        values:
+          name: "NPWP Rate Modifier 2024"
+          code: "NRM2024"
+          date_start: 2024-01-01
+          pph_rate_modifier: 120.0
+
+      - step: "Assert NPWP rate modifier created"
+        action: "assert"
+        target: "npwp_modifier"
+        asserts:
+          pph_rate_modifier:
+            type: "value"
+            expected: 120.0
+
+      - step: "Call find method"
+        action: "call"
+        target: "npwp_modifier"
+        method: "find"
+        kwargs:
+          dt: "2024-06-01"
+
+  - name: "PPh 21 - Rate creation and compute"
+    steps:
+      - step: "Create PPh 21 rate"
+        action: "create"
+        model: "l10n_id.pph_21_rate"
+        save_as: "pph_21_rate"
+        values:
+          name: "PPh 21 Rate 2024"
+          code: "PR2024"
+          date_start: 2024-01-01
+
+      - step: "Create rate line 1"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        save_as: "rate_line_1"
+        values:
+          rate_id: "EVAL: registry['pph_21_rate'].id"
+          min_income: 0.0
+          pph_rate: 5.0
+
+      - step: "Create rate line 2"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        save_as: "rate_line_2"
+        values:
+          rate_id: "EVAL: registry['pph_21_rate'].id"
+          min_income: 60000000.0
+          pph_rate: 15.0
+
+      - step: "Call find method for PPh 21 rate"
+        action: "call"
+        target: "pph_21_rate"
+        method: "find"
+        kwargs:
+          dt: "2024-06-01"
+
+      - step: "Call compute_tax method"
+        action: "call"
+        target: "pph_21_rate"
+        method: "compute_tax"
+        args:
+          - 50000000.0
+
+  - name: "PPh 21 - PTKP with lines and get_rate"
+    steps:
+      - step: "Create PTKP category for rate test"
+        action: "create"
+        model: "l10n_id.ptkp_category"
+        save_as: "ptkp_categ"
+        values:
+          name: "TK/0 Rate Test"
+          code: "TK0RT"
+
+      - step: "Create PTKP record"
+        action: "create"
+        model: "l10n_id.ptkp"
+        save_as: "ptkp"
+        values:
+          name: "PTKP 2024"
+          code: "PTKP2024"
+          date_start: 2024-01-01
+
+      - step: "Create PTKP line"
+        action: "create"
+        model: "l10n_id.ptkp_line"
+        save_as: "ptkp_line"
+        values:
+          ptkp_id: "EVAL: registry['ptkp'].id"
+          ptkp_category_id: "EVAL: registry['ptkp_categ'].id"
+          ptkp_rate: 54000000.0
+
+      - step: "Call find on PTKP"
+        action: "call"
+        target: "ptkp"
+        method: "find"
+        kwargs:
+          dt: "2024-06-01"
+
+      - step: "Call get_rate on category"
+        action: "call"
+        target: "ptkp_categ"
+        method: "get_rate"
+        kwargs:
+          dt: "2024-06-01"
+
+  - name: "PPh 21 - TER (Tarif Efektif Rata-rata)"
+    steps:
+      - step: "Create PTKP category for TER"
+        action: "create"
+        model: "l10n_id.ptkp_category"
+        save_as: "ter_ptkp_categ"
+        values:
+          name: "TK/0 TER"
+          code: "TK0TER"
+
+      - step: "Create TER record"
+        action: "create"
+        model: "l10n_id.pph_21_ter"
+        save_as: "ter"
+        values:
+          name: "TER 2024"
+          code: "TER2024"
+          date_start: 2024-01-01
+
+      - step: "Create TER line"
+        action: "create"
+        model: "l10n_id.pph_21_ter_line"
+        save_as: "ter_line"
+        values:
+          ter_id: "EVAL: registry['ter'].id"
+          name: "Kategori A"
+          code: "A"
+          ptkp_category_ids:
+            - "EVAL: registry['ter_ptkp_categ'].id"
+
+      - step: "Create TER line category"
+        action: "create"
+        model: "l10n_id.pph_21_ter_line_categ"
+        save_as: "ter_line_categ"
+        values:
+          ter_line_id: "EVAL: registry['ter_line'].id"
+          min_income: 0.0
+          pph_rate: 0.0
+
+      - step: "Call find on TER"
+        action: "call"
+        target: "ter"
+        method: "find"
+        kwargs:
+          dt: "2024-06-01"
+
+      - step: "Assert TER created"
+        action: "assert"
+        target: "ter"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"

@@ -70,7 +70,7 @@ class KlikPajakBackendParameter(models.Model):
                 elif t == "datetime":
                     datetime.strptime(v, "%Y-%m-%d %H:%M:%S")
             except Exception:
-                raise ValidationError(
+                raise ValidationError(  # pylint: disable=translation-required
                     f"Invalid value format for parameter '{record.name}' (type {t})."
                 )
 
@@ -92,4 +92,6 @@ class KlikPajakBackendParameter(models.Model):
                 return datetime.strptime(v, "%Y-%m-%d %H:%M:%S")
             return v
         except Exception as e:
-            raise UserError(f"Invalid value for parameter '{self.name}': {e}")
+            raise UserError(  # pylint: disable=translation-required
+                f"Invalid value for parameter '{self.name}': {e}"
+            )

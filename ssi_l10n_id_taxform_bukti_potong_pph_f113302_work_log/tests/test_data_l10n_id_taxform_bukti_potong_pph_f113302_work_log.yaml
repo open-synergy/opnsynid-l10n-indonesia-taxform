@@ -99,4 +99,5 @@ scenarios:
             type: "value"
             expected: "draft"
           work_log_ids:
-            type: "is_falsy"
+            type: "value"
+            operator: "is_falsy"

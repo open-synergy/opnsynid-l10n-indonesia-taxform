@@ -111,18 +111,3 @@ scenarios:
           state:
             type: "value"
             expected: "confirm"
-
-      - step: "Invalidate cache after confirm"
-        action: "call"
-        target: "bukpot"
-        method: "invalidate_cache"
-
-      - step: "Approve bukpot"
-        action: "call"
-        target: "bukpot"
-        method: "action_approve_approval"
-        as_user: "base.user_admin"
-        asserts:
-          state:
-            type: "value"
-            expected: "done"

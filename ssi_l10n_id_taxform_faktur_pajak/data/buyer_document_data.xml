@@ -3,7 +3,6 @@
      Copyright 2025 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl-3.0-standalone.html). -->
 <odoo>
-<data>
 <record id="fp_buyer_document_tin" forcecreate="True" model="buyer_document">
     <field name="name">NPWP</field>
     <field name="code">TIN</field>
@@ -23,5 +22,4 @@
     <field name="name">Dokumen Lainnya</field>
     <field name="code">Other ID</field>
 </record>
-</data>
 </odoo>

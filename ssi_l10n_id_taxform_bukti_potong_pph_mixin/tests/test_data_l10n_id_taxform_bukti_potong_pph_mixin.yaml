@@ -1,0 +1,67 @@
+scenarios:
+  - name: "Bukti Potong PPh Type - Create master data"
+    steps:
+      - step: "Create bukti potong pph type (out direction)"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_type"
+        save_as: "bpt_out"
+        values:
+          name: "Test Bukti Potong Type Out"
+          code: "TEST-OUT"
+          direction: "out"
+
+      - step: "Assert type created"
+        action: "assert"
+        target: "bpt_out"
+        asserts:
+          name:
+            type: "value"
+            expected: "Test Bukti Potong Type Out"
+          direction:
+            type: "value"
+            expected: "out"
+          active:
+            type: "value"
+            expected: true
+
+      - step: "Create bukti potong pph type (in direction)"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_type"
+        save_as: "bpt_in"
+        values:
+          name: "Test Bukti Potong Type In"
+          code: "TEST-IN"
+          direction: "in"
+
+      - step: "Assert in type created"
+        action: "assert"
+        target: "bpt_in"
+        asserts:
+          direction:
+            type: "value"
+            expected: "in"
+
+  - name: "Bukti Potong PPh Type - Update"
+    steps:
+      - step: "Create type to update"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_type"
+        save_as: "bpt_update"
+        values:
+          name: "Type to Update"
+          code: "UPD-TYPE"
+          direction: "out"
+
+      - step: "Update type name"
+        action: "write"
+        target: "bpt_update"
+        values:
+          name: "Updated Type Name"
+
+      - step: "Assert update applied"
+        action: "assert"
+        target: "bpt_update"
+        asserts:
+          name:
+            type: "value"
+            expected: "Updated Type Name"

@@ -1,0 +1,17 @@
+scenarios:
+  - name: "Faktur Pajak Keluaran Operating Unit - Verify field extension"
+    steps:
+      - step: "Search faktur pajak keluaran records"
+        action: "search"
+        model: "faktur_pajak_keluaran"
+        domain: []
+        save_as: "fp_records"
+        limit: 1
+        expect_count: 0
+
+      - step: "Search operating units"
+        action: "search"
+        model: "operating.unit"
+        domain: []
+        save_as: "op_units"
+        limit: 1

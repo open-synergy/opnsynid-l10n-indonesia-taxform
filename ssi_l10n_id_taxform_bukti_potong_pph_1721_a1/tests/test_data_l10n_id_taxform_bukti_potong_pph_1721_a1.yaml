@@ -1,0 +1,86 @@
+scenarios:
+  - name: "Bukti Potong PPh 1721 A1 - Create and workflow"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 1721A1"
+          code: "TY20241721"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create start tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "start_period"
+        values:
+          name: "01/2024 1721A1"
+          code: "0120241721"
+          date_start: 2024-01-01
+          date_end: 2024-01-31
+          year_id: "EVAL: registry['tax_year'].id"
+
+      - step: "Setup - Create end tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "end_period"
+        values:
+          name: "12/2024 1721A1"
+          code: "1220241721"
+          date_start: 2024-12-01
+          date_end: 2024-12-31
+          year_id: "EVAL: registry['tax_year'].id"
+
+      - step: "Get kode objek pajak from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform.l10n_id_taxform_objek_pajak_21_100_01"
+        save_as: "kode_objek_pajak"
+
+      - step: "Get PTKP category from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_pph_21.ptkp_tk0"
+        save_as: "ptkp_category"
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak 1721 A1"
+          is_company: false
+
+      - step: "Create Bukti Potong PPh 1721 A1"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_1721_a1"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          kode_objek_pajak_id: "EVAL: registry['kode_objek_pajak'].id"
+          start_tax_period_id: "EVAL: registry['start_period'].id"
+          end_tax_period_id: "EVAL: registry['end_period'].id"
+          wajib_pajak_id: "EVAL: registry['wajib_pajak'].id"
+          wajib_pajak_npwp: "00.000.000.0-000.000"
+          wajib_pajak_alamat: "Jl. Test No. 1, Jakarta"
+          wajib_pajak_nik: "1234567890123456"
+          wajib_pajak_ptkp_category_id: "EVAL: registry['ptkp_category'].id"
+          wajib_pajak_job_position: "Staf"
+
+      - step: "Assert bukpot created in draft"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"

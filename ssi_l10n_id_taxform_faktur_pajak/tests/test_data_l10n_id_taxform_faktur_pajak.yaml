@@ -1,0 +1,85 @@
+scenarios:
+  - name: "Faktur Pajak Transaction Type - Create master data"
+    steps:
+      - step: "Create faktur pajak transaction type"
+        action: "create"
+        model: "faktur_pajak_transaction_type"
+        save_as: "fp_type"
+        values:
+          name: "Test Transaction Type"
+          code: "99"
+          efaktur_mode: "header"
+          fpk_journal_selection_method: "domain"
+
+      - step: "Assert transaction type created"
+        action: "assert"
+        target: "fp_type"
+        asserts:
+          name:
+            type: "value"
+            expected: "Test Transaction Type"
+          code:
+            type: "value"
+            expected: "99"
+          active:
+            type: "value"
+            expected: true
+
+      - step: "Update transaction type"
+        action: "write"
+        target: "fp_type"
+        values:
+          efaktur_mode: "detail"
+
+      - step: "Assert transaction type updated"
+        action: "assert"
+        target: "fp_type"
+        asserts:
+          efaktur_mode:
+            type: "value"
+            expected: "detail"
+
+  - name: "Enofa - Create and confirm"
+    steps:
+      - step: "Create tax year for enofa"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 Enofa"
+          code: "TY2024EF"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Create enofa"
+        action: "create"
+        model: "enofa"
+        save_as: "enofa"
+        as_user: "base.user_admin"
+        values:
+          date_request: 2024-05-01
+          request_number: "TEST-REQUEST-001"
+          date_issue: 2024-05-10
+          issue_number: "TEST-ISSUE-001"
+          prefix: "010"
+          num_of_nsfp: 100
+          first_num_of_nsfp: 1
+          tax_year_id: "EVAL: registry['tax_year'].id"
+
+      - step: "Assert enofa in draft"
+        action: "assert"
+        target: "enofa"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm enofa"
+        action: "call"
+        target: "enofa"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"

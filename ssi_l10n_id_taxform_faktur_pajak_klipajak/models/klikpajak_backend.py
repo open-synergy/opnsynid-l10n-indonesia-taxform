@@ -187,7 +187,9 @@ class KlikpajakBackend(models.Model):
     def action_get_hmac(self):
         for record in self:
             result = record._get_hmac()
-            raise ValidationError(f"Result: {result}")
+            raise ValidationError(  # pylint: disable=translation-required
+                f"Result: {result}"
+            )
 
     def action_running(self):
         for record in self:

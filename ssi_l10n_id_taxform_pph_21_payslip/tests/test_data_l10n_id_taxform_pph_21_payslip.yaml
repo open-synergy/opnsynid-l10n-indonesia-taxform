@@ -42,9 +42,11 @@ scenarios:
         target: "employee"
         asserts:
           joining_tax_period_id:
-            type: "is_truthy"
+            type: "value"
+            operator: "is_truthy"
           joining_tax_year_id:
-            type: "is_truthy"
+            type: "value"
+            operator: "is_truthy"
 
   - name: "PPh 21 Payslip - HR Employee no joining date"
     steps:
@@ -60,6 +62,8 @@ scenarios:
         target: "employee_no_join"
         asserts:
           joining_tax_period_id:
-            type: "is_falsy"
+            type: "value"
+            operator: "is_falsy"
           joining_tax_year_id:
-            type: "is_falsy"
+            type: "value"
+            operator: "is_falsy"

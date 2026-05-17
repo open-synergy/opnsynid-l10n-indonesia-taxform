@@ -1,0 +1,128 @@
+scenarios:
+  - name: "Bukti Potong PPh F113302 - Create and workflow"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 F113302"
+          code: "TY2024F2"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "06/2024 F2"
+          code: "062024F2"
+          date_start: 2024-06-01
+          date_end: 2024-06-30
+          year_id: "EVAL: registry['tax_year'].id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 21 Final Payable Test"
+          code: "XPPH21FT2"
+          user_type_id: "EVAL: registry['account_type'].id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 21 Final Journal Test"
+          code: "XP21FT"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test F113302"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test F113302"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak F113302"
+          is_company: false
+
+      - step: "Get f113302 type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113302.bukti_potong_pph_type_f113302_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113302 Out"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113302_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['bp_type'].id"
+          date: 2024-06-15
+          tax_period_id: "EVAL: registry['tax_period'].id"
+          journal_id: "EVAL: registry['journal'].id"
+          account_id: "EVAL: registry['account'].id"
+          kpp_id: "EVAL: registry['kpp'].id"
+          wajib_pajak_id: "EVAL: registry['wajib_pajak'].id"
+          pemotong_pajak_id: "EVAL: registry['pemotong_pajak'].id"
+
+      - step: "Assert bukpot created in draft"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          direction:
+            type: "value"
+            expected: "out"
+
+      - step: "Confirm bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Invalidate cache after confirm"
+        action: "call"
+        target: "bukpot"
+        method: "invalidate_cache"
+
+      - step: "Approve bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "done"

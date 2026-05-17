@@ -3,7 +3,7 @@
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-<data noupdate="0">
+
 <record id="approval_template_enofa" model="approval.template">
     <field name="name">Standard</field>
     <field name="model_id" ref="model_enofa" />
@@ -27,16 +27,15 @@
     <field name="validate_sequence" eval="1" />
 </record>
 <record
-            id="approval_template_detail_faktur_pajak_keluaran"
-            model="approval.template_detail"
-        >
+        id="approval_template_detail_faktur_pajak_keluaran"
+        model="approval.template_detail"
+    >
     <field name="template_id" ref="approval_template_faktur_pajak_keluaran" />
     <field name="approver_selection_method">use_group</field>
     <field
-                name="approver_group_ids"
-                eval="[(6,0,[ref('faktur_pajak_keluaran_validator_group')])]"
-            />
+            name="approver_group_ids"
+            eval="[(6,0,[ref('faktur_pajak_keluaran_validator_group')])]"
+        />
 </record>
 
-</data>
 </odoo>

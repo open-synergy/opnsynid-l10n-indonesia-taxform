@@ -2,8 +2,7 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 <!-- f113308 in -->
 <record id="sequence_f113308_in" model="ir.sequence">
     <field name="name">Default Bukti Potong f113308 In</field>
@@ -27,5 +26,4 @@
     <field name="use_date_range" eval="1" />
     <field eval="False" name="company_id" />
 </record>
-</data>
 </odoo>

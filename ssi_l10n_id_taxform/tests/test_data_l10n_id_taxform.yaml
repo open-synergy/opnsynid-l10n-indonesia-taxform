@@ -1,0 +1,153 @@
+scenarios:
+  - name: "Tax Year - Create and generate periods"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Test Tax Year 2024"
+          code: "TY2024"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Assert tax year created in expected state"
+        action: "assert"
+        target: "tax_year"
+        asserts:
+          name:
+            type: "value"
+            expected: "Test Tax Year 2024"
+          code:
+            type: "value"
+            expected: "TY2024"
+
+      - step: "Create periods for tax year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Invalidate cache after period creation"
+        action: "call"
+        target: "tax_year"
+        method: "invalidate_cache"
+
+      - step: "Assert periods created"
+        action: "assert"
+        target: "tax_year"
+        asserts:
+          period_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 12
+
+  - name: "Tax Period - Find period method"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Test Tax Year 2025"
+          code: "TY2025"
+          date_start: 2025-01-01
+          date_end: 2025-12-31
+
+      - step: "Create tax periods"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find period for specific date"
+        action: "call"
+        target: "tax_year"
+        method: "_find_year"
+        kwargs:
+          dt: "2025-06-15"
+
+      - step: "Search for June 2025 period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "EVAL: registry['tax_year'].id"]
+          - ["date_start", "<=", "2025-06-15"]
+          - ["date_end", ">=", "2025-06-15"]
+        save_as: "june_period"
+        limit: 1
+
+      - step: "Assert period found"
+        action: "assert"
+        target: "june_period"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Taxform Objek Pajak - Create"
+    steps:
+      - step: "Create taxform objek pajak"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "TST-OBJ-PAJAK"
+          name: "Test Objek Pajak"
+
+      - step: "Assert objek pajak created"
+        action: "assert"
+        target: "objek_pajak"
+        asserts:
+          code:
+            type: "value"
+            expected: "TST-OBJ-PAJAK"
+          name:
+            type: "value"
+            expected: "Test Objek Pajak"
+          company_id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Tax Period - Next and Previous period navigation"
+    steps:
+      - step: "Create tax year for navigation test"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "nav_year"
+        values:
+          name: "Nav Test Year 2023"
+          code: "TY2023"
+          date_start: 2023-01-01
+          date_end: 2023-06-30
+
+      - step: "Create first period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "period_jan"
+        values:
+          name: "01/2023"
+          code: "01/2023"
+          date_start: 2023-01-01
+          date_end: 2023-01-31
+          year_id: "EVAL: registry['nav_year'].id"
+
+      - step: "Create second period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "period_feb"
+        values:
+          name: "02/2023"
+          code: "02/2023"
+          date_start: 2023-02-01
+          date_end: 2023-02-28
+          year_id: "EVAL: registry['nav_year'].id"
+
+      - step: "Assert periods created"
+        action: "assert"
+        target: "period_jan"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          year_id:
+            type: "value"
+            operator: "is_truthy"

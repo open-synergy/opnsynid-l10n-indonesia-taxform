@@ -9,6 +9,7 @@ scenarios:
           name: "Test Klik Pajak Backend"
           code: "TKLP01"
           auth_method: "hmac"
+          base_url: "https://api.klikpajak.id"
 
       - step: "Assert backend created"
         action: "assert"

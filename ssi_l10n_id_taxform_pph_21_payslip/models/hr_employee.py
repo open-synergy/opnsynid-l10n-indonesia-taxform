@@ -15,9 +15,10 @@ class HrEmployee(models.Model):
             joining_tax_period_id = False
             joining_tax_year_id = False
 
-            if employee.date_join:
-                obj_period = self.env["l10n_id.tax_period"]
-                period = obj_period._find_period(employee.date_join)
+            date_join = employee.sudo().date_join
+            if date_join:
+                obj_period = self.env["l10n_id.tax_period"].sudo()
+                period = obj_period._find_period(date_join, no_raise=True)
                 if period:
                     joining_tax_period_id = period
                     joining_tax_year_id = period.year_id

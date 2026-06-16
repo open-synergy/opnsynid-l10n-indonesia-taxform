@@ -29,12 +29,32 @@ scenarios:
         save_as: "company"
         limit: 1
 
-      - step: "Create hr employee with joining date"
+      - step: "Verify period is searchable before employee creation"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain: [["date_start", "<=", "2024-01-15"], ["date_end", ">=", "2024-01-15"]]
+        save_as: "verify_period"
+        limit: 1
+
+      - step: "Assert period is findable"
+        action: "assert"
+        target: "verify_period"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Create hr employee without joining date"
         action: "create"
         model: "hr.employee"
         save_as: "employee"
         values:
           name: "Test Employee PPh21"
+
+      - step: "Write date_join to trigger compute after period is confirmed in DB"
+        action: "write"
+        target: "employee"
+        values:
           date_join: 2024-01-15
 
       - step: "Assert employee has joining_tax_period_id computed"
@@ -47,6 +67,27 @@ scenarios:
           joining_tax_year_id:
             type: "value"
             operator: "is_truthy"
+
+  - name: "PPh 21 Payslip - HR Employee joining date with no tax period configured"
+    steps:
+      - step: "Create hr employee with joining date but no matching tax period"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee_no_period"
+        values:
+          name: "Test Employee No Period"
+          date_join: 2020-01-15
+
+      - step: "Assert both tax fields are False when no period configured for date"
+        action: "assert"
+        target: "employee_no_period"
+        asserts:
+          joining_tax_period_id:
+            type: "value"
+            operator: "is_falsy"
+          joining_tax_year_id:
+            type: "value"
+            operator: "is_falsy"
 
   - name: "PPh 21 Payslip - HR Employee no joining date"
     steps:

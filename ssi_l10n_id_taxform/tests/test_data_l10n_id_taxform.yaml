@@ -107,6 +107,45 @@ scenarios:
             type: "value"
             operator: "is_truthy"
 
+  - name: "Tax Period - Find period and year with no_raise when not found"
+    steps:
+      - step: "Create tax year anchor for _find_year no_raise test"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "no_raise_year"
+        values:
+          name: "No Raise Test Year 2030"
+          code: "TY2030NR"
+          date_start: 2030-01-01
+          date_end: 2030-12-31
+
+      - step: "Create tax period anchor for _find_period no_raise test"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "no_raise_period"
+        values:
+          name: "01/2030 NR"
+          code: "012030NR"
+          date_start: 2030-01-01
+          date_end: 2030-01-31
+          year_id: "EVAL: registry['no_raise_year'].id"
+
+      - step: "Call _find_period with no_raise=True on date with no period configured"
+        action: "call"
+        target: "no_raise_period"
+        method: "_find_period"
+        kwargs:
+          dt: "2019-01-01"
+          no_raise: true
+
+      - step: "Call _find_year with no_raise=True on date with no year configured"
+        action: "call"
+        target: "no_raise_year"
+        method: "_find_year"
+        kwargs:
+          dt: "2019-01-01"
+          no_raise: true
+
   - name: "Tax Period - Next and Previous period navigation"
     steps:
       - step: "Create tax year for navigation test"

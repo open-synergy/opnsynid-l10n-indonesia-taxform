@@ -64,7 +64,7 @@ class TaxYear(models.Model):
             date_start = date_start + relativedelta(months=+1)
 
     @api.model
-    def _find_year(self, dt=None):
+    def _find_year(self, dt=None, no_raise=False):
         if not dt:
             dt = datetime.now().strftime("%Y-%m-%d")
         criteria = [
@@ -73,6 +73,8 @@ class TaxYear(models.Model):
         ]
         results = self.search(criteria)
         if not results:
+            if no_raise:
+                return False
             strWarning = _("No tax year configured for %s" % dt)
             raise models.ValidationError(strWarning)
         result = results[0]
@@ -115,7 +117,7 @@ class TaxPeriod(models.Model):
         return False
 
     @api.model
-    def _find_period(self, dt=None):
+    def _find_period(self, dt=None, no_raise=False):
         if not dt:
             dt = datetime.now().strftime("%Y-%m-%d")
         criteria = [
@@ -124,6 +126,8 @@ class TaxPeriod(models.Model):
         ]
         results = self.search(criteria)
         if not results:
+            if no_raise:
+                return False
             strWarning = _("No tax period configured for %s" % dt)
             raise models.ValidationError(strWarning)
         result = results[0]

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="coretax_bupot_21_report_action" model="ir.actions.report">
+        <field name="name">Coretax PPh 21 Withholding XML</field>
+        <field name="model">hr.payslip_batch</field>
+        <field name="report_type">qweb-xml</field>
+        <field
+            name="report_name"
+        >ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.bpmp</field>
+        <field name="report_file">coretax_bupot_21</field>
+        <field
+            name="print_report_name"
+        >"coretax_bupot_21_%s" % (object.name or object.id)</field>
+        <field name="xml_encoding">UTF-8</field>
+        <field name="xml_declaration" eval="True" />
+    </record>
+</odoo>

@@ -1,0 +1,172 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch/models/hr_payslip_batch.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Generate Coretax PPh 21 withholding XML\n"
+"Database ID: %s\n"
+"Problem: Employee \"%s\" is missing: %s\n"
+"Solution: Complete the data above before generating the XML\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch/models/hr_payslip_batch.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Generate Coretax PPh 21 withholding XML\n"
+"Database ID: %s\n"
+"Problem: No payslip in this batch has PPh 21 withheld (greater than zero)\n"
+"Solution: Select a salary rule that holds the withheld PPh 21 amount\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch/models/hr_payslip_batch.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Generate Coretax PPh 21 withholding XML\n"
+"Database ID: %s\n"
+"Problem: The withholder company \"%s\" has no %s configured\n"
+"Solution: Set the NPWP (Tax ID) and NITKU of the company partner\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.actions.report,print_report_name:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.coretax_bupot_21_report_action
+msgid "\"coretax_bupot_21_%s\" % (object.name or object.id)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.actions.report,name:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.coretax_bupot_21_report_action
+msgid "Coretax PPh 21 Withholding XML"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.model_report_ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch_bpmp
+msgid "Coretax PPh 21 Withholding XML Report"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.payslip_batch_coretax_export_view_form
+msgid "Discard"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_report_ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch_bpmp__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.model_hr_payslip_batch
+msgid "Employee Payslip Batch"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.payslip_batch_coretax_export_view_form
+msgid "Export"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.model_hr_payslip_batch_coretax_export
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.payslip_batch_coretax_export_view_form
+msgid "Export Coretax PPh 21 Withholding XML"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.actions.act_window,name:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.payslip_batch_coretax_export_action
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.hr_payslip_batch_view_form
+msgid "Export Coretax PPh 21 XML"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.payslip_batch_coretax_export_view_form
+msgid ""
+"Generate the Coretax BPMP XML (Bukti Pemotongan PPh 21\n"
+"                        Pegawai Tetap) for every payslip in this batch whose\n"
+"                        withheld PPh 21 is greater than zero."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__bruto_rule_id
+msgid "Gross Income Salary Rule"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_report_ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch_bpmp__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_report_ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch_bpmp____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__batch_id
+msgid "Payslip Batch"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__batch_id
+msgid "Payslip batch whose payslips are exported to Coretax BPMP XML."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__bruto_rule_id
+msgid ""
+"Salary rule whose amount is reported as the gross income (Penghasilan Bruto)"
+" of each Coretax withholding slip."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__pph_rule_id
+msgid ""
+"Salary rule whose amount is the withheld PPh 21. Only payslips where this "
+"amount is greater than zero are exported."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.field_hr_payslip_batch_coretax_export__pph_rule_id
+msgid "Withheld PPh 21 Salary Rule"
+msgstr ""

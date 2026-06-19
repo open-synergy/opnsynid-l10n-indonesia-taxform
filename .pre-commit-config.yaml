@@ -95,8 +95,7 @@ repos:
         additional_dependencies:
           - "prettier@2.1.2"
           - "@prettier/plugin-xml@0.12.0"
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.29.0
+  - repo: local
     hooks:
       - id: eslint
         name: eslint
@@ -157,13 +156,13 @@ repos:
           - --header
           - "# generated from manifests external_dependencies"
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+    rev: 5.0.0
     hooks:
       - id: flake8
         name: flake8
         additional_dependencies: ["flake8-bugbear==20.1.4"]
   - repo: https://github.com/OCA/pylint-odoo
-    rev: v9.3.11
+    rev: 7.0.2
     hooks:
       - id: pylint_odoo
         name: pylint with optional checks

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="hr_payslip_batch_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip_batch.form.coretax_bupot_21</field>
+        <field name="model">hr.payslip_batch</field>
+        <field
+            name="inherit_id"
+            ref="ssi_hr_payroll_batch.hr_payslip_batch_view_form"
+        />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//page[@name='payslip']//button[@name='action_export_input']"
+                position="after"
+            >
+                <button
+                    name="%(payslip_batch_coretax_export_action)d"
+                    string="Export Coretax PPh 21 XML"
+                    type="action"
+                    icon="fa-file-code-o"
+                    attrs="{'invisible': [('state', '!=', 'done')]}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

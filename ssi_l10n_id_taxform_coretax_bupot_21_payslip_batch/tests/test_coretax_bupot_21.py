@@ -82,7 +82,7 @@ class TestCoretaxBupot21(YamlTransactionCase):
             {
                 "name": "Employee Taxed",
                 "address_home_id": self.partner_taxed.id,
-                "manual_job_id": self.job.id,
+                "job_id": self.job.id,
             }
         )
 
@@ -176,7 +176,7 @@ class TestCoretaxBupot21(YamlTransactionCase):
         self.assertEqual(slip["counterpart_tin"], "3275010905770021")
         self.assertEqual(slip["counterpart_opt"], "Resident")
         self.assertEqual(slip["status_tax_exemption"], "TK/0")
-        self.assertEqual(slip["position"], "Staff")
+        self.assertEqual(slip["position"], self.employee_taxed.job_id.name or "")
         self.assertEqual(slip["tax_object_code"], "21-100-01")
         self.assertEqual(slip["tax_certificate"], "N/A")
         self.assertEqual(slip["gross"], "40000000")

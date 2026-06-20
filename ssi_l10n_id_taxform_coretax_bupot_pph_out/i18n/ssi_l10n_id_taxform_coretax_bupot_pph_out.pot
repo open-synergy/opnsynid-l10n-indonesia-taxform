@@ -1,0 +1,112 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_l10n_id_taxform_coretax_bupot_pph_out
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_out/models/bukti_potong_pph_mixin.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Generate Coretax Bukti Potong PPh Out XML\n"
+"Database ID: %s\n"
+"Problem: No line in this bukti potong has PPh withheld (greater than zero)\n"
+"Solution: Add lines with a non-zero tax amount before exporting\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_out/models/bukti_potong_pph_mixin.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Generate Coretax Bukti Potong PPh Out XML\n"
+"Database ID: %s\n"
+"Problem: The withholder \"%s\" has no %s configured\n"
+"Solution: Set the NPWP (Tax ID) and NITKU of the withholder partner\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_out/models/bukti_potong_pph_mixin.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Generate Coretax Bukti Potong PPh Out XML\n"
+"Database ID: %s\n"
+"Problem: Wajib pajak \"%s\" has no NPWP (Tax ID) configured\n"
+"Solution: Set the NPWP of the wajib pajak partner\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_out.model_l10n_id_bukti_potong_pph_mixin
+msgid "Bukti Potong PPh"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_out.model_l10n_id_bukti_potong_pph_line_mixin
+msgid "Bukti Potong PPh Line Mixin"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113301_out_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113302_out_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113304_in_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113304_out_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113306_in_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113306_out_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113308_in_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113308_out_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113310_in_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113310_out_line__coretax_tax_object_code
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_line_mixin__coretax_tax_object_code
+msgid "Coretax Tax Object Code"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_line_mixin__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_mixin__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_pph_out.bukti_potong_pph_mixin_view_form_coretax_out
+msgid "Export Coretax XML"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_line_mixin__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_mixin__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_line_mixin____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_mixin____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_out
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113301_out_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113302_out_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113304_in_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113304_out_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113306_in_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113306_out_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113308_in_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113308_out_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113310_in_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_f113310_out_line__coretax_tax_object_code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_out.field_l10n_id_bukti_potong_pph_line_mixin__coretax_tax_object_code
+msgid ""
+"Tax object code used in the Coretax XML export (e.g. 23-100-01 for PPh 23 "
+"interest income)."
+msgstr ""

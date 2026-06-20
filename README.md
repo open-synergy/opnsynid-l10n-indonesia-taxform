@@ -30,6 +30,7 @@ addon | version | maintainers | summary
 [ssi_l10n_id_taxform_bukti_potong_pph_f113306](ssi_l10n_id_taxform_bukti_potong_pph_f113306/) | 14.0.1.9.0 |  | Indonesia - Bukti Potong PPh 23 (f.1.1.33.06)
 [ssi_l10n_id_taxform_bukti_potong_pph_f113306_work_log](ssi_l10n_id_taxform_bukti_potong_pph_f113306_work_log/) | 14.0.1.1.0 |  | Bukti Potong PPh 23 (f.1.33.06) - Work Log Integration
 [ssi_l10n_id_taxform_bukti_potong_pph_f113308](ssi_l10n_id_taxform_bukti_potong_pph_f113308/) | 14.0.1.6.0 |  | Indonesia - Bukti Potong PPh 26 (f.1.1.33.08)
+[ssi_l10n_id_taxform_bukti_potong_pph_f113310](ssi_l10n_id_taxform_bukti_potong_pph_f113310/) | 14.0.1.0.0 |  | Indonesia - Bukti Potong PPh 4(2) (f.1.1.33.10)
 [ssi_l10n_id_taxform_bukti_potong_pph_mixin](ssi_l10n_id_taxform_bukti_potong_pph_mixin/) | 14.0.1.7.0 |  | Indonesia - Mixin Feature for Bukti Potong PPh
 [ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch](ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch/) | 14.0.1.0.0 |  | Indonesia's Taxform - Coretax PPh 21 Withholding XML from Payslip Batch
 [ssi_l10n_id_taxform_faktur_pajak](ssi_l10n_id_taxform_faktur_pajak/) | 14.0.3.14.0 |  | Faktur Pajak

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<!-- Configurator-->
+<record id="bukti_potong_pph_f113310o_configurator_group" model="res.groups">
+    <field name="name">Bukti Potong PPh 4(2) (f.1.1.33.10) Out</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<record id="bukti_potong_pph_f113310i_configurator_group" model="res.groups">
+    <field name="name">Bukti Potong PPh 4(2) (f.1.1.33.10) In</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<!-- Workflow -->
+<!-- f113310 in -->
+<record id="l10n_id_bukti_potong_pph_f113310_in_viewer_group" model="res.groups">
+    <field name="name">Viewer</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_in_data_workflow_module_category"
+        />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113310_in_user_group" model="res.groups">
+    <field name="name">User</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_in_data_workflow_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_in_viewer_group'))]"
+        />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113310_in_validator_group" model="res.groups">
+    <field name="name">Validator</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_in_data_workflow_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_in_user_group'))]"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<!-- Data Ownership -->
+<!-- pph f113310 in -->
+<record id="l10n_id_bukti_potong_pph_f113310_in_company_group" model="res.groups">
+    <field name="name">Company</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_in_data_ownership_module_category"
+        />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113310_in_companies_group" model="res.groups">
+    <field name="name">Company and All Child Companies</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_in_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_in_company_group'))]"
+        />
+</record>
+<record id="l10n_id_bukti_potong_pph_f113310_in_all_group" model="res.groups">
+    <field name="name">All</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_in_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_in_companies_group'))]"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<!-- f113310 out -->
+<record id="l10n_id_bukti_potong_pph_f113310_out_viewer_group" model="res.groups">
+    <field name="name">Viewer</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_out_data_workflow_module_category"
+        />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113310_out_user_group" model="res.groups">
+    <field name="name">User</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_out_data_workflow_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_out_viewer_group'))]"
+        />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113310_out_validator_group" model="res.groups">
+    <field name="name">Validator</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_out_data_workflow_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_out_user_group'))]"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+<!-- Data Ownership -->
+<!-- pph f113310 out -->
+<record id="l10n_id_bukti_potong_pph_f113310_out_company_group" model="res.groups">
+    <field name="name">Company</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_out_data_ownership_module_category"
+        />
+</record>
+
+<record id="l10n_id_bukti_potong_pph_f113310_out_companies_group" model="res.groups">
+    <field name="name">Company and All Child Companies</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_out_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_out_company_group'))]"
+        />
+</record>
+<record id="l10n_id_bukti_potong_pph_f113310_out_all_group" model="res.groups">
+    <field name="name">All</field>
+    <field
+            name="category_id"
+            ref="l10n_id_bukti_potong_pph_f113310_out_data_ownership_module_category"
+        />
+    <field
+            name="implied_ids"
+            eval="[(4, ref('l10n_id_bukti_potong_pph_f113310_out_companies_group'))]"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+</odoo>

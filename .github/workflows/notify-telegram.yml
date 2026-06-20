@@ -31,22 +31,25 @@ jobs:
 
           COMMIT_COUNT=$(echo "$COMMITS_JSON" | python3 -c "import sys,json; data=json.load(sys.stdin); print(len(data))")
 
-          # Bangun daftar commit beserta full message
+          # Bangun daftar commit — HTML mode, escape karakter khusus agar tidak crash parser
           COMMIT_LIST=$(echo "$COMMITS_JSON" | python3 -c "
-          import sys, json
+          import sys, json, html
           data = json.load(sys.stdin)
           lines = []
+          # quote=False: jangan escape ' dan " — Telegram HTML hanya kenal
+          # &lt; &gt; &amp; &quot;; entity numerik &#x27; (apostrof) ditolak
+          # parser dan memicu 'can't parse entities'. ' dan " aman sbg literal.
           for c in data:
               sha    = c['id'][:7]
               msg    = c['message'].strip()
-              author = c['author']['name']
+              author = html.escape(c['author']['name'], quote=False)
               ts     = c['timestamp'][:16].replace('T', ' ')  # YYYY-MM-DD HH:MM
 
               msg_lines = msg.split('\n')
-              title = msg_lines[0][:80]  # baris pertama, maks 80 karakter
-              body_lines = [l for l in msg_lines[1:] if l.strip()]
+              title = html.escape(msg_lines[0][:80], quote=False)
+              body_lines = [html.escape(l, quote=False) for l in msg_lines[1:] if l.strip()]
 
-              entry = f'  \`{sha}\` {title}\n    👤 {author}  🕐 {ts}'
+              entry = f'  <code>{sha}</code> {title}\n    👤 {author}  🕐 {ts}'
               if body_lines:
                   indented = '\n'.join(f'    {l}' for l in body_lines)
                   entry += f'\n{indented}'
@@ -55,22 +58,28 @@ jobs:
           ")
 
           if [ "$COMMIT_COUNT" -eq 1 ]; then
-            HEADER="📝 *1 commit baru* di \`${REPO}\`"
+            HEADER="📝 <b>1 commit baru</b> di <code>${REPO}</code>"
           else
-            HEADER="📦 *${COMMIT_COUNT} commit baru* di \`${REPO}\`"
+            HEADER="📦 <b>${COMMIT_COUNT} commit baru</b> di <code>${REPO}</code>"
           fi
 
           MESSAGE="${HEADER}
-          Branch: \`${BRANCH}\`
+          Branch: <code>${BRANCH}</code>
           Pusher: @${PUSHER}
 
           ${COMMIT_LIST}
 
-          🔗 [Lihat perubahan](${COMPARE_URL})"
+          🔗 <a href=\"${COMPARE_URL}\">Lihat perubahan</a>"
 
-          # Kirim ke Telegram via Bot API
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          # Kirim ke Telegram via Bot API — periksa response agar step gagal jika error
+          RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
             --data-urlencode "text=${MESSAGE}" \
-            --data-urlencode "parse_mode=Markdown" \
-            --data-urlencode "disable_web_page_preview=true"
+            --data-urlencode "parse_mode=HTML" \
+            --data-urlencode "disable_web_page_preview=true")
+
+          echo "Telegram response: $RESPONSE"
+          if ! echo "$RESPONSE" | python3 -c "import sys,json; r=json.load(sys.stdin); exit(0 if r.get('ok') else 1)"; then
+            echo "::error::Gagal kirim pesan Telegram"
+            exit 1
+          fi

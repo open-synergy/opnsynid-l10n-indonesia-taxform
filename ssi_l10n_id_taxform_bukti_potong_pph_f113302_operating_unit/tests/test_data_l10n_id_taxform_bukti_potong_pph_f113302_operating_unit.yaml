@@ -1,0 +1,17 @@
+scenarios:
+  - name: "Bukti Potong PPh f113302 Keluaran Operating Unit - Verify field extension"
+    steps:
+      - step: "Search bukti potong f113302 out records"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113302_out"
+        domain: []
+        save_as: "bp_records"
+        limit: 1
+        expect_count: 0
+
+      - step: "Search operating units"
+        action: "search"
+        model: "operating.unit"
+        domain: []
+        save_as: "op_units"
+        limit: 1

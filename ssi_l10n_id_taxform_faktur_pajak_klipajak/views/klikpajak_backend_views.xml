@@ -22,7 +22,43 @@
         />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data />
+        <data>
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="company_id" groups="base.group_multi_company" />
+            </xpath>
+            <xpath expr="//group[@name='dom_active']" position="after">
+                <group name="dom_state">
+                    <filter
+                            name="dom_running"
+                            string="Running"
+                            domain="[('state','=','running')]"
+                        />
+                    <filter
+                            name="dom_draft"
+                            string="Draft"
+                            domain="[('state','=','draft')]"
+                        />
+                </group>
+                <group name="group_by" string="Group By">
+                    <filter
+                            name="grp_company"
+                            string="Company"
+                            context="{'group_by':'company_id'}"
+                            groups="base.group_multi_company"
+                        />
+                    <filter
+                            name="grp_auth_method"
+                            string="Auth Method"
+                            context="{'group_by':'auth_method'}"
+                        />
+                    <filter
+                            name="grp_state"
+                            string="State"
+                            context="{'group_by':'state'}"
+                        />
+                </group>
+            </xpath>
+        </data>
     </field>
 </record>
 

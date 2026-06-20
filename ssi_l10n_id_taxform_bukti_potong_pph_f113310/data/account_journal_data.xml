@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo noupdate="1">
+<record id="journal_p42i" model="account.journal">
+    <field name="name">PPh 4(2) In</field>
+    <field name="code">P42I</field>
+    <field name="type">general</field>
+</record>
+
+<record id="journal_p42o" model="account.journal">
+    <field name="name">PPh 4(2) Out</field>
+    <field name="code">P42O</field>
+    <field name="type">general</field>
+</record>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template id="coretax_bupot_pph_out">
+        <MmBulkWithholding xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <TIN t-esc="company_tin" />
+            <IDPlaceOfBusinessActivity t-esc="company_id_tku" />
+            <ListOfMmWithholding>
+                <t t-foreach="lines" t-as="line">
+                    <MmWithholding>
+                        <TaxPeriodMonth t-esc="line['tax_period_month']" />
+                        <TaxPeriodYear t-esc="line['tax_period_year']" />
+                        <CounterpartOpt t-esc="line['counterpart_opt']" />
+                        <CounterpartPassport xsi:nil="true" />
+                        <CounterpartTin t-esc="line['counterpart_tin']" />
+                        <TaxObjectCode t-esc="line['tax_object_code']" />
+                        <Gross t-esc="line['gross']" />
+                        <WithholdingTax t-esc="line['withholding_tax']" />
+                        <IDPlaceOfBusinessActivity
+                            t-esc="line['id_place_of_business_activity']"
+                        />
+                        <WithholdingDate t-esc="line['withholding_date']" />
+                    </MmWithholding>
+                </t>
+            </ListOfMmWithholding>
+        </MmBulkWithholding>
+    </template>
+</odoo>

@@ -28,6 +28,7 @@ setuptools.setup(
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_f113310_operating_unit',
         'odoo14-addon-ssi_l10n_id_taxform_bukti_potong_pph_mixin',
         'odoo14-addon-ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch',
+        'odoo14-addon-ssi_l10n_id_taxform_coretax_bupot_pph_out',
         'odoo14-addon-ssi_l10n_id_taxform_faktur_pajak',
         'odoo14-addon-ssi_l10n_id_taxform_faktur_pajak_klipajak',
         'odoo14-addon-ssi_l10n_id_taxform_faktur_pajak_operating_unit',

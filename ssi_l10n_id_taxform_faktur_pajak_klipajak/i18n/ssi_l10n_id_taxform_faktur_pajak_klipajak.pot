@@ -89,6 +89,11 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_search
+msgid "Auth Method"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak_klipajak.field_klikpajak_backend__auth_method
 #: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_form
 msgid "Authentication"
@@ -174,6 +179,7 @@ msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak_klipajak.field_klikpajak_backend__company_id
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_search
 msgid "Company"
 msgstr ""
 
@@ -228,6 +234,7 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_faktur_pajak_klipajak.selection__faktur_pajak_keluaran__klikpajak_approval_status__draft
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_faktur_pajak_klipajak.selection__klikpajak_backend__state__draft
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_search
 msgid "Draft"
 msgstr ""
 
@@ -270,6 +277,11 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_faktur_pajak_klipajak.field_klikpajak_backend__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_search
+msgid "Group By"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
@@ -624,11 +636,13 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_faktur_pajak_klipajak.selection__klikpajak_backend__state__running
 #: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_form
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_search
 msgid "Running"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak_klipajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak_klipajak.field_klikpajak_backend__state
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak_klipajak.klikpajak_backend_view_search
 msgid "State"
 msgstr ""
 

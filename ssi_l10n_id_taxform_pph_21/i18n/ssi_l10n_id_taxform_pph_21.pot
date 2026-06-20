@@ -146,6 +146,15 @@ msgid "Created on"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_pph_21
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_biaya_jabatan_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_npwp_rate_modifier_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_rate_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_ter_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.ptkp_view_search
+msgid "Date Start"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
 #: code:addons/ssi_l10n_id_taxform_pph_21/models/pph_21_biaya_jabatan.py:0
 #: code:addons/ssi_l10n_id_taxform_pph_21/models/pph_21_npwp_rate_modifier.py:0
 #: code:addons/ssi_l10n_id_taxform_pph_21/models/pph_21_rate.py:0
@@ -226,6 +235,15 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_pph_21.field_l10n_id_ptkp__activity_type_icon
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_pph_21.field_l10n_id_ptkp_category__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_pph_21
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_biaya_jabatan_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_npwp_rate_modifier_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_rate_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.pph_21_ter_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_pph_21.ptkp_view_search
+msgid "Group By"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_pph_21

@@ -371,6 +371,7 @@ msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_type__direction
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_bukti_potong_pph_mixin.l10n_id_bukti_potong_pph_type_view_search
 msgid "Direction"
 msgstr ""
 
@@ -449,6 +450,11 @@ msgid "Form Type"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_bukti_potong_pph_mixin.l10n_id_bukti_potong_pph_type_view_search
+msgid "Group By"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_line_mixin__id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_mixin__id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_type__id
@@ -483,6 +489,7 @@ msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_type__direction__in
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_bukti_potong_pph_mixin.l10n_id_bukti_potong_pph_type_view_search
 msgid "In"
 msgstr ""
 
@@ -677,6 +684,7 @@ msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_type__direction__out
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_bukti_potong_pph_mixin.l10n_id_bukti_potong_pph_type_view_search
 msgid "Out"
 msgstr ""
 

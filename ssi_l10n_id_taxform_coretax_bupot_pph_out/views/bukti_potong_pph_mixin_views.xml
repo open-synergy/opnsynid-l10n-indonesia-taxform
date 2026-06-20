@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="bukti_potong_pph_mixin_view_form_coretax_out" model="ir.ui.view">
+        <field name="name">l10n_id.bukti_potong_pph_mixin.coretax_out form</field>
+        <field name="model">l10n_id.bukti_potong_pph_mixin</field>
+        <field
+            name="inherit_id"
+            ref="ssi_l10n_id_taxform_bukti_potong_pph_mixin.bukti_potong_pph_mixin_view_form"
+        />
+        <field name="arch" type="xml">
+            <data>
+                <!-- Export button: visible only when direction=out and state=done -->
+                <xpath expr="//header/field[@name='state']" position="before">
+                    <button
+                        name="action_export_coretax_bupot_pph_out_xml"
+                        type="object"
+                        string="Export Coretax XML"
+                        attrs="{'invisible': ['|', ('direction', '!=', 'out'), ('state', '!=', 'done')]}"
+                        icon="fa-file-code-o"
+                    />
+                </xpath>
+                <!-- coretax_tax_object_code in line tree -->
+                <xpath
+                    expr="//field[@name='line_ids']//tree/field[@name='amount_tax']"
+                    position="after"
+                >
+                    <field name="coretax_tax_object_code" optional="show" />
+                </xpath>
+                <!-- coretax_tax_object_code in line inline form -->
+                <xpath
+                    expr="//field[@name='line_ids']//form//field[@name='amount_tax']"
+                    position="after"
+                >
+                    <field name="coretax_tax_object_code" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

@@ -12,7 +12,20 @@
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="date_start" />
+                </xpath>
+                <xpath expr="//group[@name='dom_active']" position="after">
+                    <group name="group_by" string="Group By">
+                        <filter
+                            name="grp_date_start"
+                            string="Date Start"
+                            context="{'group_by':'date_start'}"
+                        />
+                    </group>
+                </xpath>
+            </data>
         </field>
     </record>
     <record id="ptkp_view_tree" model="ir.ui.view">

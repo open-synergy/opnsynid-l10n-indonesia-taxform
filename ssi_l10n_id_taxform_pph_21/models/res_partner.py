@@ -76,6 +76,7 @@ class ResPartner(models.Model):
             jumlah_penghasilan_non_rutin = (
                 jumlah_penghasilan_non_rutin + akumulasi_penghasilan_non_rutin
             )
+            jumlah_bulan_kerja = periode_pemotongan - bulan_bergabung + 1
         else:
             if is_lokal:
                 jumlah_penghasilan_rutin = gaji + tunjangan_pph + tunjangan_lain
@@ -88,6 +89,7 @@ class ResPartner(models.Model):
                     gaji + tunjangan_pph + tunjangan_lain
                 ) * 12
             jumlah_penghasilan_non_rutin = jumlah_penghasilan_non_rutin
+            jumlah_bulan_kerja = 12
 
         obj_biaya_jabatan = self.env["l10n_id.pph_21_biaya_jabatan"]
         perhitungan_biaya_jabatan = obj_biaya_jabatan.find(
@@ -97,6 +99,7 @@ class ResPartner(models.Model):
             jumlah_penghasilan_rutin_setahun,
             jumlah_penghasilan_non_rutin,
             is_keluar,
+            jumlah_bulan_kerja,
         )
         biaya_jabatan_rutin_setahun = perhitungan_biaya_jabatan[
             "biaya_jabatan_rutin_setahun"

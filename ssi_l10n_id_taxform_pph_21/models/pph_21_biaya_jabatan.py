@@ -44,12 +44,14 @@ class Pph21TunjanganJabatan(models.Model):
             raise ValidationError(strWarning)
         return results[0]
 
-    def get_biaya_jabatan_rutin(self, jumlah_penghasilan_rutin=0.0, is_keluar=False):
+    def get_biaya_jabatan_rutin(
+        self, jumlah_penghasilan_rutin=0.0, is_keluar=False, jumlah_bulan=12
+    ):
         self.ensure_one()
         multiply = (self.rate_biaya_jabatan / 100.00) * jumlah_penghasilan_rutin
         maximum_jabatan = self.max_biaya_jabatan
         if is_keluar:
-            maximum_jabatan = 12 * self.max_biaya_jabatan
+            maximum_jabatan = jumlah_bulan * self.max_biaya_jabatan
         if multiply >= maximum_jabatan:
             result = maximum_jabatan
         else:
@@ -58,13 +60,17 @@ class Pph21TunjanganJabatan(models.Model):
         return result
 
     def get_biaya_jabatan_non_rutin(
-        self, jumlah_penghasilan_non_rutin=0.0, biaya_jabatan_rutin=0.0, is_keluar=False
+        self,
+        jumlah_penghasilan_non_rutin=0.0,
+        biaya_jabatan_rutin=0.0,
+        is_keluar=False,
+        jumlah_bulan=12,
     ):
         self.ensure_one()
         multiply = (self.rate_biaya_jabatan / 100.0) * jumlah_penghasilan_non_rutin
         maximum_jabatan = self.max_biaya_jabatan
         if is_keluar:
-            maximum_jabatan = 12 * self.max_biaya_jabatan
+            maximum_jabatan = jumlah_bulan * self.max_biaya_jabatan
         if multiply + biaya_jabatan_rutin >= maximum_jabatan:
             result = maximum_jabatan - biaya_jabatan_rutin
         else:
@@ -77,6 +83,7 @@ class Pph21TunjanganJabatan(models.Model):
         jumlah_penghasilan_rutin_setahun=0.0,
         jumlah_penghasilan_non_rutin=0.0,
         is_keluar=False,
+        jumlah_bulan=12,
     ):
         # TODO:
         self.ensure_one()
@@ -105,10 +112,13 @@ class Pph21TunjanganJabatan(models.Model):
             )
         else:
             biaya_jabatan_rutin_setahun = self.get_biaya_jabatan_rutin(
-                jumlah_penghasilan_rutin_setahun, True
+                jumlah_penghasilan_rutin_setahun, True, jumlah_bulan
             )
             biaya_jabatan_non_rutin_setahun = self.get_biaya_jabatan_non_rutin(
-                jumlah_penghasilan_non_rutin, biaya_jabatan_rutin_setahun, True
+                jumlah_penghasilan_non_rutin,
+                biaya_jabatan_rutin_setahun,
+                True,
+                jumlah_bulan,
             )
             biaya_jabatan = (
                 biaya_jabatan_rutin_setahun + biaya_jabatan_non_rutin_setahun

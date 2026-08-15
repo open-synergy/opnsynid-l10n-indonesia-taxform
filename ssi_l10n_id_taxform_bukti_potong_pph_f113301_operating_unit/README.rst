@@ -9,6 +9,11 @@ Indonesia - Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01) - Operating Unit In
 This module integrates Operating Unit support into the Bukti Potong PPh 21/26 module.
 It allows bukti potong PPh 21/26 documents to be scoped to a specific operating unit.
 
+Work Instruction
+================
+
+* `Create Bukti Potong PPh f.1.1.33.01 Out <docs/l10n_id_bukti_potong_pph_f113301_out/01-create.html>`_
+
 
 Bug Tracker
 ===========

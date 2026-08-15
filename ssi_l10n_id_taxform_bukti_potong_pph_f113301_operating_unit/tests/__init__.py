@@ -3,5 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import (
-    l10n_id_bukti_potong_pph_f113301_out,
+    test_l10n_id_taxform_bukti_potong_pph_f113301_operating_unit,
+    test_ui_l10n_id_bukti_potong_pph_f113301_out_operating_unit,
 )

@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -84,7 +84,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -94,7 +94,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -104,7 +104,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"
@@ -114,7 +114,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_1721_a1
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/bukti_potong_pph_1721_a1.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/models/l10n_id_bukti_potong_pph_1721_a1.py:0
 #, python-format
 msgid ""
 "\n"

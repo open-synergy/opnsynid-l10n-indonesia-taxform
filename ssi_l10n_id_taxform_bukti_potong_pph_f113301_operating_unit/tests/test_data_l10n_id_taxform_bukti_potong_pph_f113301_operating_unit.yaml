@@ -1,0 +1,250 @@
+scenarios:
+  - name: "Operating Unit field stores an explicit value"
+    steps:
+      - step: "Create operating unit partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_partner"
+        values:
+          name: "OU Partner F113301 Explicit"
+          is_company: true
+
+      - step: "Create operating unit"
+        action: "create"
+        model: "operating.unit"
+        save_as: "operating_unit"
+        values:
+          name: "OU F113301 Explicit"
+          code: "OUF33EXP"
+          partner_id: "REC: ou_partner.id"
+
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2026 F113301 OU Explicit"
+          code: "TY26F33OE"
+          date_start: 2026-01-01
+          date_end: 2026-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "06/2026 F113301 OU Explicit"
+          code: "0626F33OE"
+          date_start: 2026-06-01
+          date_end: 2026-06-30
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 21/26 Payable Test OU Explicit"
+          code: "XPPH2126OE1"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 21/26 Journal Test OU Explicit"
+          code: "XP26OE"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Gambir OU Explicit"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak OU Explicit"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Individual OU Explicit"
+          is_company: false
+
+      - step: "Get f113301 type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113301.bukti_potong_pph_type_f113301_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113301 Out with an explicit Operating Unit"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2026-06-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          operating_unit_id: "REC: operating_unit.id"
+
+      - step: "Assert operating unit is stored as selected"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit"
+
+  - name: "Operating Unit field defaults to the acting user's default operating unit"
+    steps:
+      - step: "Create operating unit partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_partner"
+        values:
+          name: "OU Partner F113301 Default"
+          is_company: true
+
+      - step: "Create operating unit"
+        action: "create"
+        model: "operating.unit"
+        save_as: "operating_unit"
+        values:
+          name: "OU F113301 Default"
+          code: "OUF33DEF"
+          partner_id: "REC: ou_partner.id"
+
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2026 F113301 OU Default"
+          code: "TY26F33OD"
+          date_start: 2026-01-01
+          date_end: 2026-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "06/2026 F113301 OU Default"
+          code: "0626F33OD"
+          date_start: 2026-06-01
+          date_end: 2026-06-30
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 21/26 Payable Test OU Default"
+          code: "XPPH2126OD1"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 21/26 Journal Test OU Default"
+          code: "XP26OD"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Gambir OU Default"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak OU Default"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Individual OU Default"
+          is_company: false
+
+      - step: "Get f113301 type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113301.bukti_potong_pph_type_f113301_out"
+        save_as: "bp_type"
+
+      - step: "Create a user whose default operating unit is the one above"
+        action: "create"
+        model: "res.users"
+        save_as: "ou_user"
+        values:
+          name: "TOUR OU User F113301"
+          login: "tour_ou_user_f113301@example.com"
+          groups_id:
+            - - 6
+              - 0
+              - - "REF:
+                  ssi_l10n_id_taxform_bukti_potong_pph_f113301.l10n_id_bukti_potong_pph_f113301_out_user_group"
+                - "REF: base.group_user"
+          default_operating_unit_id: "REC: operating_unit.id"
+
+      - step: "Create Bukti Potong PPh F113301 Out without an explicit Operating Unit"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        as_user: "ou_user"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2026-06-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+
+      - step: "Assert operating unit defaulted from the acting user"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit"

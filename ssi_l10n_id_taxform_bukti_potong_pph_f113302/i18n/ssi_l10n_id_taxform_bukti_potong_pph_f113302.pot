@@ -191,7 +191,7 @@ msgid "Bukti Potong PPh 21 Final F.1.1.33.02 Out"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113302
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113302/models/bukti_potong_pph_f113302_out.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113302/models/l10n_id_bukti_potong_pph_f113302_out.py:0
 #, python-format
 msgid "Bukti Potong PPh 21 Final f113302 Out type hasn't defined"
 msgstr ""

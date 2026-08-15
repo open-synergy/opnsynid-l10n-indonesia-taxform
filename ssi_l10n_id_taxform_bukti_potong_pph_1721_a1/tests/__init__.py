@@ -2,4 +2,7 @@
 # Copyright 2025 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from . import test_l10n_id_taxform_bukti_potong_pph_1721_a1
+from . import (
+    test_l10n_id_taxform_bukti_potong_pph_1721_a1,
+    test_ui_l10n_id_bukti_potong_pph_1721_a1,
+)

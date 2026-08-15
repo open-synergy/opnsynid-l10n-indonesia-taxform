@@ -23,6 +23,7 @@
         "report_py3o",
         "ssi_print_mixin",
         "partner_contact_in_several_companies",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -37,6 +38,7 @@
         "views/bukti_potong_pph_1721_a1_views.xml",
         "views/bukti_potong_pph_1721_a1_config_views.xml",
         "views/res_company_views.xml",
+        "views/assets.xml",
     ],
     "demo": [
         # "demo/account_journal_demo.xml",

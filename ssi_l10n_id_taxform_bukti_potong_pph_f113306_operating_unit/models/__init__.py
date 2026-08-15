@@ -3,6 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import (
-    bukti_potong_pph_f113306_in,
-    bukti_potong_pph_f113306_out,
+    l10n_id_bukti_potong_pph_f113306_in,
+    l10n_id_bukti_potong_pph_f113306_out,
 )

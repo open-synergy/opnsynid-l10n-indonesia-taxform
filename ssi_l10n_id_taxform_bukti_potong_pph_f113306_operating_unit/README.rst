@@ -9,6 +9,12 @@ Indonesia - Bukti Potong PPh 23 (f.1.1.33.06) - Operating Unit Integration
 This module integrates Operating Unit support into the Indonesia - Bukti Potong PPh 23 (f.1.1.33.06) module.
 It allows the related bukti potong PPh documents to be scoped to a specific operating unit.
 
+Work Instruction
+================
+
+* `Create Bukti Potong PPh f.1.1.33.06 In <docs/l10n_id_bukti_potong_pph_f113306_in/01-create.html>`_
+* `Create Bukti Potong PPh f.1.1.33.06 Out <docs/l10n_id_bukti_potong_pph_f113306_out/01-create.html>`_
+
 
 Bug Tracker
 ===========

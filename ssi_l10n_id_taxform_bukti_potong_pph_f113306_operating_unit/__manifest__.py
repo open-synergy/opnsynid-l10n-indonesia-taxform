@@ -13,11 +13,13 @@
     "depends": [
         "ssi_l10n_id_taxform_bukti_potong_pph_f113306",
         "ssi_operating_unit_mixin",
+        "web_tour",
     ],
     "data": [
         "security/res_group/res_group_data.xml",
         "security/ir_rule/ir_rule_data.xml",
         "views/bukti_potong_pph_f113306_in_views.xml",
         "views/bukti_potong_pph_f113306_out_views.xml",
+        "views/assets.xml",
     ],
 }

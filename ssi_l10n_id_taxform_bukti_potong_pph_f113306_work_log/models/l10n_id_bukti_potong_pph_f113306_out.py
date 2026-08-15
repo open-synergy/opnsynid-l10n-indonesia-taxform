@@ -5,7 +5,14 @@
 from odoo import models
 
 
-class BuktiPotongPPhf113306Out(models.Model):
+class L10nIdBuktiPotongPphF113306Out(models.Model):
+    """Add Work Log tracking to the PPh 23 outgoing withholding slip.
+
+    Glue module: enables the Work Log tab (``mixin.work_object``) on
+    ``l10n_id.bukti_potong_pph_f113306_out`` so hours spent processing
+    this document can be recorded against ``hr.work_log``.
+    """
+
     _name = "l10n_id.bukti_potong_pph_f113306_out"
     _inherit = [
         "l10n_id.bukti_potong_pph_f113306_out",

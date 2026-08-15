@@ -7,6 +7,13 @@ Bukti Potong PPh 23 (f.1.33.06) - Work Log Integration
 ======================================================
 
 
+Work Instruction
+================
+
+* `Create Bukti Potong PPh f.1.1.33.06 In <docs/l10n_id_bukti_potong_pph_f113306_in/index.html>`_
+* `Create Bukti Potong PPh f.1.1.33.06 Out <docs/l10n_id_bukti_potong_pph_f113306_out/index.html>`_
+
+
 Installation
 ============
 

@@ -11,8 +11,11 @@
     "depends": [
         "ssi_l10n_id_taxform_bukti_potong_pph_f113306",
         "ssi_work_log_mixin",
+        "web_tour",
     ],
-    "data": [],
+    "data": [
+        "views/assets.xml",
+    ],
     "demo": [],
     "images": [],
 }

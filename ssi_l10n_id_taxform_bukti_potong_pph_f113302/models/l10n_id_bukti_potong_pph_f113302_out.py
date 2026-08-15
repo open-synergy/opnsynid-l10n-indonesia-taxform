@@ -8,12 +8,24 @@ from odoo.exceptions import Warning as UserError
 from odoo.addons.ssi_decorator import ssi_decorator
 
 
-class BuktiPotongPPhf113302Out(models.Model):
+class L10nIdBuktiPotongPphF113302Out(models.Model):
+    """Indonesia's PPh 21 final withholding slip, form f.1.1.33.02.
+
+    Records outgoing (company-issued) tax withholding through the
+    standard confirm/approve/done workflow, then generates the related
+    journal entry once the document is done.
+    """
+
     _name = "l10n_id.bukti_potong_pph_f113302_out"
     _inherit = "l10n_id.bukti_potong_pph_mixin"
     _description = "Bukti Potong PPh 21 Final (f.1.1.33.02) Out"
 
     def _get_type_id(self):
+        """Look up this module's ``l10n_id.bukti_potong_pph_type`` record.
+
+        :return: id of the "f113302 Out" form type
+        :raises UserError: when the type record has not been loaded
+        """
         type_id = self.env.ref(
             "ssi_l10n_id_taxform_bukti_potong_pph_f113302."
             "bukti_potong_pph_type_f113302_out"
@@ -25,6 +37,10 @@ class BuktiPotongPPhf113302Out(models.Model):
 
     @api.model
     def _default_type_id(self):
+        """Return the default ``type_id`` value.
+
+        :return: id of the "f113302 Out" form type
+        """
         return self._get_type_id()
 
     type_id = fields.Many2one(

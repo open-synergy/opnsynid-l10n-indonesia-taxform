@@ -13,6 +13,7 @@
     "application": False,
     "depends": [
         "ssi_l10n_id_taxform_bukti_potong_pph_mixin",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -27,6 +28,7 @@
         "data/account_journal_data.xml",
         "views/bukti_potong_pph_type_views.xml",
         "views/bukti_potong_pph_f113302_out_views.xml",
+        "views/assets.xml",
     ],
     "demo": [
         "demo/account_journal_demo.xml",

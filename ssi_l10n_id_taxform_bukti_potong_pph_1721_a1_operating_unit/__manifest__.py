@@ -5,7 +5,7 @@
 {
     "name": "Indonesia - Bukti Potong PPh 21 Formulir 1721 A1"
     "- Operating Unit Integration",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "AGPL-3",

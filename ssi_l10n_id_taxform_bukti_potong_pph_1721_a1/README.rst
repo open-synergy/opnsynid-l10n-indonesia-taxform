@@ -19,6 +19,20 @@ To install this module, you need to:
 5.  Search For *Indonesia - Bukti Potong PPh 21 Formulir 1721 A1*
 6.  Install the module
 
+Work Instruction
+================
+
+* `Create Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/01-create.html>`_
+* `Edit Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/02-edit.html>`_
+* `Delete Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/03-delete.html>`_
+* `Confirm Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/04-confirm.html>`_
+* `Approve Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/05-approve.html>`_
+* `Reject Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/06-reject.html>`_
+* `Cancel Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/10-cancel.html>`_
+* `Restart Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/12-restart.html>`_
+* `Reset Document Number — Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/13-reset-number.html>`_
+* `Restart Approval Process — Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/14-restart-approval.html>`_
+
 Bug Tracker
 ===========
 

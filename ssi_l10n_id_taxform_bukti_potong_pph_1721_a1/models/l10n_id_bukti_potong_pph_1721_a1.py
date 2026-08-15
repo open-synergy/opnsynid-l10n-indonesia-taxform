@@ -7,8 +7,17 @@ from openerp.tools.safe_eval import safe_eval as eval
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
 
+from odoo.addons.ssi_decorator import ssi_decorator
 
-class BuktiPotongPPh1721A1(models.Model):
+
+class L10nIdBuktiPotongPph1721A1(models.Model):
+    """
+    Represents Indonesia's PPh 21 Withholding Slip Form 1721 A1.
+    Computes gross income, deductions, PTKP, and the annual/annualized
+    PPh 21 payable for a single taxpayer, through the standard
+    confirm/approve/done workflow.
+    """
+
     _name = "l10n_id.bukti_potong_pph_1721_a1"
     _inherit = [
         "mixin.transaction_cancel",
@@ -62,6 +71,10 @@ class BuktiPotongPPh1721A1(models.Model):
     _create_sequence_state = "done"
 
     def _default_company_id(self):
+        """Return the default ``company_id`` value.
+
+        :return: id of the current user's company
+        """
         return self.env.user.company_id.id
 
     company_id = fields.Many2one(
@@ -129,6 +142,10 @@ class BuktiPotongPPh1721A1(models.Model):
 
     @api.model
     def _default_pemotong_pajak_id(self):
+        """Return the default ``pemotong_pajak_id`` value.
+
+        :return: id of the current company's partner
+        """
         return self.env.user.company_id.partner_id.id
 
     pemotong_pajak_id = fields.Many2one(
@@ -398,6 +415,12 @@ class BuktiPotongPPh1721A1(models.Model):
     # PENGURANG
     @api.depends("penghasilan_08")
     def _compute_jabatan(self):
+        """Compute ``pengurang_09``, the annual occupational expense.
+
+        Delegates to ``l10n_id.pph_21_biaya_jabatan`` to look up the
+        occupational expense (biaya jabatan) rate that applies on the
+        document date, applied to the gross income for the year.
+        """
         for document in self:
             obj_biaya_jabatan = self.env["l10n_id.pph_21_biaya_jabatan"]
             perhitungan_biaya_jabatan = obj_biaya_jabatan.find(
@@ -433,6 +456,11 @@ class BuktiPotongPPh1721A1(models.Model):
         "pengurang_10",
     )
     def _compute_pengurang(self):
+        """Compute ``pengurang_11``, the total deduction.
+
+        Sums the occupational expense (``pengurang_09``) and the
+        pension/JHT-THT contribution (``pengurang_10``).
+        """
         for document in self:
             document.pengurang_11 = 0.0
             document.pengurang_11 = document.pengurang_09 + document.pengurang_10
@@ -451,6 +479,11 @@ class BuktiPotongPPh1721A1(models.Model):
         "pengurang_11",
     )
     def _compute_penghasilan_netto(self):
+        """Compute ``perhitungan_12``, the net income for the period.
+
+        Subtracts the total deduction (``pengurang_11``) from the gross
+        income (``penghasilan_08``).
+        """
         for document in self:
             document.perhitungan_12 = 0.0
             document.perhitungan_12 = document.penghasilan_08 - document.pengurang_11
@@ -478,6 +511,12 @@ class BuktiPotongPPh1721A1(models.Model):
         "perhitungan_13",
     )
     def _compute_penghasilan_netto_setahun(self):
+        """Compute ``perhitungan_14``, the annualized net income.
+
+        Adds the net income for the current period (``perhitungan_12``)
+        to the net income already reported for prior periods
+        (``perhitungan_13``).
+        """
         for document in self:
             document.perhitungan_14 = 0.0
             document.perhitungan_14 = document.perhitungan_12 + document.perhitungan_13
@@ -496,6 +535,11 @@ class BuktiPotongPPh1721A1(models.Model):
         "date",
     )
     def _compute_ptkp(self):
+        """Compute ``perhitungan_15``, the non-taxable income (PTKP).
+
+        Looks up the PTKP rate for the taxpayer's PTKP category
+        (``wajib_pajak_ptkp_category_id``) as of the document date.
+        """
         for document in self:
             document.perhitungan_15 = 0.0
             ptkp_category = document.wajib_pajak_ptkp_category_id
@@ -516,6 +560,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "perhitungan_15",
     )
     def _compute_pkp(self):
+        """Compute ``perhitungan_16``, the taxable income (PKP).
+
+        The taxable income is the annualized net income
+        (``perhitungan_14``) minus PTKP (``perhitungan_15``), rounded
+        down to the nearest thousand rupiah. Zero when PTKP is not
+        exceeded.
+        """
         for document in self:
             document.perhitungan_16 = 0.0
             if document.perhitungan_14 > document.perhitungan_15:
@@ -536,6 +587,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "perhitungan_16",
     )
     def _compute_pph21(self):
+        """Compute ``perhitungan_17``, the annual/annualized PPh 21.
+
+        Delegates the progressive tax bracket calculation to
+        ``wajib_pajak_id.compute_pph_21_2110001()``, passing the
+        taxable income and related income components. Stays zero when
+        the taxable income (``perhitungan_16``) is not positive.
+        """
         for document in self:
             pph_21 = 0.0
             if document.perhitungan_16 > 0:
@@ -587,6 +645,12 @@ class BuktiPotongPPh1721A1(models.Model):
         "perhitungan_18",
     )
     def _compute_hutang_pph(self):
+        """Compute ``perhitungan_19``, the total PPh 21 payable.
+
+        Adds the PPh 21 computed for the current period
+        (``perhitungan_17``) to the amount already withheld in prior
+        periods (``perhitungan_18``).
+        """
         for document in self:
             document.perhitungan_19 = document.perhitungan_17 + document.perhitungan_18
 
@@ -606,6 +670,12 @@ class BuktiPotongPPh1721A1(models.Model):
         },
     )
 
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch
+
     @api.model
     def _get_policy_field(self):
         res = super()._get_policy_field()
@@ -623,6 +693,14 @@ class BuktiPotongPPh1721A1(models.Model):
         return res
 
     def _get_localdict(self):
+        """Build the local dict used to evaluate ``python_code`` config.
+
+        Available locals: ``env`` (the current environment) and
+        ``document`` (this record). The evaluated code is expected to
+        set a ``result`` variable, which the caller reads back.
+
+        :return: dict with keys ``env`` and ``document``
+        """
         self.ensure_one()
         return {
             "env": self.env,
@@ -650,6 +728,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_penghasilan_01(self):
+        """Recompute ``penghasilan_01`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.penghasilan_01 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -682,6 +767,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_penghasilan_02(self):
+        """Recompute ``penghasilan_02`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.penghasilan_02 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -714,6 +806,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_penghasilan_03(self):
+        """Recompute ``penghasilan_03`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.penghasilan_03 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -746,6 +845,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_penghasilan_04(self):
+        """Recompute ``penghasilan_04`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.penghasilan_04 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -778,6 +884,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_penghasilan_05(self):
+        """Recompute ``penghasilan_05`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.penghasilan_05 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -810,6 +923,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_penghasilan_06(self):
+        """Recompute ``penghasilan_06`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.penghasilan_06 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -844,6 +964,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_penghasilan_07(self):
+        """Recompute ``penghasilan_07`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.penghasilan_07 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -879,6 +1006,10 @@ class BuktiPotongPPh1721A1(models.Model):
         "penghasilan_07",
     )
     def _compute_penghasilan(self):
+        """Compute ``penghasilan_08``, the total gross income.
+
+        Sums ``penghasilan_01`` through ``penghasilan_07``.
+        """
         for document in self:
             document.penghasilan_08 = 0.0
             document.penghasilan_08 = (
@@ -898,6 +1029,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_pengurang_10(self):
+        """Recompute ``pengurang_10`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.pengurang_10 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -930,6 +1068,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_perhitungan_13(self):
+        """Recompute ``perhitungan_13`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.perhitungan_13 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -962,6 +1107,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_perhitungan_18(self):
+        """Recompute ``perhitungan_18`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.perhitungan_18 = 0.0
         if self.company_id:
             localdict = self._get_localdict()
@@ -994,6 +1146,13 @@ class BuktiPotongPPh1721A1(models.Model):
         "end_tax_period_id",
     )
     def onchange_perhitungan_20(self):
+        """Recompute ``perhitungan_20`` from the company's config code.
+
+        Evaluates the ``python_code`` registered for this field on
+        ``company_id`` (see ``res.company._get_python_1721_config``)
+        and assigns its ``result`` to the field. Raises
+        :class:`~odoo.exceptions.UserError` when the code fails.
+        """
         self.perhitungan_20 = 0.0
         if self.company_id:
             localdict = self._get_localdict()

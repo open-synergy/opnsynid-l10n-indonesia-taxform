@@ -5,7 +5,14 @@
 from odoo import api, fields, models
 
 
-class L10nidBuktiPotongPPH1721A1Config(models.Model):
+class L10nIdBuktiPotongPph1721A1Config(models.Model):
+    """
+    Represents a per-company, per-field Python computation rule for
+    Form 1721 A1. Company administrators use it to configure how a
+    given onchange-computed field of ``l10n_id.bukti_potong_pph_1721_a1``
+    is auto-filled.
+    """
+
     _name = "l10n_id.bukti_potong_pph_1721_a1_config"
     _description = "Bukti Potong PPh 21 1721 A1 Config"
 
@@ -16,6 +23,15 @@ class L10nidBuktiPotongPPH1721A1Config(models.Model):
     )
 
     def _get_allowed_field(self):
+        """Return the field names configurable through this record.
+
+        Restricts ``field_id`` to the ``l10n_id.bukti_potong_pph_1721_a1``
+        fields that have a matching non-trivial ``onchange_*`` method
+        reading company config (income, deduction, and carry-over
+        fields).
+
+        :return: list of technical field names
+        """
         res = [
             "penghasilan_01",
             "penghasilan_02",
@@ -35,6 +51,13 @@ class L10nidBuktiPotongPPH1721A1Config(models.Model):
         "company_id",
     )
     def _compute_allowed_field_ids(self):
+        """Compute ``allowed_field_ids``, the selectable field domain.
+
+        Looks up the ``ir.model.fields`` records of
+        ``l10n_id.bukti_potong_pph_1721_a1`` whose name is in
+        :meth:`_get_allowed_field`, so the ``field_id`` widget only
+        offers fields this config model actually supports.
+        """
         obj_fields = self.env["ir.model.fields"]
 
         for document in self:

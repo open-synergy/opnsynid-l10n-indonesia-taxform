@@ -1,0 +1,178 @@
+scenarios:
+  - name: "Operating Unit field stores an explicit value"
+    steps:
+      - step: "Create operating unit partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_partner"
+        values:
+          name: "OU Partner 1721A1 Explicit"
+          is_company: true
+
+      - step: "Create operating unit"
+        action: "create"
+        model: "operating.unit"
+        save_as: "operating_unit"
+        values:
+          name: "OU 1721A1 Explicit"
+          code: "OU1721AEXP"
+          partner_id: "REC: ou_partner.id"
+
+      - step: "Get kode objek pajak from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform.l10n_id_taxform_objek_pajak_21_100_01"
+        save_as: "kode_objek_pajak"
+
+      - step: "Get PTKP category from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_pph_21.ptkp_tk0"
+        save_as: "ptkp_category"
+
+      - step: "Create start tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "start_period"
+        values:
+          name: "01/2026 1721A1OUE"
+          code: "0120261721OUE"
+          date_start: 2026-01-01
+          date_end: 2026-01-31
+
+      - step: "Create end tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "end_period"
+        values:
+          name: "12/2026 1721A1OUE"
+          code: "1220261721OUE"
+          date_start: 2026-12-01
+          date_end: 2026-12-31
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak 1721A1 OU Explicit"
+          is_company: false
+
+      - step: "Create Bukti Potong PPh 1721 A1 with an explicit Operating Unit"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_1721_a1"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          kode_objek_pajak_id: "REC: kode_objek_pajak.id"
+          start_tax_period_id: "REC: start_period.id"
+          end_tax_period_id: "REC: end_period.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          wajib_pajak_npwp: "00.000.000.0-000.000"
+          wajib_pajak_alamat: "Jl. Test No. 1, Jakarta"
+          wajib_pajak_nik: "1234567890123456"
+          wajib_pajak_ptkp_category_id: "REC: ptkp_category.id"
+          wajib_pajak_job_position: "Staf"
+          operating_unit_id: "REC: operating_unit.id"
+
+      - step: "Assert operating unit is stored as selected"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit"
+
+  - name: "Operating Unit field defaults to the acting user's default operating unit"
+    steps:
+      - step: "Create operating unit partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_partner"
+        values:
+          name: "OU Partner 1721A1 Default"
+          is_company: true
+
+      - step: "Create operating unit"
+        action: "create"
+        model: "operating.unit"
+        save_as: "operating_unit"
+        values:
+          name: "OU 1721A1 Default"
+          code: "OU1721ADEF"
+          partner_id: "REC: ou_partner.id"
+
+      - step: "Get kode objek pajak from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform.l10n_id_taxform_objek_pajak_21_100_01"
+        save_as: "kode_objek_pajak"
+
+      - step: "Get PTKP category from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_pph_21.ptkp_tk0"
+        save_as: "ptkp_category"
+
+      - step: "Create start tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "start_period"
+        values:
+          name: "01/2026 1721A1OUD"
+          code: "0120261721OUD"
+          date_start: 2026-01-01
+          date_end: 2026-01-31
+
+      - step: "Create end tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "end_period"
+        values:
+          name: "12/2026 1721A1OUD"
+          code: "1220261721OUD"
+          date_start: 2026-12-01
+          date_end: 2026-12-31
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak 1721A1 OU Default"
+          is_company: false
+
+      - step: "Create a user whose default operating unit is the one above"
+        action: "create"
+        model: "res.users"
+        save_as: "ou_user"
+        values:
+          name: "TOUR OU User 1721A1"
+          login: "tour_ou_user_1721a1@example.com"
+          groups_id:
+            - - 6
+              - 0
+              - - "REF:
+                  ssi_l10n_id_taxform_bukti_potong_pph_1721_a1.l10n_id_bukti_potong_pph_1721_a1_user_group"
+                - "REF: base.group_user"
+          default_operating_unit_id: "REC: operating_unit.id"
+
+      - step: "Create Bukti Potong PPh 1721 A1 without an explicit Operating Unit"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_1721_a1"
+        save_as: "bukpot"
+        as_user: "ou_user"
+        values:
+          kode_objek_pajak_id: "REC: kode_objek_pajak.id"
+          start_tax_period_id: "REC: start_period.id"
+          end_tax_period_id: "REC: end_period.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          wajib_pajak_npwp: "00.000.000.0-000.000"
+          wajib_pajak_alamat: "Jl. Test No. 1, Jakarta"
+          wajib_pajak_nik: "1234567890123456"
+          wajib_pajak_ptkp_category_id: "REC: ptkp_category.id"
+          wajib_pajak_job_position: "Staf"
+
+      - step: "Assert operating unit defaulted from the acting user"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit"

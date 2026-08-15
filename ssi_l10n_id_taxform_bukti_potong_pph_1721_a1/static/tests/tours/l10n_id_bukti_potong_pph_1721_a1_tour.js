@@ -184,11 +184,24 @@ odoo.define(
                 selectPeriodSteps("TOUR 01/2026"),
                 // ── Flow 8 — Click Save.
                 saveSteps,
-                // ── Post-Condition — a new record is created in Draft.
+                // ── Post-Condition — a new record is created in Draft. In
+                // 14.0, Save keeps the form open in read-only mode (it does
+                // not navigate back to the list), so what is asserted here
+                // is the saved data shown on the form itself, not a list
+                // row.
                 [
                     {
-                        content: "New record appears in the list",
-                        trigger: ".o_data_row:contains(TOUR WP Create1721A1)",
+                        content: "Wajib Pajak shows the created value",
+                        trigger:
+                            ".o_form_readonly .o_field_widget[name='wajib_pajak_id']:contains(TOUR WP Create1721A1)",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+                    {
+                        content: "Status is Draft",
+                        trigger:
+                            ".o_statusbar_status .o_arrow_button[data-value='draft'].btn-primary",
                         run: function () {
                             // Assertion only.
                         },

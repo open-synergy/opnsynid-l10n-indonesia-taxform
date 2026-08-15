@@ -59,5 +59,6 @@
 
 ## Post-Condition
 
-- A new record is created in **Draft** status.
+- A new record is created in **Draft** status. **(14.0: Save keeps the form open in
+  read-only mode; it does not navigate back to the list.)**
 - The document number stays **/** until the record is confirmed and approved.

@@ -9,7 +9,10 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestL10nIdTaxformBuktiPotongPphF113302WorkLog(YamlTransactionCase):
+    """Test work log field exposure on Bukti Potong PPh f.1.1.33.02 Out."""
+
     def test_l10n_id_taxform_bukti_potong_pph_f113302_work_log(self):
+        """Run the work log scenario for the f.1.1.33.02 Out model."""
         self.run_yaml_scenario(
             "test_data_l10n_id_taxform_bukti_potong_pph_f113302_work_log.yaml"
         )

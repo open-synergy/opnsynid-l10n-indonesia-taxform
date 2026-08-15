@@ -7,6 +7,12 @@ Bukti Potong PPh 21 Final (f.1.1.33.02) - Work Log Integration
 ==============================================================
 
 
+Work Instruction
+================
+
+* `Create Bukti Potong PPh f.1.1.33.02 Out <docs/l10n_id_bukti_potong_pph_f113302_out/index.html>`_
+
+
 Installation
 ============
 

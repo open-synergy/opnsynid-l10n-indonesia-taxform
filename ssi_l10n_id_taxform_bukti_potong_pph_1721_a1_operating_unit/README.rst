@@ -9,6 +9,11 @@ Indonesia - Bukti Potong PPh 21 Formulir 1721 A1 - Operating Unit Integration
 This module integrates Operating Unit support into the Bukti Potong PPh 21 Formulir 1721 A1 module.
 It allows bukti potong PPh 21 Formulir 1721 A1 documents to be scoped to a specific operating unit.
 
+Work Instruction
+================
+
+* `Create Tax Form 1721 A1 <docs/l10n_id_bukti_potong_pph_1721_a1/01-create.html>`_
+
 
 Bug Tracker
 ===========

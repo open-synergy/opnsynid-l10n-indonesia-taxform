@@ -21,6 +21,30 @@ To install this module, you need to:
 5.  Search For *Indonesia - Bukti Potong PPh 22 (f.1.1.33.04)*
 6.  Install the module
 
+Work Instruction
+================
+
+* `Create Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/01-create.html>`_
+* `Edit Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/02-edit.html>`_
+* `Delete Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/03-delete.html>`_
+* `Confirm Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/04-confirm.html>`_
+* `Approve Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/05-approve.html>`_
+* `Reject Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/06-reject.html>`_
+* `Cancel Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/10-cancel.html>`_
+* `Restart Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/12-restart.html>`_
+* `Reset Document Number — Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/13-reset-number.html>`_
+* `Restart Approval Process — Bukti Potong PPh f.1.1.33.04 In <docs/l10n_id_bukti_potong_pph_f113304_in/14-restart-approval.html>`_
+* `Create Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/01-create.html>`_
+* `Edit Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/02-edit.html>`_
+* `Delete Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/03-delete.html>`_
+* `Confirm Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/04-confirm.html>`_
+* `Approve Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/05-approve.html>`_
+* `Reject Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/06-reject.html>`_
+* `Cancel Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/10-cancel.html>`_
+* `Restart Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/12-restart.html>`_
+* `Reset Document Number — Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/13-reset-number.html>`_
+* `Restart Approval Process — Bukti Potong PPh f.1.1.33.04 Out <docs/l10n_id_bukti_potong_pph_f113304_out/14-restart-approval.html>`_
+
 Bug Tracker
 ===========
 

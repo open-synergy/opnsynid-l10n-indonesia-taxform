@@ -22,7 +22,7 @@ addon | version | maintainers | summary
 [ssi_l10n_id_taxform_bukti_potong_pph_1721_a1](ssi_l10n_id_taxform_bukti_potong_pph_1721_a1/) | 14.0.1.3.1 |  | Indonesia - Bukti Potong PPh 21 Formulir 1721 A1
 [ssi_l10n_id_taxform_bukti_potong_pph_1721_a1_operating_unit](ssi_l10n_id_taxform_bukti_potong_pph_1721_a1_operating_unit/) | 14.0.1.0.1 |  | Indonesia - Bukti Potong PPh 21 Formulir 1721 A1- Operating Unit Integration
 [ssi_l10n_id_taxform_bukti_potong_pph_f113301](ssi_l10n_id_taxform_bukti_potong_pph_f113301/) | 14.0.1.6.1 |  | Indonesia - Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01)
-[ssi_l10n_id_taxform_bukti_potong_pph_f113301_operating_unit](ssi_l10n_id_taxform_bukti_potong_pph_f113301_operating_unit/) | 14.0.1.0.0 |  | Indonesia - Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01)- Operating Unit Integration
+[ssi_l10n_id_taxform_bukti_potong_pph_f113301_operating_unit](ssi_l10n_id_taxform_bukti_potong_pph_f113301_operating_unit/) | 14.0.1.0.1 |  | Indonesia - Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01)- Operating Unit Integration
 [ssi_l10n_id_taxform_bukti_potong_pph_f113301_work_log](ssi_l10n_id_taxform_bukti_potong_pph_f113301_work_log/) | 14.0.1.1.0 |  | Bukti Potong PPh 21/26 Tidak Final (f.1.1.33.01) - Work Log Integration
 [ssi_l10n_id_taxform_bukti_potong_pph_f113302](ssi_l10n_id_taxform_bukti_potong_pph_f113302/) | 14.0.1.7.0 |  | Indonesia - Bukti Potong PPh 21 Final (f.1.1.33.02)
 [ssi_l10n_id_taxform_bukti_potong_pph_f113302_operating_unit](ssi_l10n_id_taxform_bukti_potong_pph_f113302_operating_unit/) | 14.0.1.0.0 |  | Indonesia - Bukti Potong PPh 21 Final (f.1.1.33.02) - Operating Unit Integration

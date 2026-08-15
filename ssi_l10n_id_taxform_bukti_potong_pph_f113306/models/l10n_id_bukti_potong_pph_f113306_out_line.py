@@ -5,7 +5,13 @@
 from odoo import fields, models
 
 
-class BuktiPotongPPhf113306OutLine(models.Model):
+class L10nIdBuktiPotongPphF113306OutLine(models.Model):
+    """Detail line of a Bukti Potong PPh f.1.1.33.06 Out document.
+
+    Holds the withheld tax amount and the accounting move lines
+    (income entries) this withholding line originates from.
+    """
+
     _name = "l10n_id.bukti_potong_pph_f113306_out_line"
     _inherit = "l10n_id.bukti_potong_pph_line_mixin"
     _description = "Bukti Potong PPh 23 f.1.1.33.06 Out Line"

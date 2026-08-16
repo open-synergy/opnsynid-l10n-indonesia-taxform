@@ -5,7 +5,17 @@
 from odoo import fields, models
 
 
-class BuktiPotongPPhType(models.Model):
+class L10nIdBuktiPotongPphType(models.Model):
+    """Master data of Bukti Potong PPh types (form types).
+
+    Each record represents one Indonesian withholding tax slip (Bukti
+    Potong PPh) form type, such as f.1.1.33.01 or f.1.1.33.10. It
+    restricts which journal, tax, and account are allowed to be used
+    on documents created with this type. Concrete downstream modules
+    (one per form type) each own a single fixed record of this model
+    and expose it through their own configuration menu.
+    """
+
     _name = "l10n_id.bukti_potong_pph_type"
     _inherit = [
         "mixin.master_data",

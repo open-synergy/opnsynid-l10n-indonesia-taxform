@@ -44,7 +44,7 @@
 </record>
 
 <record id="bukti_potong_pph_f113308_out_action" model="ir.actions.act_window">
-    <field name="name">Bukti Potong PPh 22 (f.1.1.33.08) Out</field>
+    <field name="name">Bukti Potong PPh 26 (f.1.1.33.08) Out</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">l10n_id.bukti_potong_pph_f113308_out</field>
     <field name="view_mode">tree,form</field>

@@ -10,7 +10,17 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestCoretaxBupot21(YamlTransactionCase):
+    """Tests for the Coretax BPMP XML export helpers on ``hr.payslip_batch``.
+
+    Pure Python throughout — every test below asserts either the return
+    value of a private preparation method (P1; L-01: ``action: call``
+    discards return values, so YAML cannot capture them) or the
+    ``UserError`` that same method raises instead of returning, which is
+    the error path of that identical non-record-persisting contract.
+    """
+
     def setUp(self):
+        """Build the payroll, PTKP and employee fixtures every test needs."""
         super().setUp()
         # Withholder (pemotong) identity on the company partner.
         self.company = self.env.ref("base.main_company")
@@ -118,6 +128,13 @@ class TestCoretaxBupot21(YamlTransactionCase):
         )
 
     def _create_payslip(self, employee, gross, pph):
+        """Create a payslip for ``employee`` with a gross and a PPh 21 line.
+
+        :param employee: the ``hr.employee`` the payslip belongs to
+        :param gross: amount written on the gross income salary rule line
+        :param pph: amount written on the withheld PPh 21 salary rule line
+        :return: the created ``hr.payslip``
+        """
         return self.env["hr.payslip"].create(
             {
                 "batch_id": self.batch.id,
@@ -154,13 +171,24 @@ class TestCoretaxBupot21(YamlTransactionCase):
         )
 
     def test_format_number(self):
-        """Integer-valued numbers are rendered without a trailing ``.0``."""
+        """Integer-valued numbers are rendered without a trailing ``.0``.
+
+        Pure Python — trigger P1 (L-01: ``_coretax_format_number`` is a
+        private helper whose return value ``action: call`` would discard).
+        """
         self.assertEqual(self.batch._coretax_format_number(40000000.0), "40000000")
         self.assertEqual(self.batch._coretax_format_number(5.5), "5.5")
 
     def test_only_taxed_employee_exported(self):
         """Only payslips whose withheld PPh 21 is greater than zero are
-        included, and the header/slip fields are mapped to the BPMP schema."""
+        included, and the header/slip fields are mapped to the BPMP schema.
+
+        Pure Python — trigger P1 (L-01: ``_prepare_coretax_bupot_21_values``
+        is a private helper that returns a plain ``dict``, which
+        ``action: call`` would discard; L-02: YAML's assert "actual" side is
+        always a dotted ``getattr`` on a registry record, not on a returned
+        ``dict``, so the nested ``slips`` list could not be inspected).
+        """
         values = self.batch._prepare_coretax_bupot_21_values(
             self.bruto_rule, self.pph_rule
         )
@@ -196,19 +224,36 @@ class TestCoretaxBupot21(YamlTransactionCase):
         self.assertEqual(slip["rate"], self.batch._coretax_format_number(expected_rate))
 
     def test_missing_employee_npwp_raises(self):
-        """A taxed employee without NPWP/PTKP must raise a user error."""
+        """A taxed employee without NPWP/PTKP must raise a user error.
+
+        Pure Python — trigger P1 (L-01: this exercises the error path of
+        the same private, non-record-persisting
+        ``_prepare_coretax_bupot_21_values`` helper covered by
+        ``test_only_taxed_employee_exported``; there is no wizard/action
+        call site YAML could bind to for a helper with this signature).
+        """
         self.partner_taxed.write({"vat": False})
         with self.assertRaises(UserError):
             self.batch._prepare_coretax_bupot_21_values(self.bruto_rule, self.pph_rule)
 
     def test_missing_company_identity_raises(self):
-        """A withholder company without NPWP/NITKU must raise a user error."""
+        """A withholder company without NPWP/NITKU must raise a user error.
+
+        Pure Python — trigger P1 (L-01: same private, non-record-persisting
+        ``_prepare_coretax_bupot_21_values`` helper as
+        ``test_only_taxed_employee_exported``, exercised on its error path).
+        """
         self.company.partner_id.write({"nitku": False})
         with self.assertRaises(UserError):
             self.batch._prepare_coretax_bupot_21_values(self.bruto_rule, self.pph_rule)
 
     def test_no_taxed_payslip_raises(self):
-        """A batch where no payslip has PPh 21 withheld must raise an error."""
+        """A batch where no payslip has PPh 21 withheld must raise an error.
+
+        Pure Python — trigger P1 (L-01: same private, non-record-persisting
+        ``_prepare_coretax_bupot_21_values`` helper as
+        ``test_only_taxed_employee_exported``, exercised on its error path).
+        """
         self.payslip_taxed.line_ids.filtered(
             lambda line: line.rule_id == self.pph_rule
         ).write({"amount": 0.0})

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="hr_payslip_batch_coretax_export_user_access" model="ir.model.access">
+        <field name="name">hr_payslip_batch_coretax_export - user</field>
+        <field name="model_id" ref="model_hr_payslip_batch_coretax_export" />
+        <!-- The wizard does not create a transaction object of its own —
+             it only triggers a report download for an existing
+             hr.payslip_batch — so the group is the one that operates that
+             model's data (10-wizard.md §4). -->
+        <field name="group_id" ref="ssi_hr_payroll_batch.hr_payslip_batch_user_group" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+</odoo>

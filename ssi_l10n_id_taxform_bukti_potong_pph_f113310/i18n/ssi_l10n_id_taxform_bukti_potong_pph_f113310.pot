@@ -241,13 +241,13 @@ msgid "Bukti Potong PPh 4(2) f.1.1.33.10 Out Line"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113310
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113310/models/bukti_potong_pph_f113310_in.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113310/models/l10n_id_bukti_potong_pph_f113310_in.py:0
 #, python-format
 msgid "Bukti Potong PPh 4(2) f113310 In type hasn't defined"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113310
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113310/models/bukti_potong_pph_f113310_out.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113310/models/l10n_id_bukti_potong_pph_f113310_out.py:0
 #, python-format
 msgid "Bukti Potong PPh 4(2) f113310 Out type hasn't defined"
 msgstr ""

@@ -8,23 +8,39 @@ from odoo.exceptions import Warning as UserError
 from odoo.addons.ssi_decorator import ssi_decorator
 
 
-class BuktiPotongPPhf113308Out(models.Model):
-    _name = "l10n_id.bukti_potong_pph_f113308_out"
+class L10nIdBuktiPotongPphF113308In(models.Model):
+    """Indonesia's PPh 26 incoming withholding slip, form f.1.1.33.08.
+
+    Records incoming (received by the company) tax withholding through
+    the standard confirm/approve/done workflow, then generates the
+    related journal entry once the document is done.
+    """
+
+    _name = "l10n_id.bukti_potong_pph_f113308_in"
     _inherit = "l10n_id.bukti_potong_pph_mixin"
-    _description = "Bukti Potong PPh 26 (f.1.1.33.08) Out"
+    _description = "Bukti Potong PPh 26 (f.1.1.33.08) In"
 
     def _get_type_id(self):
+        """Look up this module's ``l10n_id.bukti_potong_pph_type`` record.
+
+        :return: id of the "f113308 In" form type
+        :raises UserError: when the type record has not been loaded
+        """
         type_id = self.env.ref(
             "ssi_l10n_id_taxform_bukti_potong_pph_f113308."
-            "bukti_potong_pph_type_f113308_out"
+            "bukti_potong_pph_type_f113308_in"
         )
         if not type_id.id:
-            err_msg = _("Bukti Potong PPh 26 f113308 Out type hasn't defined")
+            err_msg = _("Bukti Potong PPh 26 f113308 In type hasn't defined")
             raise UserError(err_msg)
         return type_id.id
 
     @api.model
     def _default_type_id(self):
+        """Return the default ``type_id`` value.
+
+        :return: id of the "f113308 In" form type
+        """
         return self._get_type_id()
 
     type_id = fields.Many2one(
@@ -32,7 +48,7 @@ class BuktiPotongPPhf113308Out(models.Model):
     )
 
     line_ids = fields.One2many(
-        comodel_name="l10n_id.bukti_potong_pph_f113308_out_line",
+        comodel_name="l10n_id.bukti_potong_pph_f113308_in_line",
     )
 
     @ssi_decorator.insert_on_form_view()

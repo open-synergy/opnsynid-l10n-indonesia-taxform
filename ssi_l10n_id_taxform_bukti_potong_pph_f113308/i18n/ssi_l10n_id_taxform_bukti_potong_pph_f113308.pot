@@ -191,11 +191,6 @@ msgid "Bukti Potong Line"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113308
-#: model:ir.actions.act_window,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.bukti_potong_pph_f113308_out_action
-msgid "Bukti Potong PPh 22 (f.1.1.33.08) Out"
-msgstr ""
-
-#. module: ssi_l10n_id_taxform_bukti_potong_pph_f113308
 #: model:ir.actions.act_window,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.bukti_potong_pph_f113308_in_action
 #: model:ir.actions.act_window,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.bukti_potong_pph_type_f113308_in_action
 #: model:ir.model,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.model_l10n_id_bukti_potong_pph_f113308_in
@@ -212,6 +207,7 @@ msgid "Bukti Potong PPh 26 (f.1.1.33.08) In Line"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113308
+#: model:ir.actions.act_window,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.bukti_potong_pph_f113308_out_action
 #: model:ir.actions.act_window,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.bukti_potong_pph_type_f113308_out_action
 #: model:ir.model,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.model_l10n_id_bukti_potong_pph_f113308_out
 #: model:ir.module.category,name:ssi_l10n_id_taxform_bukti_potong_pph_f113308.l10n_id_bukti_potong_pph_f113308_out_data_ownership_module_category
@@ -237,13 +233,13 @@ msgid "Bukti Potong PPh 26 Out"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113308
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113308/models/bukti_potong_pph_f113308_in.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113308/models/l10n_id_bukti_potong_pph_f113308_in.py:0
 #, python-format
 msgid "Bukti Potong PPh 26 f113308 In type hasn't defined"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113308
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113308/models/bukti_potong_pph_f113308_out.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_f113308/models/l10n_id_bukti_potong_pph_f113308_out.py:0
 #, python-format
 msgid "Bukti Potong PPh 26 f113308 Out type hasn't defined"
 msgstr ""

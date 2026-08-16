@@ -5,7 +5,7 @@
 {
     "name": "Indonesia - Bukti Potong PPh 4(2) (f.1.1.33.10)"
     " - Operating Unit Integration",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "AGPL-3",

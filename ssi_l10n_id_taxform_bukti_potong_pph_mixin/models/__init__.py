@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from . import (
-    bukti_potong_pph_type,
-    bukti_potong_pph_mixin,
-    bukti_potong_pph_line_mixin,
+    l10n_id_bukti_potong_pph_type,
+    l10n_id_bukti_potong_pph_mixin,
+    l10n_id_bukti_potong_pph_line_mixin,
 )

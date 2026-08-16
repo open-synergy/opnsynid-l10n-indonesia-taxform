@@ -6,7 +6,18 @@ from odoo import api, fields, models
 from odoo.tools.translate import _
 
 
-class BuktiPotongPPhLineMixin(models.AbstractModel):
+class L10nIdBuktiPotongPphLineMixin(models.AbstractModel):
+    """Abstract mixin for a Bukti Potong PPh withholding line.
+
+    Provides the tax line behaviour shared by every concrete Bukti
+    Potong PPh document: pairing the withheld ``account.move.line``
+    with its source income move line, computing the withheld amount
+    and tax, and building the accounting entry lines (``account.move.
+    line``) that record the withholding on ``action_done``. Concrete
+    transactional models inherit this mixin and add the ``bukti_
+    potong_id`` inverse relation via their own ``line_ids`` field.
+    """
+
     _name = "l10n_id.bukti_potong_pph_line_mixin"
     _description = "Bukti Potong PPh Line Mixin"
     _order = "sequence, id"
@@ -19,6 +30,15 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         "manual_amount",
     )
     def _compute_amount(self):
+        """Compute the withheld amount and the resulting tax amount.
+
+        When ``amount_computation_method`` is ``auto`` the amount is
+        summed from ``income_move_line_ids`` (credit side for
+        ``direction == "in"``, debit side otherwise). When it is
+        ``manual`` the amount is taken from ``manual_amount``. The
+        tax amount is then derived by applying ``tax_id`` on the
+        resulting amount.
+        """
         for line in self:
             line.amount = line.amount_tax = 0.0
             if line.amount_computation_method == "auto":
@@ -72,6 +92,13 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         "move_line_id",
     )
     def _compute_allowed_income_move_line_ids(self):
+        """Restrict the income move lines selectable for this line.
+
+        Only ``account.move.line`` records that belong to the same
+        journal entry as ``move_line_id`` (excluding itself) are
+        allowed, so the user can only pick income lines that actually
+        originate from the same accounting document.
+        """
         AML = self.env["account.move.line"]
         for record in self:
             result = []
@@ -135,6 +162,17 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
             self.name = name
 
     def _create_aml(self):
+        """Create the debit/credit tax accounting entry lines.
+
+        Builds one debit and one credit ``account.move.line`` for the
+        withheld tax amount and pairs them with ``move_line_id`` so
+        they can later be reconciled together.
+
+        :return: the recordset of move lines to reconcile (the source
+            ``move_line_id`` plus whichever created line is on the
+            opposite side), or ``False`` when the direction is
+            unknown
+        """
         self.ensure_one()
         AML = self.env["account.move.line"]
         pair = False
@@ -148,6 +186,15 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         return pair
 
     def _pair_aml(self, debit_aml, credit_aml):
+        """Select which created line reconciles with ``move_line_id``.
+
+        :param debit_aml: the ``account.move.line`` created on the
+            debit side
+        :param credit_aml: the ``account.move.line`` created on the
+            credit side
+        :return: recordset combining ``move_line_id`` with the created
+            line on the opposite side of the document direction
+        """
         self.ensure_one()
         result = False
 
@@ -165,6 +212,18 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         credit,
         partner_id=False,
     ):
+        """Build the values for one ``account.move.line``.
+
+        Extension point shared by both the debit and credit tax entry
+        preparation methods.
+
+        :param account_id: id of the ``account.account`` to post to
+        :param debit: debit amount
+        :param credit: credit amount
+        :param partner_id: id of the ``res.partner`` on the line, if
+            any
+        :return: dict of ``account.move.line`` values
+        """
         result = {
             "name": self.name,
             "account_id": account_id,
@@ -176,6 +235,14 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         return result
 
     def _get_debit_account(self):
+        """Resolve the account for the debit tax entry line.
+
+        For direction ``in`` the tax account (``_select_tax_account``)
+        is used; otherwise the account of the source move line is
+        used.
+
+        :return: an ``account.account`` record
+        """
         self.ensure_one()
         result = False
         if self.bukti_potong_id.direction == "in":
@@ -185,6 +252,14 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         return result
 
     def _get_credit_account(self):
+        """Resolve the account for the credit tax entry line.
+
+        For direction ``out`` the tax account (``_select_tax_account``)
+        is used; otherwise the account of the source move line is
+        used.
+
+        :return: an ``account.account`` record
+        """
         self.ensure_one()
         result = False
         if self.bukti_potong_id.direction == "out":
@@ -194,6 +269,13 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         return result
 
     def _get_debit_partner(self):
+        """Resolve the partner for the debit tax entry line.
+
+        For direction ``in`` the document's ``kpp_id`` (tax office) is
+        used; otherwise the partner of the source move line is used.
+
+        :return: a ``res.partner`` record, or ``False``
+        """
         self.ensure_one()
         result = False
         if self.bukti_potong_id.direction == "in":
@@ -203,6 +285,14 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         return result
 
     def _get_credit_partner(self):
+        """Resolve the partner for the credit tax entry line.
+
+        For direction ``out`` the document's ``kpp_id`` (tax office)
+        is used; otherwise the partner of the source move line is
+        used.
+
+        :return: a ``res.partner`` record, or ``False``
+        """
         self.ensure_one()
         result = False
         if self.bukti_potong_id.direction == "out":
@@ -212,6 +302,10 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         return result
 
     def _prepare_tax_debit_aml_data(self):
+        """Build the values for the debit tax entry line.
+
+        :return: dict of ``account.move.line`` values
+        """
         self.ensure_one()
         account = self._get_debit_account()
         partner = self._get_debit_partner()
@@ -223,6 +317,10 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         )
 
     def _prepare_tax_credit_aml_data(self):
+        """Build the values for the credit tax entry line.
+
+        :return: dict of ``account.move.line`` values
+        """
         self.ensure_one()
         account = self._get_credit_account()
         partner = self._get_credit_partner()
@@ -234,6 +332,15 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
         )
 
     def _select_tax_account(self):
+        """Resolve the tax account configured on ``tax_id``.
+
+        Reads the invoice repartition line's account, which is used
+        as the counterpart account for the withheld tax.
+
+        :return: an ``account.account`` record
+        :raises UserWarning: when ``tax_id`` has no invoice
+            repartition line configured
+        """
         self.ensure_one()
         tax = self.tax_id
         if tax.invoice_repartition_line_ids:

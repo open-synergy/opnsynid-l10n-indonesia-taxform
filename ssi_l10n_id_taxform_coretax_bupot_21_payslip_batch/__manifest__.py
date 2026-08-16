@@ -19,13 +19,15 @@
         "ssi_hr_payroll_batch",
         "ssi_l10n_id_taxform_pph_21_payslip",
         "report_xml",
+        "web_tour",
     ],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir_model_access/hr_payslip_batch_coretax_export.xml",
         "reports/coretax_bupot_21_report.xml",
         "reports/coretax_bupot_21_template.xml",
         "wizards/payslip_batch_coretax_export_views.xml",
         "views/hr_payslip_batch_views.xml",
+        "views/assets.xml",
     ],
     "demo": [],
 }

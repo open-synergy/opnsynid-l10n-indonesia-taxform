@@ -5,8 +5,16 @@
 from odoo import fields, models
 
 
-class PayslipBatchCoretaxExport(models.TransientModel):
-    _name = "hr.payslip_batch_coretax_export"
+class HrPayslipBatchCoretaxExport(models.TransientModel):
+    """Collect the two salary rules and export the Coretax BPMP XML.
+
+    Opened from the ``hr.payslip_batch`` Export Coretax PPh 21 XML button,
+    this wizard asks which salary rule holds the gross income and which one
+    holds the withheld PPh 21, then triggers the ``bpmp`` report download
+    for the batch.
+    """
+
+    _name = "hr_payslip_batch_coretax_export"
     _description = "Export Coretax PPh 21 Withholding XML"
 
     batch_id = fields.Many2one(
@@ -33,6 +41,15 @@ class PayslipBatchCoretaxExport(models.TransientModel):
     )
 
     def action_export(self):
+        """Validate the batch data, then trigger the Coretax XML download.
+
+        :return: an ``ir.actions.report`` dict rendering the ``bpmp``
+            report for ``batch_id``
+        :raises odoo.exceptions.UserError: when the withholder company or a
+            taxed employee is missing required data, or no payslip in the
+            batch has PPh 21 withheld (raised by
+            ``hr.payslip_batch._prepare_coretax_bupot_21_values``)
+        """
         self.ensure_one()
         # Validate the data up front so configuration problems surface as a
         # clean user error instead of a download failure.

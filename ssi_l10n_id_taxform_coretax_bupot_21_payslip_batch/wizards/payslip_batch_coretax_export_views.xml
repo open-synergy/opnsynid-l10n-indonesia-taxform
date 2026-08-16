@@ -4,8 +4,8 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <record id="payslip_batch_coretax_export_view_form" model="ir.ui.view">
-        <field name="name">hr.payslip_batch_coretax_export form</field>
-        <field name="model">hr.payslip_batch_coretax_export</field>
+        <field name="name">hr_payslip_batch_coretax_export form</field>
+        <field name="model">hr_payslip_batch_coretax_export</field>
         <field name="arch" type="xml">
             <form string="Export Coretax PPh 21 Withholding XML">
                 <group>
@@ -35,7 +35,7 @@
 
     <record id="payslip_batch_coretax_export_action" model="ir.actions.act_window">
         <field name="name">Export Coretax PPh 21 XML</field>
-        <field name="res_model">hr.payslip_batch_coretax_export</field>
+        <field name="res_model">hr_payslip_batch_coretax_export</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>

@@ -16,6 +16,14 @@ CORETAX_TAX_CERTIFICATE = "N/A"
 
 
 class HrPayslipBatch(models.Model):
+    """Add Coretax PPh 21 BPMP XML export helpers to the payslip batch.
+
+    Builds the rendering context consumed by the Coretax BPMP XML report
+    (``report.ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch.bpmp``):
+    the withholder header plus one slip per payslip whose withheld PPh 21
+    is greater than zero.
+    """
+
     _inherit = "hr.payslip_batch"
 
     def _coretax_format_number(self, value):

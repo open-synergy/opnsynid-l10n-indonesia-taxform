@@ -15,6 +15,12 @@ The XML only contains employees who are actually subject to PPh 21 (the selected
 withheld PPh 21 salary rule is greater than zero).
 
 
+Work Instruction
+================
+
+* `Export Coretax PPh 21 XML of Employee Payslip Batch <docs/hr_payslip_batch/20-export-coretax.html>`_
+
+
 Installation
 ============
 

@@ -332,7 +332,7 @@ msgid "Created on"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/bukti_potong_pph_mixin.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/l10n_id_bukti_potong_pph_mixin.py:0
 #, python-format
 msgid "Credit diff. account not defined"
 msgstr ""
@@ -344,7 +344,7 @@ msgid "Date"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/bukti_potong_pph_mixin.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/l10n_id_bukti_potong_pph_mixin.py:0
 #, python-format
 msgid "Debit diff. account not defined"
 msgstr ""
@@ -695,7 +695,7 @@ msgid "Pemotong Pajak"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/bukti_potong_pph_line_mixin.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/l10n_id_bukti_potong_pph_line_mixin.py:0
 #, python-format
 msgid "Please configure invoice tax account for %s"
 msgstr ""
@@ -830,7 +830,7 @@ msgid "Total Tax Diff."
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
-#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/bukti_potong_pph_mixin.py:0
+#: code:addons/ssi_l10n_id_taxform_bukti_potong_pph_mixin/models/l10n_id_bukti_potong_pph_mixin.py:0
 #, python-format
 msgid "Total tax has to be greater than 0"
 msgstr ""

@@ -50,9 +50,7 @@ class TestActionComputeTaxFakturPajakKeluaran(YamlTransactionCase):
         in the first place).
         """
         revenue_type = self.env.ref("account.data_account_type_revenue")
-        liability_type = self.env.ref(
-            "account.data_account_type_current_liabilities"
-        )
+        liability_type = self.env.ref("account.data_account_type_current_liabilities")
         income_account = self.env["account.account"].create(
             {
                 "code": "FPKVAL1",
@@ -126,21 +124,34 @@ class TestActionComputeTaxFakturPajakKeluaran(YamlTransactionCase):
         partner = self.env["res.partner"].create(
             {"name": "Test Tax Validation FPK Partner", "is_company": True}
         )
+        # `klikpajak_backend_id` is required once
+        # `ssi_l10n_id_taxform_faktur_pajak_klipajak` (a sibling addon in
+        # this same repo) is installed -- which `oca_install_addons`
+        # always does in CI. `hasattr` keeps this test passing locally
+        # too, where that addon is not installed and the field does not
+        # exist on the model at all.
+        fpk_vals = {
+            "type_id": fp_type_restricted.id,
+            "tax_id": tax_12.id,
+            "partner_id": partner.id,
+            "date": "2026-01-15",
+            "efaktur_mode": "detail",
+        }
+        if "klikpajak_backend_id" in self.env["faktur_pajak_keluaran"]._fields:
+            klikpajak_backend = self.env["klikpajak_backend"].create(
+                {
+                    "name": "Test Tax Validation FPK Klikpajak Backend",
+                    "code": "/",
+                    "base_url": "https://example.test",
+                }
+            )
+            fpk_vals["klikpajak_backend_id"] = klikpajak_backend.id
 
-        fpk = self.env["faktur_pajak_keluaran"].create(
-            {
-                "type_id": fp_type_restricted.id,
-                "tax_id": tax_12.id,
-                "partner_id": partner.id,
-                "date": "2026-01-15",
-                "efaktur_mode": "detail",
-            }
-        )
+        fpk = self.env["faktur_pajak_keluaran"].create(fpk_vals)
         self.assertEqual(
             fpk.tax_id,
             tax_12,
-            "the allowed header tax must be accepted for the restricted "
-            "type",
+            "the allowed header tax must be accepted for the restricted " "type",
         )
 
         with self.assertRaises(ValidationError):

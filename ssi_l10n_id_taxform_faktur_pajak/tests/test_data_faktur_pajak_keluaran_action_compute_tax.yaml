@@ -125,6 +125,23 @@ scenarios:
             env['res.partner'].search_count([])"
           is_company: true
 
+      # `klikpajak_backend_id` is required on `faktur_pajak_keluaran` once
+      # `ssi_l10n_id_taxform_faktur_pajak_klipajak` (a sibling addon in
+      # this same repo) is installed -- which `oca_install_addons` always
+      # does in CI (it installs every addon in the repo together, not
+      # just this one's declared dependencies). Created unconditionally
+      # here to match what CI actually tests against.
+      - step: "Create klikpajak backend"
+        action: "create"
+        model: "klikpajak_backend"
+        save_as: "klikpajak_backend"
+        values:
+          name:
+            "EVAL: 'Test Compute Tax FPK Klikpajak Backend %d' %
+            env['klikpajak_backend'].search_count([])"
+          code: "/"
+          base_url: "https://example.test"
+
       - step: "Create Faktur Pajak Keluaran draft"
         action: "create"
         model: "faktur_pajak_keluaran"
@@ -134,6 +151,7 @@ scenarios:
           type_id: "EVAL: registry['fp_type_open'].id"
           tax_id: "EVAL: registry['tax_12'].id"
           partner_id: "EVAL: registry['partner'].id"
+          klikpajak_backend_id: "EVAL: registry['klikpajak_backend'].id"
           date: 2026-01-15
           efaktur_mode: "detail"
 
@@ -239,8 +257,8 @@ scenarios:
               - - "EVAL: registry['tax_11'].id"
 
       - step:
-          "Before Compute Tax runs again, the header summary is still
-          stale -- reproduces the reported bug"
+          "Before Compute Tax runs again, the header summary is still stale --
+          reproduces the reported bug"
         action: "assert"
         target: "fpk"
         asserts:
@@ -262,8 +280,8 @@ scenarios:
         as_user: "base.user_admin"
 
       - step:
-          "FIX: the header summary now splits into one line per tax and
-          reflects the corrected 11% line"
+          "FIX: the header summary now splits into one line per tax and reflects the
+          corrected 11% line"
         action: "assert"
         target: "fpk"
         asserts:
@@ -347,6 +365,7 @@ scenarios:
           type_id: "EVAL: registry['fp_type_open'].id"
           tax_id: "EVAL: registry['tax_11'].id"
           partner_id: "EVAL: registry['partner'].id"
+          klikpajak_backend_id: "EVAL: registry['klikpajak_backend'].id"
           date: 2026-01-15
           efaktur_mode: "detail"
 
@@ -367,8 +386,8 @@ scenarios:
               - - "EVAL: registry['tax_11'].id"
 
       - step:
-          "Before confirm, Compute Tax was never called -- the tax
-          summary is still empty"
+          "Before confirm, Compute Tax was never called -- the tax summary is still
+          empty"
         action: "assert"
         target: "fpk_confirm"
         asserts:
@@ -394,8 +413,7 @@ scenarios:
             expected: "confirm"
 
       - step:
-          "FIX: the pre_confirm_action hook recomputed the tax summary
-          automatically"
+          "FIX: the pre_confirm_action hook recomputed the tax summary automatically"
         action: "assert"
         target: "fpk_confirm"
         asserts:

@@ -986,6 +986,11 @@ msgid ""
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.faktur_pajak_keluaran_view_form
+msgid "Compute Tax"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.create_faktur_pajak_keluaran_view_form
 msgid "Confirm"
 msgstr ""
@@ -1058,6 +1063,11 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak
 #: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.faktur_pajak_keluaran_view_form
 msgid "DPP"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_faktur_pajak.faktur_pajak_keluaran_view_form
+msgid "DPP NILAI LAINNYA"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
@@ -1852,6 +1862,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__efaktur_of_dpp
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran_detail__efaktur_of_dpp
 msgid "OF_DPP"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran__efaktur_of_dpp_lain
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran_detail__efaktur_of_dpp_lain
+msgid "OF_DPP_LAIN"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak

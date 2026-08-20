@@ -35,7 +35,7 @@
                                 <Qty t-esc="detail.efaktur_of_jumlah_barang" />
                                 <TotalDiscount t-esc="detail.efaktur_of_diskon" />
                                 <TaxBase t-esc="detail.efaktur_of_dpp" />
-                                <OtherTaxBase t-esc="detail.efaktur_of_dpp" />
+                                <OtherTaxBase t-esc="detail.efaktur_of_dpp_lain" />
                                 <VATRate>12</VATRate>
                                 <VAT t-esc="detail.efaktur_of_ppn" />
                                 <STLGRate>0</STLGRate>
@@ -52,7 +52,7 @@
                                 <Qty t-esc="doc.efaktur_of_jumlah_barang" />
                                 <TotalDiscount t-esc="doc.efaktur_of_diskon" />
                                 <TaxBase t-esc="doc.efaktur_of_dpp" />
-                                <OtherTaxBase t-esc="doc.efaktur_of_dpp" />
+                                <OtherTaxBase t-esc="doc.efaktur_of_dpp_lain" />
                                 <VATRate>12</VATRate>
                                 <VAT t-esc="doc.efaktur_of_ppn" />
                                 <STLGRate>0</STLGRate>

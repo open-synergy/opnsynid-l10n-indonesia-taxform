@@ -260,6 +260,10 @@
                                                 string="DISKON"
                                             />
                                         <field name="efaktur_of_dpp" string="DPP" />
+                                        <field
+                                                name="efaktur_of_dpp_lain"
+                                                string="DPP NILAI LAINNYA"
+                                            />
                                         <field name="efaktur_of_ppn" string="PPN" />
                                     </group>
                                 </page>
@@ -352,6 +356,7 @@
                         <field name="efaktur_of_harga_total" string="HARGA_TOTAL" />
                         <field name="efaktur_of_diskon" string="DISKON" />
                         <field name="efaktur_of_dpp" string="DPP" />
+                        <field name="efaktur_of_dpp_lain" string="DPP NILAI LAINNYA" />
                         <field name="efaktur_of_ppn" string="PPN" />
                     </group>
                 </page>

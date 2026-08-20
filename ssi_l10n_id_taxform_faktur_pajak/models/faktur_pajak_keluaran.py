@@ -812,6 +812,26 @@ class FakturPajakKeluaran(models.Model):
     )
 
     @api.depends("amount_tax")
+    def _compute_efaktur_of_dpp_lain(self):
+        """Back-compute the Coretax "OtherTaxBase" from the header VAT.
+
+        Header-level counterpart of
+        ``faktur_pajak_keluaran_detail._compute_efaktur_of_dpp_lain``,
+        used when ``efaktur_mode == 'header'``. See that method's
+        docstring for why the VAT is divided back by the rate instead
+        of reading the tax scheme's adjusted base directly.
+        """
+        for record in self:
+            record.efaktur_of_dpp_lain = str(int(record.amount_tax / 0.12))
+
+    efaktur_of_dpp_lain = fields.Char(
+        string="OF_DPP_LAIN",
+        compute="_compute_efaktur_of_dpp_lain",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends("amount_tax")
     def _compute_efaktur_of_ppn(self):
         for record in self:
             record.efaktur_of_ppn = str(int(round(record.amount_tax)))
@@ -1106,6 +1126,7 @@ class FakturPajakKeluaran(models.Model):
             record._compute_efaktur_of_harga_total()
             record._compute_efaktur_of_diskon()
             record._compute_efaktur_of_dpp()
+            record._compute_efaktur_of_dpp_lain()
             record._compute_efaktur_of_ppn()
 
         return {

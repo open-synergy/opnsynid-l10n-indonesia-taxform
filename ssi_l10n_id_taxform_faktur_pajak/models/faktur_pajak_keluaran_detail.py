@@ -155,6 +155,29 @@ transaction type %s
     )
 
     @api.depends("price_tax")
+    def _compute_efaktur_of_dpp_lain(self):
+        """Back-compute the Coretax "OtherTaxBase" from the line's VAT.
+
+        For a "DPP Nilai Lain" tax (e.g. ``DPP = 11/12 * price_unit *
+        quantity``, ``PPN = DPP * 0.12``), the adjusted base is not
+        exposed by any stored field -- it only exists as a local
+        variable inside the tax's ``python_compute`` snippet. Dividing
+        ``price_tax`` back by the VAT rate recovers it without needing
+        to detect which tax scheme is in use: for a regular tax the
+        result trivially equals ``efaktur_of_dpp`` too, since there
+        ``DPP == TaxBase``.
+        """
+        for record in self:
+            record.efaktur_of_dpp_lain = str(int(record.price_tax / 0.12))
+
+    efaktur_of_dpp_lain = fields.Char(
+        string="OF_DPP_LAIN",
+        compute="_compute_efaktur_of_dpp_lain",
+        store=True,
+        compute_sudo=True,
+    )
+
+    @api.depends("price_tax")
     def _compute_efaktur_of_ppn(self):
         for record in self:
             record.efaktur_of_ppn = str(int(record.price_tax))

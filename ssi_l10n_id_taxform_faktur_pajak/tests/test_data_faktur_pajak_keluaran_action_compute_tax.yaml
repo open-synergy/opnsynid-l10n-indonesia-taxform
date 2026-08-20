@@ -142,6 +142,24 @@ scenarios:
           code: "/"
           base_url: "https://example.test"
 
+      # `faktur_pajak_keluaran._compute_taxform_period` calls
+      # `l10n_id.tax_period._find_period(date)` on every create -- and
+      # that raises if no period record covers the date. Our local
+      # `devel` DB is a production-like restore with tax periods for
+      # almost every date, which masked this; CI's clean test DB has
+      # none. Created explicitly (no `l10n_id.tax_year` needed --
+      # `year_id` on `l10n_id.tax_period` is optional) to cover every
+      # FPK date used below (2026-01-15).
+      - step: "Create tax period covering 2026-01-15"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "Test Compute Tax FPK Period 01/2026"
+          code: "/"
+          date_start: 2026-01-01
+          date_end: 2026-01-31
+
       - step: "Create Faktur Pajak Keluaran draft"
         action: "create"
         model: "faktur_pajak_keluaran"

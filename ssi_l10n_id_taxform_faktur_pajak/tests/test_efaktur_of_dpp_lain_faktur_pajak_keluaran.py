@@ -110,6 +110,19 @@ class TestEfakturOfDppLainFakturPajakKeluaran(YamlTransactionCase):
         partner = self.env["res.partner"].create(
             {"name": "Test Report DPP Lain FPK Partner", "is_company": True}
         )
+        # `_compute_taxform_period` calls `l10n_id.tax_period._find_period`
+        # on every create, which raises if no period covers the date. Our
+        # local `devel` DB is a production-like restore with periods for
+        # almost every date, which masked this; CI's clean test DB has
+        # none, so it is created explicitly here for every environment.
+        self.env["l10n_id.tax_period"].create(
+            {
+                "name": "Test Report DPP Lain FPK Period 01/2026",
+                "code": "/",
+                "date_start": "2026-01-01",
+                "date_end": "2026-01-31",
+            }
+        )
         # `klikpajak_backend_id` is required once
         # `ssi_l10n_id_taxform_faktur_pajak_klipajak` (a sibling addon in
         # this same repo) is installed -- which `oca_install_addons`

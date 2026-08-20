@@ -1,0 +1,411 @@
+scenarios:
+  - name: "Compute Tax recalculates tax and pre_confirm_action auto-recomputes"
+    steps:
+      - step: "Get revenue account type"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "revenue_acc_type"
+
+      - step: "Get current liabilities account type"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "liability_acc_type"
+
+      - step: "Create income account"
+        action: "create"
+        model: "account.account"
+        save_as: "income_account"
+        values:
+          code: "EVAL: 'FPKCTI%d' % env['account.account'].search_count([])"
+          name: "Test Compute Tax FPK Income"
+          user_type_id: "EVAL: registry['revenue_acc_type'].id"
+
+      - step: "Create tax account"
+        action: "create"
+        model: "account.account"
+        save_as: "tax_account"
+        values:
+          code: "EVAL: 'FPKCTT%d' % env['account.account'].search_count([])"
+          name: "Test Compute Tax FPK VAT Payable"
+          user_type_id: "EVAL: registry['liability_acc_type'].id"
+
+      # `account_id` on the tax's own "tax" repartition line is what ends
+      # up populating `faktur_pajak_keluaran_tax.account_id`
+      # (required=True) when `action_compute_tax` calls
+      # `_recompute_standard_tax()` -- without it, `compute_all()` returns
+      # no account and the auto-created tax row violates the NOT NULL
+      # constraint.
+      - step: "Create a 12% output VAT (exclude)"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax_12"
+        values:
+          name:
+            "EVAL: 'Test Compute Tax FPK VAT 12pct %d' %
+            env['account.tax'].search_count([])"
+          amount_type: "percent"
+          amount: 12.0
+          type_tax_use: "sale"
+          price_include: false
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+          refund_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+
+      - step: "Create an 11% output VAT (exclude)"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax_11"
+        values:
+          name:
+            "EVAL: 'Test Compute Tax FPK VAT 11pct %d' %
+            env['account.tax'].search_count([])"
+          amount_type: "percent"
+          amount: 11.0
+          type_tax_use: "sale"
+          price_include: false
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+          refund_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+
+      - step: "Create an unrestricted transaction type (default tax domain)"
+        action: "create"
+        model: "faktur_pajak_transaction_type"
+        save_as: "fp_type_open"
+        values:
+          name:
+            "EVAL: 'Test Compute Tax FPK Type Open %d' %
+            env['faktur_pajak_transaction_type'].search_count([])"
+          code: "/"
+          efaktur_mode: "detail"
+          fpk_journal_selection_method: "domain"
+          tax_id: "EVAL: registry['tax_12'].id"
+
+      - step: "Create customer partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        as_user: "base.user_admin"
+        values:
+          name:
+            "EVAL: 'Test Compute Tax FPK Partner %d' %
+            env['res.partner'].search_count([])"
+          is_company: true
+
+      - step: "Create Faktur Pajak Keluaran draft"
+        action: "create"
+        model: "faktur_pajak_keluaran"
+        save_as: "fpk"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['fp_type_open'].id"
+          tax_id: "EVAL: registry['tax_12'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          date: 2026-01-15
+          efaktur_mode: "detail"
+
+      - step: "Create first detail line taxed at 12%"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_1"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk'].id"
+          name: "Test Compute Tax FPK Line 1"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 1000000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_12'].id"
+
+      - step: "Create second detail line taxed at 12%"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_2"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk'].id"
+          name: "Test Compute Tax FPK Line 2"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 1000000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_12'].id"
+
+      - step: "No tax summary line exists before Compute Tax is called"
+        action: "assert"
+        target: "fpk"
+        asserts:
+          tax_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+          amount_untaxed:
+            type: "value"
+            expected: 2000000.0
+
+      - step: "Call action_compute_tax the first time"
+        action: "call"
+        target: "fpk"
+        method: "action_compute_tax"
+        as_user: "base.user_admin"
+
+      - step: "One merged tax summary line is created for both 12% lines"
+        action: "assert"
+        target: "fpk"
+        asserts:
+          tax_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 1
+          amount_tax:
+            type: "value"
+            expected: 240000.0
+          amount_total:
+            type: "value"
+            expected: 2240000.0
+
+      - step: "Get the merged tax summary line"
+        action: "search"
+        model: "faktur_pajak_keluaran_tax"
+        domain:
+          - ["faktur_pajak_keluaran_id", "=", "EVAL: registry['fpk'].id"]
+        save_as: "tax_line_12"
+        expect_count: 1
+
+      - step: "The merged tax line matches both 12% detail lines"
+        action: "assert"
+        target: "tax_line_12"
+        asserts:
+          base_amount:
+            type: "value"
+            expected: 2000000.0
+          tax_amount:
+            type: "value"
+            expected: 240000.0
+
+      # This is the reported production bug, reproduced step by step: the
+      # user manually corrects one line's tax in the draft (e.g. to match
+      # the source invoice), and the header tax summary does not follow
+      # until Compute Tax is called again.
+      - step: "Manually correct the second line's tax to 11%"
+        action: "write"
+        target: "detail_2"
+        as_user: "base.user_admin"
+        values:
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_11'].id"
+
+      - step:
+          "Before Compute Tax runs again, the header summary is still
+          stale -- reproduces the reported bug"
+        action: "assert"
+        target: "fpk"
+        asserts:
+          tax_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 1
+          amount_tax:
+            type: "value"
+            expected: 240000.0
+          amount_untaxed:
+            type: "value"
+            expected: 2000000.0
+
+      - step: "Call action_compute_tax again after the manual correction"
+        action: "call"
+        target: "fpk"
+        method: "action_compute_tax"
+        as_user: "base.user_admin"
+
+      - step:
+          "FIX: the header summary now splits into one line per tax and
+          reflects the corrected 11% line"
+        action: "assert"
+        target: "fpk"
+        asserts:
+          tax_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 2
+          amount_tax:
+            type: "value"
+            expected: 230000.0
+          amount_untaxed:
+            type: "value"
+            expected: 2000000.0
+          amount_total:
+            type: "value"
+            expected: 2230000.0
+
+      - step: "Get the recomputed 12% tax summary line"
+        action: "search"
+        model: "faktur_pajak_keluaran_tax"
+        domain:
+          - ["faktur_pajak_keluaran_id", "=", "EVAL: registry['fpk'].id"]
+          - ["tax_id", "=", "EVAL: registry['tax_12'].id"]
+        save_as: "tax_line_12_after"
+        expect_count: 1
+
+      - step: "The 12% line still covers only the first detail line"
+        action: "assert"
+        target: "tax_line_12_after"
+        asserts:
+          base_amount:
+            type: "value"
+            expected: 1000000.0
+          tax_amount:
+            type: "value"
+            expected: 120000.0
+
+      - step: "Get the new 11% tax summary line"
+        action: "search"
+        model: "faktur_pajak_keluaran_tax"
+        domain:
+          - ["faktur_pajak_keluaran_id", "=", "EVAL: registry['fpk'].id"]
+          - ["tax_id", "=", "EVAL: registry['tax_11'].id"]
+        save_as: "tax_line_11"
+        expect_count: 1
+
+      - step: "The 11% line covers the corrected second detail line"
+        action: "assert"
+        target: "tax_line_11"
+        asserts:
+          base_amount:
+            type: "value"
+            expected: 1000000.0
+          tax_amount:
+            type: "value"
+            expected: 110000.0
+
+      - step: "Calling action_compute_tax again does not duplicate lines"
+        action: "call"
+        target: "fpk"
+        method: "action_compute_tax"
+        as_user: "base.user_admin"
+
+      - step: "Tax summary line count stays at two after recompute"
+        action: "assert"
+        target: "fpk"
+        asserts:
+          tax_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 2
+
+      # --- pre_confirm_action: recompute happens automatically before
+      # confirmation, even when Compute Tax was never clicked manually.
+      - step: "Create a second Faktur Pajak Keluaran draft"
+        action: "create"
+        model: "faktur_pajak_keluaran"
+        save_as: "fpk_confirm"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['fp_type_open'].id"
+          tax_id: "EVAL: registry['tax_11'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          date: 2026-01-15
+          efaktur_mode: "detail"
+
+      - step: "Create one detail line taxed at 11%"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_confirm"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk_confirm'].id"
+          name: "Test Compute Tax FPK Confirm Line"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 1000000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_11'].id"
+
+      - step:
+          "Before confirm, Compute Tax was never called -- the tax
+          summary is still empty"
+        action: "assert"
+        target: "fpk_confirm"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          tax_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+
+      - step: "Confirm without ever clicking Compute Tax"
+        action: "call"
+        target: "fpk_confirm"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step:
+          "FIX: the pre_confirm_action hook recomputed the tax summary
+          automatically"
+        action: "assert"
+        target: "fpk_confirm"
+        asserts:
+          tax_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 1
+          amount_tax:
+            type: "value"
+            expected: 110000.0
+          amount_total:
+            type: "value"
+            expected: 1110000.0

@@ -5,7 +5,7 @@
 import re
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 from odoo.addons.ssi_decorator import ssi_decorator
 
@@ -61,7 +61,6 @@ class FakturPajakKeluaran(models.Model):
         "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
         "%(ssi_transaction_cancel_mixin.base_select_terminate_reason_action)d",
         "action_restart",
-        "action_recompute_all_fields",
     ]
 
     # Attributes related to add element on search view automatically
@@ -1012,6 +1011,70 @@ class FakturPajakKeluaran(models.Model):
                     }
                     Detail.create(data)
         self._recompute_standard_tax()
+
+    def action_compute_tax(self):
+        """Recompute the header tax summary from the detail lines.
+
+        Public action bound to the "Compute Tax" button; delegates to
+        the accounting mixin's ``_recompute_standard_tax`` for each
+        record, so ``tax_ids``/``amount_tax`` reflect taxes edited
+        manually on ``detail_ids`` after the document was created or
+        reloaded.
+        """
+        for record in self.sudo():
+            record._recompute_standard_tax()
+
+    @ssi_decorator.pre_confirm_action()
+    def _01_compute_tax(self):
+        """Recompute the header tax summary before confirmation.
+
+        Runs as a ``pre_confirm_action`` hook so ``tax_ids`` reflects
+        the current detail lines even when the user forgot to click
+        "Compute Tax" after editing a line's tax manually.
+        """
+        self.ensure_one()
+        self._recompute_standard_tax()
+
+    @api.constrains(
+        "tax_id",
+        "type_id",
+    )
+    def _check_tax_allowed_by_type(self):
+        """Ensure the header tax is allowed by the transaction type.
+
+        Validates that ``tax_id`` belongs to ``allowed_fpk_tax_ids`` --
+        the whitelist computed from ``type_id`` (its
+        ``fpk_tax_selection_method``/``fpk_tax_ids``/``fpk_tax_domain``/
+        ``fpk_tax_python_code``). When a transaction type leaves the
+        whitelist unrestricted (computed result empty/``False``, e.g.
+        the default domain ``"[]"`` matches every ``account.tax``),
+        the check is skipped for that record instead of blocking
+        everything. The matching check for detail lines lives on
+        ``faktur_pajak_keluaran_detail`` -- Odoo's ``@api.constrains``
+        does not re-trigger a parent's constraint when a one2many
+        child field changes.
+
+        :raises ValidationError: when ``tax_id`` is not part of
+            ``allowed_fpk_tax_ids``.
+        """
+        for record in self:
+            if not record.type_id or not record.allowed_fpk_tax_ids:
+                continue
+
+            allowed = record.allowed_fpk_tax_ids
+
+            if record.tax_id and record.tax_id not in allowed:
+                error_message = """
+                Context: Set document tax
+                Database ID: %s
+                Problem: Tax %s is not allowed for transaction type %s
+                Solution: Pick a tax allowed by the transaction type
+                """ % (
+                    record.id,
+                    record.tax_id.name,
+                    record.type_id.name,
+                )
+                raise ValidationError(_(error_message))
 
     def action_recompute_efaktur_fields(self):
         for record in self:

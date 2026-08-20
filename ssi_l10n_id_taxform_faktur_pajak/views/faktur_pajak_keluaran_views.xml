@@ -186,6 +186,15 @@
                             type="object"
                             attrs="{'invisible':[('state','!=','draft')]}"
                         />
+                    <button
+                            name="action_compute_tax"
+                            string="Compute Tax"
+                            icon="fa-gear"
+                            class="oe_highlight"
+                            type="object"
+                            style="margin-left:4px"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
                     <field name="detail_ids">
                         <tree editable="top">
                             <field name="pricelist_id" invisible="1" />

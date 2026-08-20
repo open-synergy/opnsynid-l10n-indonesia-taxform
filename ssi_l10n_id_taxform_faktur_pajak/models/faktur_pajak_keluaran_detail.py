@@ -2,7 +2,8 @@
 # Copyright 2023 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class FakturPajakKeluaranDetail(models.Model):
@@ -16,6 +17,47 @@ class FakturPajakKeluaranDetail(models.Model):
         required=True,
         ondelete="cascade",
     )
+
+    @api.constrains(
+        "tax_ids",
+        "faktur_pajak_keluaran_id",
+    )
+    def _check_tax_allowed_by_type(self):
+        """Ensure the line's tax is allowed by the parent's type.
+
+        Validates that every tax on ``tax_ids`` belongs to
+        ``faktur_pajak_keluaran_id.allowed_fpk_tax_ids`` -- the
+        whitelist computed from the parent's transaction type. When
+        the whitelist is unrestricted (empty/``False``, e.g. the
+        default domain ``"[]"`` matches every ``account.tax``), the
+        check is skipped instead of blocking everything. Declared on
+        this model (not on the parent) because Odoo's
+        ``@api.constrains`` does not re-trigger a parent's constraint
+        when a one2many child field changes.
+
+        :raises ValidationError: when a tax on ``tax_ids`` is not part
+            of the parent's ``allowed_fpk_tax_ids``.
+        """
+        for record in self:
+            fpk = record.faktur_pajak_keluaran_id
+            if not fpk.type_id or not fpk.allowed_fpk_tax_ids:
+                continue
+
+            invalid_taxes = record.tax_ids - fpk.allowed_fpk_tax_ids
+            if invalid_taxes:
+                error_message = """
+                Context: Set detail line tax
+                Database ID: %s
+                Problem: Tax %s on line %s is not allowed for \
+transaction type %s
+                Solution: Pick a tax allowed by the transaction type
+                """ % (
+                    fpk.id,
+                    ", ".join(invalid_taxes.mapped("name")),
+                    record.name,
+                    fpk.type_id.name,
+                )
+                raise ValidationError(_(error_message))
 
     @api.depends(
         "name",

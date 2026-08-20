@@ -1,0 +1,249 @@
+scenarios:
+  - name: "efaktur_of_dpp_lain back-computes OtherTaxBase for DPP Nilai Lain"
+    steps:
+      - step: "Get revenue account type"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "revenue_acc_type"
+
+      - step: "Get current liabilities account type"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "liability_acc_type"
+
+      - step: "Create income account"
+        action: "create"
+        model: "account.account"
+        save_as: "income_account"
+        values:
+          code: "EVAL: 'FPKDLI%d' % env['account.account'].search_count([])"
+          name: "Test DPP Lain FPK Income"
+          user_type_id: "EVAL: registry['revenue_acc_type'].id"
+
+      - step: "Create tax account"
+        action: "create"
+        model: "account.account"
+        save_as: "tax_account"
+        values:
+          code: "EVAL: 'FPKDLT%d' % env['account.account'].search_count([])"
+          name: "Test DPP Lain FPK VAT Payable"
+          user_type_id: "EVAL: registry['liability_acc_type'].id"
+
+      # NOT a reproduction of the real "DPP Nilai Lain" tax (local
+      # account.tax id=3, amount_type "code" via the OCA
+      # account_tax_python module) -- that field/module is not a
+      # declared dependency of this addon and does not exist in CI's
+      # dependency-resolved environment. `efaktur_of_dpp_lain` only
+      # reads `price_tax`/`amount_tax` (see its `@api.depends` in
+      # faktur_pajak_keluaran(_detail).py), so any tax whose rate
+      # differs from the hardcoded VATRate (12, in
+      # core_tax_report.xml) is enough to prove the back-computed
+      # OtherTaxBase is genuinely decoupled from TaxBase: a plain 11%
+      # tax on 50,000,000 gives the exact same numbers the real DPP
+      # Nilai Lain tax would (VAT 5,500,000, OtherTaxBase 45,833,333).
+      - step: "Create an 11% output VAT (exclude)"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax_dpp_lain"
+        values:
+          name: "EVAL: 'Test DPP Lain FPK VAT %d' % env['account.tax'].search_count([])"
+          amount_type: "percent"
+          amount: 11.0
+          type_tax_use: "sale"
+          price_include: false
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+          refund_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+
+      - step: "Create an unrestricted transaction type"
+        action: "create"
+        model: "faktur_pajak_transaction_type"
+        save_as: "fp_type_open"
+        values:
+          name:
+            "EVAL: 'Test DPP Lain FPK Type %d' %
+            env['faktur_pajak_transaction_type'].search_count([])"
+          code: "/"
+          efaktur_mode: "detail"
+          fpk_journal_selection_method: "domain"
+          tax_id: "EVAL: registry['tax_dpp_lain'].id"
+
+      - step: "Create customer partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        as_user: "base.user_admin"
+        values:
+          name:
+            "EVAL: 'Test DPP Lain FPK Partner %d' % env['res.partner'].search_count([])"
+          is_company: true
+
+      # `klikpajak_backend_id` is required on `faktur_pajak_keluaran` once
+      # `ssi_l10n_id_taxform_faktur_pajak_klipajak` (a sibling addon in
+      # this same repo) is installed -- which `oca_install_addons` always
+      # does in CI (it installs every addon in the repo together, not
+      # just this one's declared dependencies). Created unconditionally
+      # here to match what CI actually tests against.
+      - step: "Create klikpajak backend"
+        action: "create"
+        model: "klikpajak_backend"
+        save_as: "klikpajak_backend"
+        values:
+          name:
+            "EVAL: 'Test DPP Lain FPK Klikpajak Backend %d' %
+            env['klikpajak_backend'].search_count([])"
+          code: "/"
+          base_url: "https://example.test"
+
+      # `faktur_pajak_keluaran._compute_taxform_period` calls
+      # `l10n_id.tax_period._find_period(date)` on every create -- and
+      # that raises if no period record covers the date. Our local
+      # `devel` DB is a production-like restore with tax periods for
+      # almost every date, which masked this; CI's clean test DB has
+      # none. Created explicitly (no `l10n_id.tax_year` needed --
+      # `year_id` on `l10n_id.tax_period` is optional) to cover every
+      # FPK date used below (2026-01-15).
+      - step: "Create tax period covering 2026-01-15"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "Test DPP Lain FPK Period 01/2026"
+          code: "/"
+          date_start: 2026-01-01
+          date_end: 2026-01-31
+
+      # --- Detail mode: the exact numeric example from the issue ---
+      # Untaxed 50,000,000 with the DPP Nilai Lain tax gives
+      # VAT = 50,000,000 * 11/12 * 12% = 5,500,000 (exact), so
+      # OtherTaxBase = VAT / 0.12 = 45,833,333 (truncated to int).
+      - step: "Create Faktur Pajak Keluaran draft (detail mode)"
+        action: "create"
+        model: "faktur_pajak_keluaran"
+        save_as: "fpk"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['fp_type_open'].id"
+          tax_id: "EVAL: registry['tax_dpp_lain'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          klikpajak_backend_id: "EVAL: registry['klikpajak_backend'].id"
+          date: 2026-01-15
+          efaktur_mode: "detail"
+
+      - step: "Create the detail line, price_subtotal 50,000,000"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_1"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk'].id"
+          name: "Test DPP Lain FPK Line"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 50000000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_dpp_lain'].id"
+
+      - step:
+          "TaxBase (efaktur_of_dpp) stays the raw untaxed amount; VAT is the
+          DPP-Nilai-Lain amount; OtherTaxBase (efaktur_of_dpp_lain) is the new field,
+          back-computed from VAT"
+        action: "assert"
+        target: "detail_1"
+        asserts:
+          efaktur_of_dpp:
+            type: "value"
+            expected: "50000000.0"
+          efaktur_of_ppn:
+            type: "value"
+            expected: "5500000"
+          efaktur_of_dpp_lain:
+            type: "value"
+            expected: "45833333"
+
+      # --- Header mode: same formula, driven by amount_tax instead of
+      # price_tax, exercised through action_compute_tax like a real
+      # Compute Tax click.
+      - step: "Create a second Faktur Pajak Keluaran draft (header mode)"
+        action: "create"
+        model: "faktur_pajak_keluaran"
+        save_as: "fpk_header"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['fp_type_open'].id"
+          tax_id: "EVAL: registry['tax_dpp_lain'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          klikpajak_backend_id: "EVAL: registry['klikpajak_backend'].id"
+          date: 2026-01-15
+          efaktur_mode: "header"
+          header_product_name: "Test DPP Lain FPK Header Mode"
+
+      - step: "Create its detail line, same 50,000,000 base"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_header"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk_header'].id"
+          name: "Test DPP Lain FPK Header Line"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 50000000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_dpp_lain'].id"
+
+      - step: "Compute Tax to populate the header amount_tax"
+        action: "call"
+        target: "fpk_header"
+        method: "action_compute_tax"
+        as_user: "base.user_admin"
+
+      - step:
+          "Header efaktur_of_dpp/efaktur_of_dpp_lain follow amount_tax, same formula as
+          the detail-level field"
+        action: "assert"
+        target: "fpk_header"
+        asserts:
+          efaktur_of_dpp:
+            type: "value"
+            expected: "50000000"
+          efaktur_of_dpp_lain:
+            type: "value"
+            expected: "45833333"
+
+      - step:
+          "The 'Recompute' button (action_recompute_efaktur_fields) also keeps
+          efaktur_of_dpp_lain correct"
+        action: "call"
+        target: "fpk_header"
+        method: "action_recompute_efaktur_fields"
+        as_user: "base.user_admin"
+
+      - step: "Value is unchanged after the manual recompute"
+        action: "assert"
+        target: "fpk_header"
+        asserts:
+          efaktur_of_dpp_lain:
+            type: "value"
+            expected: "45833333"

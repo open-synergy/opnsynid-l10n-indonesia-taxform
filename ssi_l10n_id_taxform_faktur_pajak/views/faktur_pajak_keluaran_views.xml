@@ -186,6 +186,15 @@
                             type="object"
                             attrs="{'invisible':[('state','!=','draft')]}"
                         />
+                    <button
+                            name="action_compute_tax"
+                            string="Compute Tax"
+                            icon="fa-gear"
+                            class="oe_highlight"
+                            type="object"
+                            style="margin-left:4px"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
                     <field name="detail_ids">
                         <tree editable="top">
                             <field name="pricelist_id" invisible="1" />
@@ -251,6 +260,10 @@
                                                 string="DISKON"
                                             />
                                         <field name="efaktur_of_dpp" string="DPP" />
+                                        <field
+                                                name="efaktur_of_dpp_lain"
+                                                string="DPP NILAI LAINNYA"
+                                            />
                                         <field name="efaktur_of_ppn" string="PPN" />
                                     </group>
                                 </page>
@@ -343,6 +356,7 @@
                         <field name="efaktur_of_harga_total" string="HARGA_TOTAL" />
                         <field name="efaktur_of_diskon" string="DISKON" />
                         <field name="efaktur_of_dpp" string="DPP" />
+                        <field name="efaktur_of_dpp_lain" string="DPP NILAI LAINNYA" />
                         <field name="efaktur_of_ppn" string="PPN" />
                     </group>
                 </page>

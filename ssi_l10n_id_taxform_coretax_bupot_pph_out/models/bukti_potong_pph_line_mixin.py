@@ -6,6 +6,14 @@ from odoo import fields, models
 
 
 class BuktiPotongPPhLineMixin(models.AbstractModel):
+    """Adds the Coretax tax object code to a Bukti Potong PPh line.
+
+    ``coretax_tax_object_code`` tags each withholding line with the
+    tax object code required by the DGT Coretax XML schema, so the
+    export built in ``BuktiPotongPPhMixin`` can populate the
+    ``TaxObjectCode`` element of every ``MmWithholding`` entry.
+    """
+
     _inherit = "l10n_id.bukti_potong_pph_line_mixin"
 
     coretax_tax_object_code = fields.Char(

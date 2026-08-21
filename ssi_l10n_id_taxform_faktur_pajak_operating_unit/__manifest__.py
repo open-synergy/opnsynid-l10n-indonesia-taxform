@@ -12,11 +12,13 @@
     "depends": [
         "ssi_l10n_id_taxform_faktur_pajak",
         "ssi_operating_unit_mixin",
+        "web_tour",
     ],
     "data": [
         "security/res_group/faktur_pajak_keluaran.xml",
         "security/ir_rule/faktur_pajak_keluaran.xml",
         "views/faktur_pajak_keluaran_views.xml",
+        "views/assets.xml",
     ],
     "demo": [],
 }

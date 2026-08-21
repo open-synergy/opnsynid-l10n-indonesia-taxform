@@ -9,7 +9,14 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestL10nIdTaxformFakturPajakOperatingUnit(YamlTransactionCase):
+    """Test the Operating Unit fields on ``faktur_pajak_keluaran``.
+
+    Covers the e-Faktur seller ID TKU and company NPWP computed
+    fields when the document is scoped to an Operating Unit.
+    """
+
     def test_l10n_id_taxform_faktur_pajak_operating_unit(self):
+        """Run the Operating Unit compute field scenario."""
         self.run_yaml_scenario(
             "test_data_l10n_id_taxform_faktur_pajak_operating_unit.yaml"
         )

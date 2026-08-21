@@ -10,7 +10,12 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
-class TaxYear(models.Model):
+class L10nIdTaxYear(models.Model):
+    """
+    Represents an Indonesian tax year, used to bound and generate the
+    monthly tax periods (``l10n_id.tax_period``) that fall within it.
+    """
+
     _name = "l10n_id.tax_year"
     _inherit = [
         "mixin.master_data",
@@ -30,10 +35,24 @@ class TaxYear(models.Model):
     )
 
     def action_create_period(self):
+        """Generate the monthly tax periods for each selected tax year.
+
+        Triggers ``_create_period`` for every record in ``self``.
+        """
         for year in self:
             year._create_period()
 
     def _create_period(self):
+        """Create one ``l10n_id.tax_period`` record per calendar month.
+
+        Iterates from ``date_start`` to ``date_end`` in one-month steps,
+        clamping the last period's ``date_end`` to the tax year's
+        ``date_end`` when it would otherwise overflow. Each generated
+        period is linked back to this tax year via ``year_id``.
+
+        :raises UserError: if a computed period's end date ends up
+            before its start date
+        """
         self.ensure_one()
         obj_period = self.env["l10n_id.tax_period"]
         date_start = self.date_start
@@ -65,6 +84,17 @@ class TaxYear(models.Model):
 
     @api.model
     def _find_year(self, dt=None, no_raise=False):
+        """Find the tax year whose date range contains ``dt``.
+
+        :param dt: date string (``%Y-%m-%d``) to look up; defaults to
+            today when not given
+        :param no_raise: return ``False`` instead of raising when no
+            matching tax year is found
+        :return: the matching ``l10n_id.tax_year`` record, or ``False``
+            when ``no_raise`` is set and none is found
+        :raises models.ValidationError: when no tax year covers ``dt``
+            and ``no_raise`` is not set
+        """
         if not dt:
             dt = datetime.now().strftime("%Y-%m-%d")
         criteria = [
@@ -76,59 +106,6 @@ class TaxYear(models.Model):
             if no_raise:
                 return False
             strWarning = _("No tax year configured for %s" % dt)
-            raise models.ValidationError(strWarning)
-        result = results[0]
-        return result
-
-
-class TaxPeriod(models.Model):
-    _name = "l10n_id.tax_period"
-    _inherit = [
-        "mixin.master_data",
-        "mixin.date_duration",
-    ]
-    _description = "Tax Period"
-    _order = "date_start asc, id"
-
-    name = fields.Char(
-        string="Tax Period",
-        required=True,
-    )
-    year_id = fields.Many2one(
-        string="Tax Year",
-        comodel_name="l10n_id.tax_year",
-        ondelete="cascade",
-    )
-
-    def _next_period(self, step):
-        self.ensure_one()
-        criteria = [("date_start", ">", self.date_start)]
-        results = self.search(criteria)
-        if results:
-            return results[step - 1]
-        return False
-
-    def _previous_period(self, step):
-        self.ensure_one()
-        criteria = [("date_start", "<", self.date_start)]
-        results = self.search(criteria, order="date_start desc")
-        if results:
-            return results[step - 1]
-        return False
-
-    @api.model
-    def _find_period(self, dt=None, no_raise=False):
-        if not dt:
-            dt = datetime.now().strftime("%Y-%m-%d")
-        criteria = [
-            ("date_start", "<=", dt),
-            ("date_end", ">=", dt),
-        ]
-        results = self.search(criteria)
-        if not results:
-            if no_raise:
-                return False
-            strWarning = _("No tax period configured for %s" % dt)
             raise models.ValidationError(strWarning)
         result = results[0]
         return result

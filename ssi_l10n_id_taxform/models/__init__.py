@@ -5,7 +5,8 @@
 from . import (
     res_company,
     res_config_settings,
-    tax_period,
+    l10n_id_tax_year,
+    l10n_id_tax_period,
     taxform_objek_pajak,
     res_partner,
 )

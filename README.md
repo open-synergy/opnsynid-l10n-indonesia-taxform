@@ -41,7 +41,7 @@ addon | version | maintainers | summary
 [ssi_l10n_id_taxform_coretax_bupot_pph_out](ssi_l10n_id_taxform_coretax_bupot_pph_out/) | 14.0.1.0.0 |  | Indonesia's Taxform - Coretax Bukti Potong PPh Out XML Export
 [ssi_l10n_id_taxform_faktur_pajak](ssi_l10n_id_taxform_faktur_pajak/) | 14.0.3.15.0 |  | Faktur Pajak
 [ssi_l10n_id_taxform_faktur_pajak_klipajak](ssi_l10n_id_taxform_faktur_pajak_klipajak/) | 14.0.1.5.0 |  | Klik Pajak Integration
-[ssi_l10n_id_taxform_faktur_pajak_operating_unit](ssi_l10n_id_taxform_faktur_pajak_operating_unit/) | 14.0.1.3.0 |  | Faktur Pajak + Operating Unit
+[ssi_l10n_id_taxform_faktur_pajak_operating_unit](ssi_l10n_id_taxform_faktur_pajak_operating_unit/) | 14.0.1.4.0 |  | Faktur Pajak + Operating Unit
 [ssi_l10n_id_taxform_pph_21](ssi_l10n_id_taxform_pph_21/) | 14.0.2.2.1 |  | Indonesia's PPh 21 Taxform
 [ssi_l10n_id_taxform_pph_21_payslip](ssi_l10n_id_taxform_pph_21_payslip/) | 14.0.1.3.0 |  | Indonesia's Taxform - PPh 21 Computation On Payslip
 

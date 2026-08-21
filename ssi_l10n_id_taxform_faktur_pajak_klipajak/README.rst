@@ -15,6 +15,7 @@ Work Instruction
 * `Delete Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
 * `Run Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
 * `Restart Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
+* `Test HMAC Signature of a Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
 
 
 Installation

@@ -64,6 +64,7 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
         cls.backend_restart.company_id.write(
             {"klikpajak_backend_id": cls.backend_restart.id}
         )
+        cls.backend_test_hmac = cls._create_backend("TOUR KLIKPAJAK BACKEND Test HMAC")
 
     @classmethod
     def _create_backend(cls, name, state="draft", parameter_lines=None):
@@ -149,6 +150,17 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
         self.start_tour(
             "/web?debug=1",
             "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_restart",
+            login="admin",
+        )
+
+    def test_test_hmac(self):
+        """Run the test-HMAC tour for ``klikpajak_backend``.
+
+        IK: docs/klikpajak_backend/06-test-hmac.md
+        """
+        self.start_tour(
+            "/web?debug=1",
+            "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_test_hmac",
             login="admin",
         )
 

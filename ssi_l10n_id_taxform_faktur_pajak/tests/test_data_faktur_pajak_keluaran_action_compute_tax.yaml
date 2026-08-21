@@ -595,3 +595,98 @@ scenarios:
           price_unit:
             type: "value"
             expected: 500000.0
+
+      # --- Same bug, but with an Include tax reconfigured as a custom
+      # `python_compute` ("code") tax instead of a plain `percent` tax --
+      # found on the SGRS production server: "PPN Keluaran 11% (Include)"
+      # was changed from `amount_type: percent` to `amount_type: code`
+      # with `gross * 11 / 111` (mathematically the same 11% Include tax,
+      # just no longer expressed as a plain percentage). The gross-up
+      # must not assume a formula, so it works here too.
+      - step: "Create an 11% output VAT (include, custom code formula)"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax_11_include_code"
+        values:
+          name:
+            "EVAL: 'Test Compute Tax FPK VAT 11pct Include Code %d' %
+            env['account.tax'].search_count([])"
+          amount_type: "code"
+          amount: 11.0
+          type_tax_use: "sale"
+          price_include: true
+          python_compute:
+            "gross = price_unit * quantity\nresult = int(gross * 11 / 111 +
+            0.5)"
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+          refund_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+
+      - step: "Create a fourth Faktur Pajak Keluaran draft (code-tax scenario)"
+        action: "create"
+        model: "faktur_pajak_keluaran"
+        save_as: "fpk_code_tax"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['fp_type_open'].id"
+          tax_id: "EVAL: registry['tax_12'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          klikpajak_backend_id: "EVAL: registry['klikpajak_backend'].id"
+          date: 2026-01-15
+          efaktur_mode: "detail"
+
+      - step: "Create a detail line with base_amount, taxed with the code Include tax"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_code_tax"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk_code_tax'].id"
+          name: "Test Compute Tax FPK Code Tax Line"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 41869088.29
+          base_amount: 41869088.29
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_11_include_code'].id"
+
+      - step: "Call action_compute_tax for the code-tax line"
+        action: "call"
+        target: "fpk_code_tax"
+        method: "action_compute_tax"
+        as_user: "base.user_admin"
+
+      - step:
+          "FIX: DPP stays anchored to base_amount for a custom code Include tax too,
+          not just plain percent taxes"
+        action: "assert"
+        target: "detail_code_tax"
+        asserts:
+          price_unit:
+            type: "value"
+            expected: 46474688.29
+          price_subtotal:
+            type: "value"
+            expected: 41869088.29
+          price_tax:
+            type: "value"
+            expected: 4605600.0

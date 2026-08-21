@@ -616,8 +616,7 @@ scenarios:
           type_tax_use: "sale"
           price_include: true
           python_compute:
-            "gross = price_unit * quantity\nresult = int(gross * 11 / 111 +
-            0.5)"
+            "gross = price_unit * quantity\nresult = int(gross * 11 / 111 + 0.5)"
           invoice_repartition_line_ids:
             - - 0
               - 0
@@ -676,8 +675,8 @@ scenarios:
         as_user: "base.user_admin"
 
       - step:
-          "FIX: DPP stays anchored to base_amount for a custom code Include tax too,
-          not just plain percent taxes"
+          "FIX: DPP stays anchored to base_amount for a custom code Include tax too, not
+          just plain percent taxes"
         action: "assert"
         target: "detail_code_tax"
         asserts:

@@ -8,7 +8,19 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 
-class KlikPajakBackendParameter(models.Model):
+class KlikpajakBackendParameter(models.Model):
+    """
+    Store one API parameter of a Klikpajak backend record.
+
+    This is a detail/child model: each row belongs to exactly one
+    ``klikpajak_backend`` (see ``backend_id``) and its rows are edited
+    inline from the parent's ``parameter_value_ids`` field. Values are
+    kept as plain text (``value``) and typed/parsed on demand through
+    ``parse_value``, so a single free-text column can hold string,
+    number, boolean, JSON, date, or datetime data depending on
+    ``type``.
+    """
+
     _name = "klikpajak_backend.parameter"
     _description = "Klikpajak Backend Parameter Definition"
 
@@ -52,6 +64,16 @@ class KlikPajakBackendParameter(models.Model):
         "type",
     )
     def _check_value_format(self):
+        """Validate that ``value`` parses under the selected ``type``.
+
+        Runs ``int``/``float``/JSON/date/datetime parsing (or checks
+        the ``bool`` literal set) against ``value`` for each record;
+        any parsing failure means the stored text cannot be trusted
+        by ``parse_value`` later, so it must be rejected here instead.
+
+        :raises ValidationError: when ``value`` cannot be parsed as
+            ``type`` for one of the records in ``self``.
+        """
         for record in self:
             t = record.type
             v = record.value
@@ -75,6 +97,19 @@ class KlikPajakBackendParameter(models.Model):
                 )
 
     def parse_value(self):
+        """Convert the stored text ``value`` to its typed Python value.
+
+        Called by code that consumes a parameter row and needs the
+        actual ``int``/``float``/``bool``/``dict``/``date``/
+        ``datetime`` instead of the raw text stored in ``value``.
+        Falls back to returning ``value`` unchanged for ``type ==
+        "char"``.
+
+        :return: the parsed value, typed according to ``type``.
+        :raises UserError: when ``value`` cannot be parsed as
+            ``type`` — this can only happen if
+            ``_check_value_format`` was bypassed (e.g. import).
+        """
         t = self.type
         v = self.value
         try:

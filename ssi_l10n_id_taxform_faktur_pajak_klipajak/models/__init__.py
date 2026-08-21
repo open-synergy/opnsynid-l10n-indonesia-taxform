@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import (
-    klikpajak_parameter,
+    klikpajak_backend_parameter,
     klikpajak_backend,
     buyer_document,
     res_company,

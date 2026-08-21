@@ -7,6 +7,16 @@ Klik Pajak Integration
 ======================
 
 
+Work Instruction
+================
+
+* `Create Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
+* `Edit Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
+* `Delete Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
+* `Run Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
+* `Restart Klik Pajak Backend <docs/klikpajak_backend/index.html>`_
+
+
 Installation
 ============
 

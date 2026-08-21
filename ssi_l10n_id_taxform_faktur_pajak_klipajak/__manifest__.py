@@ -12,6 +12,7 @@
     "application": False,
     "depends": [
         "ssi_l10n_id_taxform_faktur_pajak",
+        "web_tour",
     ],
     "data": [
         "security/ir.model.access.csv",
@@ -21,5 +22,6 @@
         "views/klikpajak_backend_views.xml",
         "views/faktur_pajak_keluaran_views.xml",
         "views/buyer_document_views.xml",
+        "views/assets.xml",
     ],
 }

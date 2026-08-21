@@ -145,6 +145,14 @@
                             <field name="type" />
                             <field name="value" />
                         </tree>
+                        <form>
+                            <group name="parameter_1">
+                                <field name="name" />
+                                <field name="type" />
+                                <field name="value" />
+                                <field name="description" />
+                            </group>
+                        </form>
                     </field>
                 </page>
             </xpath>

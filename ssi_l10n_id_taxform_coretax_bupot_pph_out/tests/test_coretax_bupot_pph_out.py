@@ -4,7 +4,6 @@
 
 from odoo_yaml_test import YamlTransactionCase
 
-from odoo.exceptions import UserError
 from odoo.tests import tagged
 
 
@@ -157,18 +156,33 @@ class TestCoretaxBupotPPhOut(YamlTransactionCase):
         )
 
     def test_format_number(self):
-        """Integer-valued numbers are rendered without a trailing ``.0``."""
+        """Integer-valued numbers are rendered without a trailing ``.0``.
+
+        Pure Python — trigger P1 (L-01: ``action: call`` discards the
+        return value of a method; the formatted string here is never
+        stored on a record field, so YAML has no way to capture it).
+        """
         self.assertEqual(self.bukpot._coretax_format_number(10000000.0), "10000000")
         self.assertEqual(self.bukpot._coretax_format_number(2.5), "2.5")
 
     def test_prepare_values_header(self):
-        """Header fields (TIN, ID TKU) are mapped from pemotong_pajak_id."""
+        """Header fields (TIN, ID TKU) are mapped from pemotong_pajak_id.
+
+        Pure Python — trigger P1 (L-01/L-02: the method returns a plain
+        ``dict``, and YAML asserts only support dotted ``getattr`` on a
+        registry record, never a raw returned mapping).
+        """
         values = self.bukpot._prepare_coretax_bupot_pph_out_values()
         self.assertEqual(values["company_tin"], "0029482015507000")
         self.assertEqual(values["company_id_tku"], "0029482015507000000000")
 
     def test_prepare_values_line(self):
-        """Line data is correctly mapped from the bukti potong line."""
+        """Line data is correctly mapped from the bukti potong line.
+
+        Pure Python — trigger P1 (L-01/L-02: the assertions read a
+        nested ``dict``/``list`` returned by the method, which YAML
+        cannot capture at all).
+        """
         values = self.bukpot._prepare_coretax_bupot_pph_out_values()
         self.assertEqual(len(values["lines"]), 1)
         line = values["lines"][0]
@@ -185,7 +199,12 @@ class TestCoretaxBupotPPhOut(YamlTransactionCase):
 
     def test_zero_tax_line_excluded(self):
         """Lines with zero or negative amount_tax must be excluded from the
-        export."""
+        export.
+
+        Pure Python — trigger P1 (L-01/L-02: the filtered line count is
+        read from the ``dict`` the method returns, not from an o2m
+        field on a record, so YAML cannot observe it).
+        """
         # Add a second line with zero manual_amount so amount_tax stays 0.
         self.bukpot.write(
             {
@@ -210,31 +229,54 @@ class TestCoretaxBupotPPhOut(YamlTransactionCase):
         self.assertEqual(len(values["lines"]), 1)
 
     def test_missing_pemotong_npwp_raises(self):
-        """A withholder without NPWP must raise a UserError."""
-        self.company.partner_id.write({"vat": False})
-        with self.assertRaises(UserError):
-            self.bukpot._prepare_coretax_bupot_pph_out_values()
+        """A withholder without NPWP must raise a UserError.
+
+        ``UserError`` is one of the twelve types ``expect_error``
+        understands, so this negative path belongs in YAML — see
+        ``odoo-development-unit-test``, "Yang TIDAK pernah
+        membenarkan Python". Delegates to a self-contained scenario
+        (its own fixture, not ``self.bukpot``).
+        """
+        self.run_yaml_scenario("test_coretax_bupot_missing_pemotong_npwp.yaml")
 
     def test_missing_pemotong_nitku_raises(self):
-        """A withholder without NITKU must raise a UserError."""
-        self.company.partner_id.write({"nitku": False})
-        with self.assertRaises(UserError):
-            self.bukpot._prepare_coretax_bupot_pph_out_values()
+        """A withholder without NITKU must raise a UserError.
+
+        ``UserError`` is one of the twelve types ``expect_error``
+        understands, so this negative path belongs in YAML. Delegates
+        to a self-contained scenario (its own fixture, not
+        ``self.bukpot``).
+        """
+        self.run_yaml_scenario("test_coretax_bupot_missing_pemotong_nitku.yaml")
 
     def test_missing_wajib_pajak_npwp_raises(self):
-        """A wajib pajak without NPWP must raise a UserError."""
-        self.wajib_pajak.write({"vat": False})
-        with self.assertRaises(UserError):
-            self.bukpot._prepare_coretax_bupot_pph_out_values()
+        """A wajib pajak without NPWP must raise a UserError.
+
+        ``UserError`` is one of the twelve types ``expect_error``
+        understands, so this negative path belongs in YAML. Delegates
+        to a self-contained scenario (its own fixture, not
+        ``self.bukpot``).
+        """
+        self.run_yaml_scenario("test_coretax_bupot_missing_wp_npwp.yaml")
 
     def test_no_taxed_line_raises(self):
-        """A bukti potong with no line having positive amount_tax must raise."""
-        self.bukpot.line_ids.write({"manual_amount": 0.0})
-        with self.assertRaises(UserError):
-            self.bukpot._prepare_coretax_bupot_pph_out_values()
+        """A bukti potong with no line having positive amount_tax must
+        raise.
+
+        ``UserError`` is one of the twelve types ``expect_error``
+        understands, so this negative path belongs in YAML. Delegates
+        to a self-contained scenario (its own fixture, not
+        ``self.bukpot``).
+        """
+        self.run_yaml_scenario("test_coretax_bupot_no_taxed_line.yaml")
 
     def test_non_resident_counterpart_opt(self):
-        """A foreign wajib pajak must produce CounterpartOpt = NonResident."""
+        """A foreign wajib pajak must produce CounterpartOpt = NonResident.
+
+        Pure Python — trigger P1 (L-01/L-02: the assertion reads a
+        nested ``dict``/``list`` returned by the method, which YAML
+        cannot capture at all).
+        """
         singapore = self.env["res.country"].search([("code", "=", "SG")], limit=1)
         if singapore:
             self.wajib_pajak.write({"country_id": singapore.id})

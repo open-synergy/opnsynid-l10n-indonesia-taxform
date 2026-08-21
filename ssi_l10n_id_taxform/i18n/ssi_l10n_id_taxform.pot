@@ -165,7 +165,7 @@ msgid "Date Start"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform
-#: code:addons/ssi_l10n_id_taxform/models/tax_period.py:0
+#: code:addons/ssi_l10n_id_taxform/models/l10n_id_tax_year.py:0
 #, python-format
 msgid "Date Start  > Date End "
 msgstr ""
@@ -443,13 +443,13 @@ msgid "Next Activity Type"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform
-#: code:addons/ssi_l10n_id_taxform/models/tax_period.py:0
+#: code:addons/ssi_l10n_id_taxform/models/l10n_id_tax_period.py:0
 #, python-format
 msgid "No tax period configured for %s"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform
-#: code:addons/ssi_l10n_id_taxform/models/tax_period.py:0
+#: code:addons/ssi_l10n_id_taxform/models/l10n_id_tax_year.py:0
 #, python-format
 msgid "No tax year configured for %s"
 msgstr ""

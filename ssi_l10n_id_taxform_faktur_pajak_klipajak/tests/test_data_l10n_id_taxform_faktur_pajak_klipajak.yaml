@@ -41,3 +41,87 @@ scenarios:
           auth_method:
             type: "value"
             expected: "jwt"
+
+  - name: "Klik Pajak Backend - Running and Restart lifecycle"
+    steps:
+      - step: "Create first backend"
+        action: "create"
+        model: "klikpajak_backend"
+        save_as: "backend_a"
+        values:
+          name: "Test Klik Pajak Backend Running A"
+          code: "TKLP02"
+          base_url: "https://api.klikpajak.id"
+
+      - step: "Create second backend"
+        action: "create"
+        model: "klikpajak_backend"
+        save_as: "backend_b"
+        values:
+          name: "Test Klik Pajak Backend Running B"
+          code: "TKLP03"
+          base_url: "https://api.klikpajak.id"
+
+      - step: "Assert both backends start in Draft"
+        action: "assert"
+        target: "backend_a"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Run the first backend"
+        action: "call"
+        target: "backend_a"
+        method: "action_running"
+
+      - step: "Assert first backend is Running and linked to the company"
+        action: "assert"
+        target: "backend_a"
+        asserts:
+          state:
+            type: "value"
+            expected: "running"
+          company_id.klikpajak_backend_id:
+            type: "m2o"
+            expected: "REC: backend_a"
+
+      - step: "Run the second backend"
+        action: "call"
+        target: "backend_b"
+        method: "action_running"
+
+      - step: "Assert second backend is now Running and linked to the company"
+        action: "assert"
+        target: "backend_b"
+        asserts:
+          state:
+            type: "value"
+            expected: "running"
+          company_id.klikpajak_backend_id:
+            type: "m2o"
+            expected: "REC: backend_b"
+
+      - step: "Assert first backend was demoted back to Draft"
+        action: "assert"
+        target: "backend_a"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Restart the second backend"
+        action: "call"
+        target: "backend_b"
+        method: "action_restart"
+
+      - step: "Assert second backend is back to Draft and unlinked"
+        action: "assert"
+        target: "backend_b"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          company_id.klikpajak_backend_id:
+            type: "value"
+            operator: "is_falsy"

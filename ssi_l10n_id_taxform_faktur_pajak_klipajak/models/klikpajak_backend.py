@@ -13,6 +13,18 @@ from odoo.exceptions import ValidationError
 
 
 class KlikpajakBackend(models.Model):
+    """
+    Represent one Klikpajak API backend configuration per company.
+
+    Holds the base URL, authentication credentials (JWT/Basic/HMAC),
+    the outbound e-Faktur endpoints, and a free-form list of extra API
+    parameters (``parameter_value_ids``). Only one backend per company
+    can be ``running`` at a time — ``action_running`` enforces this by
+    demoting any other running backend of the same company back to
+    ``draft`` and links the chosen backend to
+    ``res.company.klikpajak_backend_id``.
+    """
+
     _name = "klikpajak_backend"
     _inherit = [
         "mixin.master_data",
@@ -22,6 +34,10 @@ class KlikpajakBackend(models.Model):
 
     @api.model
     def _default_company_id(self):
+        """Return the current user's company as the default company.
+
+        :return: ``id`` of ``self.env.user.company_id``.
+        """
         return self.env.user.company_id.id
 
     company_id = fields.Many2one(
@@ -192,6 +208,15 @@ class KlikpajakBackend(models.Model):
             )
 
     def action_running(self):
+        """Set the backend as the running backend of its company.
+
+        **Side effect:** any other backend of the same company that is
+        currently ``running`` is demoted back to ``draft`` first, since
+        only one backend per company can be running at a time. The
+        record is then linked to
+        ``res.company.klikpajak_backend_id`` and its own ``state`` is
+        set to ``running``.
+        """
         for record in self:
             check_running_backend_ids = self.search(
                 [
@@ -206,6 +231,11 @@ class KlikpajakBackend(models.Model):
             record.write({"state": "running"})
 
     def action_restart(self):
+        """Return the backend to ``draft`` and unlink it from its company.
+
+        Clears ``res.company.klikpajak_backend_id`` when it points to
+        this record, then sets ``state`` back to ``draft``.
+        """
         for record in self:
             record.company_id.write({"klikpajak_backend_id": False})
             record.write({"state": "draft"})

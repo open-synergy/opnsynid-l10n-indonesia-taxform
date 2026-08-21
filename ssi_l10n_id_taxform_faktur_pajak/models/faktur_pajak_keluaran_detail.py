@@ -49,24 +49,71 @@ class FakturPajakKeluaranDetail(models.Model):
         (via `mixin.product_line_account`), which treats it as
         tax-inclusive when the tax is a price-included ("Include") tax
         and as tax-exclusive otherwise. `base_amount` is always the
-        tax-exclusive DPP, so when an Include-type percentage tax is
-        selected, `price_unit` must be grossed up first -- otherwise
-        the tax gets stripped a second time and the DPP/PPN reported to
-        Coretax end up smaller than the source invoice.
-
-        Only single, simple percentage taxes are handled; anything else
-        (no tax, or a custom `python_compute` tax such as "DPP Nilai
-        Lain") falls back to `price_unit = base_amount`, matching the
-        pre-existing behaviour for those cases.
+        tax-exclusive DPP, so when an Include tax is selected,
+        `price_unit` must be grossed up first -- otherwise the tax gets
+        stripped a second time and the DPP/PPN reported to Coretax end
+        up smaller than the source invoice. Delegates the actual
+        gross-up to `_gross_up_price_unit_for_tax`, which works for any
+        Include tax formula (plain `percent` or a custom
+        `python_compute` "code" tax).
         """
         for record in self:
             if not record.base_amount:
                 continue
             tax = record.tax_ids[:1]
-            price_unit = record.base_amount
-            if tax and tax.amount_type == "percent" and tax.price_include:
-                price_unit = record.base_amount * (1 + tax.amount / 100.0)
-            record.price_unit = price_unit
+            record.price_unit = record._gross_up_price_unit_for_tax(
+                record.base_amount, tax
+            )
+
+    def _gross_up_price_unit_for_tax(self, base_amount, tax):
+        """Find the `price_unit` whose exclusive total equals `base_amount`.
+
+        For no tax, or an Exclude tax, `price_unit` already equals the
+        exclusive base, so `base_amount` is returned unchanged.
+
+        For an Include tax, `compute_all` treats `price_unit` as
+        already tax-inclusive and strips the tax back out of it; that
+        is inverted here by adjusting `price_unit` until
+        `compute_all`'s own `total_excluded` matches `base_amount`,
+        instead of assuming a particular tax formula. VAT-style taxes
+        are proportional to `price_unit` (no fixed component), so
+        `total_excluded / price_unit` is their exact slope and a
+        single correction scaled by that ratio converges in one or two
+        iterations -- whether the tax is a plain `percent` type or a
+        custom `python_compute` "code" tax, such as the one "PPN
+        Keluaran 11% (Include)" was reconfigured to on the SGRS
+        production server (``gross * 11 / 111``, mathematically
+        equivalent to a plain 11% Include tax but not something that
+        can be read off `tax.amount`/`tax.amount_type` directly).
+        Capped defensively so a pathological tax formula cannot loop
+        forever; it then returns its best-effort result rather than
+        raising.
+        """
+        self.ensure_one()
+        if not tax or not tax.price_include:
+            return base_amount
+        quantity = self.uom_quantity or 1.0
+        currency = self.currency_id or self.env.company.currency_id
+        precision = currency.rounding or 0.01
+        target_total = base_amount * quantity
+        price_unit = base_amount
+        for _iteration in range(20):
+            total_excluded = tax.compute_all(
+                price_unit,
+                currency,
+                quantity,
+                product=self.product_id,
+                partner=False,
+            )["total_excluded"]
+            diff = target_total - total_excluded
+            if abs(diff) < precision:
+                break
+            ratio = total_excluded / price_unit if price_unit else 0.0
+            if ratio <= 0:
+                price_unit += diff / quantity
+            else:
+                price_unit += (diff / quantity) / ratio
+        return price_unit
 
     @api.constrains(
         "tax_ids",

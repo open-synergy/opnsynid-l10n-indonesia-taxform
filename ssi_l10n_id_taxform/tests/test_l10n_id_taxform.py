@@ -9,5 +9,12 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestL10nIdTaxform(YamlTransactionCase):
+    """
+    Cover ``l10n_id.tax_year``, ``l10n_id.tax_period``, and
+    ``l10n_id.taxform_objek_pajak`` creation, period generation, and
+    period/year lookup helpers.
+    """
+
     def test_l10n_id_taxform(self):
+        """Run the tax year/period/objek pajak YAML scenario."""
         self.run_yaml_scenario("test_data_l10n_id_taxform.yaml")

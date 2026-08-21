@@ -14,6 +14,7 @@
     "depends": [
         "ssi_master_data_mixin",
         "ssi_duration_mixin",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -25,5 +26,6 @@
         "views/tax_period_views.xml",
         "views/taxform_objek_pajak_views.xml",
         "views/res_partner_views.xml",
+        "views/assets.xml",
     ],
 }

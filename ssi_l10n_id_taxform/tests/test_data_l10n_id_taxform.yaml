@@ -27,14 +27,10 @@ scenarios:
         target: "tax_year"
         method: "action_create_period"
 
-      - step: "Invalidate cache after period creation"
-        action: "call"
-        target: "tax_year"
-        method: "invalidate_cache"
-
       - step: "Assert periods created"
         action: "assert"
         target: "tax_year"
+        refresh: true
         asserts:
           period_ids:
             type: "o2m"

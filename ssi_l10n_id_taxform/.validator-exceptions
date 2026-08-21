@@ -1,0 +1,14 @@
+# Copyright 2026 PT. Simetri Sinergi Indonesia
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+#
+# See open-synergy/opnsynid-l10n-indonesia-taxform#208 for the full
+# rationale. All three entries below concern
+# models/res_config_settings.py, which declares
+# ``_name = "res.config.settings"`` with
+# ``_inherit = ["res.config.settings"]`` — a core Odoo model
+# extension (the standard pattern for adding ``module_*`` toggles to
+# the Settings screen), not a wizard owned by this module.
+
+module acl-wizard-satu-user-access-tanpa-all-access|res.config.settings: tidak ada ACL sama sekali -- res.config.settings ACL is provided by base; adding an ACL row for this core model from this module would be wrong.
+module berkas-wizard-berada-di-wizards|models/res_config_settings.py: TransientModel di luar wizards/ -- moving it to wizards/ would violate the Odoo/OCA convention of keeping Settings extensions in models/res_config_settings.py, and would not turn it into a wizard.
+module name-wizard-tanpa-notasi-titik|models/res_config_settings.py: _name 'res.config.settings' memakai notasi titik -- the core model's _name cannot be changed; changing it would break the entire Settings screen.

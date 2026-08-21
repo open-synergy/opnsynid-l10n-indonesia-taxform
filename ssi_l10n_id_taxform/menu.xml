@@ -76,7 +76,7 @@
 <menuitem
         id="taxform_configuration_menu"
         name="Configuration"
-        sequence="99"
+        sequence="999"
         parent="taxform_main_menu"
     />
 

@@ -839,6 +839,11 @@ msgid "Base Amount"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran_detail__base_amount
+msgid "Base Amount (DPP)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model,name:ssi_l10n_id_taxform_faktur_pajak.model_buyer_document
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_buyer_document__name
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_create_faktur_pajak_keluaran__buyer_document_id
@@ -2216,6 +2221,17 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_faktur_pajak
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran_detail__tax_ids
 msgid "Tax(es)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_faktur_pajak
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_faktur_pajak.field_faktur_pajak_keluaran_detail__base_amount
+msgid ""
+"Tax-exclusive unit base copied from the source invoice line's accounting "
+"entry (never affected by which tax is selected on this line). Used to re-"
+"derive `price_unit` whenever `tax_ids` changes, so the DPP stays correct "
+"whether the selected tax is Include or Exclude. Left empty for lines not "
+"sourced from an invoice (e.g. added manually), which keep the legacy "
+"behaviour of `price_unit` being edited directly."
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_faktur_pajak

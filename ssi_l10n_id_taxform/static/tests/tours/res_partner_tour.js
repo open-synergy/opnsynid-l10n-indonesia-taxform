@@ -36,9 +36,13 @@ odoo.define("ssi_l10n_id_taxform.res_partner_tour", function (require) {
             },
 
             // ── Click New. (14.0: "Create")
+            // Contacts lands on kanban (contacts.action_contacts view_mode
+            // starts with kanban), so the Create button is the kanban
+            // controller's own ".o-kanban-button-new" (note the HYPHEN),
+            // not the list view's ".o_list_button_add".
             {
                 content: "Click New",
-                trigger: ".o_list_button_add",
+                trigger: ".o-kanban-button-new",
                 extra_trigger: ".o_kanban_view",
             },
             {

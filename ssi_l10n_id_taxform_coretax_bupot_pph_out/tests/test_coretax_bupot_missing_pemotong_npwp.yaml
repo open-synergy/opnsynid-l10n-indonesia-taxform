@@ -148,3 +148,4 @@ scenarios:
         method: "_prepare_coretax_bupot_pph_out_values"
         expect_error:
           type: "UserError"
+          message_contains: 'The withholder "'

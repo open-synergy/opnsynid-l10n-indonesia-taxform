@@ -7,6 +7,12 @@ Faktur Pajak + Operating Unit
 =============================
 
 
+Work Instruction
+================
+
+* `Create Faktur Pajak Keluaran <docs/faktur_pajak_keluaran/01-create.html>`_
+
+
 Installation
 ============
 

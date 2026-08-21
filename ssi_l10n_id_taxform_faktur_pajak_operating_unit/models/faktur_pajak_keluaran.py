@@ -8,6 +8,14 @@ from odoo import api, fields, models
 
 
 class FakturPajakKeluaran(models.Model):
+    """
+    Adds Operating Unit awareness to Faktur Pajak Keluaran.
+    Lets the document be scoped to a single Operating Unit and
+    recomputes the e-Faktur seller ID TKU and company NPWP from the
+    Operating Unit's partner when one is set, falling back to the
+    company's own partner otherwise.
+    """
+
     _name = "faktur_pajak_keluaran"
     _inherit = [
         "faktur_pajak_keluaran",
@@ -20,6 +28,13 @@ class FakturPajakKeluaran(models.Model):
         "operating_unit_id.partner_id.nitku",
     )
     def _compute_efaktur_seller_id_tku(self):
+        """Resolve the e-Faktur seller ID TKU from the Operating Unit.
+
+        Uses the ``nitku`` of the Operating Unit's partner when the
+        document has an Operating Unit set and that partner has a
+        ``nitku`` value; falls back to the default placeholder
+        (16 zeros) otherwise.
+        """
         for record in self:
             result = "0000000000000000"
             if (
@@ -41,6 +56,14 @@ class FakturPajakKeluaran(models.Model):
         "company_id.partner_id.vat",
     )
     def _compute_efaktur_company_npwp(self):
+        """Resolve the company NPWP digits for e-Faktur reporting.
+
+        Reads the ``vat`` of the Operating Unit's partner when the
+        document has an Operating Unit set, falling back to the
+        company's own partner ``vat`` otherwise. Non-digit characters
+        are stripped so only the numeric NPWP remains; falls back to
+        the default placeholder (15 zeros) when no ``vat`` is set.
+        """
         for record in self:
             result = "000000000000000"
             if record.operating_unit_id:

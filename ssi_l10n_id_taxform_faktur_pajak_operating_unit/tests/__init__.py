@@ -3,3 +3,4 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import test_l10n_id_taxform_faktur_pajak_operating_unit
+from . import test_ui_faktur_pajak_keluaran

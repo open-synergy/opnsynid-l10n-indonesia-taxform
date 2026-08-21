@@ -565,7 +565,8 @@ scenarios:
             type: "value"
             expected: 110000.0
 
-      - step: "Create a manual detail line without base_amount (not sourced from an invoice)"
+      - step:
+          "Create a manual detail line without base_amount (not sourced from an invoice)"
         action: "create"
         model: "faktur_pajak_keluaran_detail"
         save_as: "detail_manual"

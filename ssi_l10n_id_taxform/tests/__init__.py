@@ -3,4 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import test_l10n_id_taxform
+from . import test_ui_l10n_id_tax_period
+from . import test_ui_l10n_id_tax_year
 from . import test_ui_res_partner

@@ -1,0 +1,97 @@
+scenarios:
+  - name: "Bukti Potong PPh 23 Out with no lines raises UserError"
+    steps:
+      - step: "Get the company (pemotong) partner"
+        action: "search"
+        model: "res.partner"
+        domain:
+          - ["id", "=", "REC: company.partner_id.id"]
+        limit: 1
+        save_as: "company_partner"
+
+      - step: "Set valid NPWP and NITKU on the withholder partner"
+        action: "write"
+        target: "company_partner"
+        values:
+          vat: "0029482015507000"
+          nitku: "0029482015507000000000"
+
+      - step: "Create wajib pajak (income recipient) partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "PT Wajib Pajak Test"
+          is_company: true
+          vat: "0123456789012000"
+
+      - step: "Create KPP (tax office) partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Pratama Test"
+          is_company: true
+
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "2034"
+          code: "2034"
+          date_start: "2034-01-01"
+          date_end: "2034-12-31"
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2034 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", "2034-10-01"]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test General 4"
+          code: "TSTBPG4"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 23 Payable 4"
+          code: "22401TST4"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create Bukti Potong PPh 23 Out with no lines"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113306_out"
+        save_as: "bukpot"
+        values:
+          date: "2034-10-15"
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: company.partner_id.id"
+
+      - step: "Preparing Coretax values raises when no line has withheld tax"
+        action: "call"
+        target: "bukpot"
+        method: "_prepare_coretax_bupot_pph_out_values"
+        expect_error:
+          type: "UserError"
+          message_contains: "No line in this bukti potong has PPh withheld"

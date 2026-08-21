@@ -21,6 +21,9 @@ Work Instruction
 * `Create Tax Period <docs/l10n_id_tax_period/index.html>`_
 * `Edit Tax Period <docs/l10n_id_tax_period/index.html>`_
 * `Delete Tax Period <docs/l10n_id_tax_period/index.html>`_
+* `Create Taxform Objek Pajak <docs/l10n_id_taxform_objek_pajak/index.html>`_
+* `Edit Taxform Objek Pajak <docs/l10n_id_taxform_objek_pajak/index.html>`_
+* `Delete Taxform Objek Pajak <docs/l10n_id_taxform_objek_pajak/index.html>`_
 
 
 Installation

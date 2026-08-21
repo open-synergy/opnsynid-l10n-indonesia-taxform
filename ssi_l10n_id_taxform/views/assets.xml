@@ -21,6 +21,10 @@
                 type="text/javascript"
                 src="/ssi_l10n_id_taxform/static/tests/tours/l10n_id_tax_period_tour.js"
             />
+            <script
+                type="text/javascript"
+                src="/ssi_l10n_id_taxform/static/tests/tours/l10n_id_taxform_objek_pajak_tour.js"
+            />
         </xpath>
     </template>
 </odoo>

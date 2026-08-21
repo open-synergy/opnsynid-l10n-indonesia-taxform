@@ -10,6 +10,13 @@ This module add capability to compute tax article 21 (PPh 21) for objek pajak
 21-100-01.
 
 
+Work Instruction
+================
+
+* `Create Employee <docs/hr_employee/index.html>`_
+* `Create Employee Payslip <docs/hr_payslip/index.html>`_
+
+
 Installation
 ============
 

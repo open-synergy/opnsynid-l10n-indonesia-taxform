@@ -38,22 +38,22 @@ scenarios:
         model: "l10n_id.tax_year"
         save_as: "tax_year"
         values:
-          name: "2024"
-          code: "2024"
-          date_start: "2024-01-01"
-          date_end: "2024-12-31"
+          name: "2034"
+          code: "2034"
+          date_start: "2034-01-01"
+          date_end: "2034-12-31"
 
       - step: "Generate tax periods for the year"
         action: "call"
         target: "tax_year"
         method: "action_create_period"
 
-      - step: "Find the October 2024 tax period"
+      - step: "Find the October 2034 tax period"
         action: "search"
         model: "l10n_id.tax_period"
         domain:
           - ["year_id", "=", "REC: tax_year.id"]
-          - ["date_start", "=", "2024-10-01"]
+          - ["date_start", "=", "2034-10-01"]
         limit: 1
         save_as: "tax_period"
 
@@ -62,8 +62,8 @@ scenarios:
         model: "account.journal"
         save_as: "journal"
         values:
-          name: "Test General"
-          code: "TSTBPG"
+          name: "Test General 4"
+          code: "TSTBPG4"
           type: "general"
 
       - step: "Create account for the bukti potong"
@@ -71,8 +71,8 @@ scenarios:
         model: "account.account"
         save_as: "account"
         values:
-          name: "Test PPh 23 Payable"
-          code: "22401TST"
+          name: "Test PPh 23 Payable 4"
+          code: "22401TST4"
           user_type_id: "account.data_account_type_current_liabilities"
 
       - step: "Create account move with a debit/credit line pair"
@@ -109,7 +109,7 @@ scenarios:
         model: "account.tax"
         save_as: "tax"
         values:
-          name: "PPh 23 2% Test"
+          name: "PPh 23 2% Test 4"
           type_tax_use: "purchase"
           amount: 2.0
           amount_type: "percent"
@@ -119,7 +119,7 @@ scenarios:
         model: "l10n_id.bukti_potong_pph_f113306_out"
         save_as: "bukpot"
         values:
-          date: "2024-10-15"
+          date: "2034-10-15"
           tax_period_id: "REC: tax_period.id"
           journal_id: "REC: journal.id"
           account_id: "REC: account.id"

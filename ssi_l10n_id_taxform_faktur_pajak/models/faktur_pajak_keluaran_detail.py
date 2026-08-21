@@ -17,6 +17,56 @@ class FakturPajakKeluaranDetail(models.Model):
         required=True,
         ondelete="cascade",
     )
+    base_amount = fields.Monetary(
+        string="Base Amount (DPP)",
+        currency_field="currency_id",
+        help="Tax-exclusive unit base copied from the source invoice "
+        "line's accounting entry (never affected by which tax is "
+        "selected on this line). Used to re-derive `price_unit` "
+        "whenever `tax_ids` changes, so the DPP stays correct whether "
+        "the selected tax is Include or Exclude. Left empty for lines "
+        "not sourced from an invoice (e.g. added manually), which keep "
+        "the legacy behaviour of `price_unit` being edited directly.",
+    )
+
+    @api.onchange(
+        "tax_ids",
+    )
+    def onchange_price_unit_from_base_amount(self):
+        """Re-derive `price_unit` as soon as the line's tax is changed.
+
+        Delegates to `_recompute_price_unit_from_base_amount` so the UI
+        reflects the corrected DPP/PPN immediately when a user swaps a
+        detail line's tax in the tree view, without waiting for the
+        "Compute Tax" button.
+        """
+        self._recompute_price_unit_from_base_amount()
+
+    def _recompute_price_unit_from_base_amount(self):
+        """Re-derive `price_unit` from `base_amount` for the current tax.
+
+        `price_unit` is fed into the standard `account.tax.compute_all`
+        (via `mixin.product_line_account`), which treats it as
+        tax-inclusive when the tax is a price-included ("Include") tax
+        and as tax-exclusive otherwise. `base_amount` is always the
+        tax-exclusive DPP, so when an Include-type percentage tax is
+        selected, `price_unit` must be grossed up first -- otherwise
+        the tax gets stripped a second time and the DPP/PPN reported to
+        Coretax end up smaller than the source invoice.
+
+        Only single, simple percentage taxes are handled; anything else
+        (no tax, or a custom `python_compute` tax such as "DPP Nilai
+        Lain") falls back to `price_unit = base_amount`, matching the
+        pre-existing behaviour for those cases.
+        """
+        for record in self:
+            if not record.base_amount:
+                continue
+            tax = record.tax_ids[:1]
+            price_unit = record.base_amount
+            if tax and tax.amount_type == "percent" and tax.price_include:
+                price_unit = record.base_amount * (1 + tax.amount / 100.0)
+            record.price_unit = price_unit
 
     @api.constrains(
         "tax_ids",

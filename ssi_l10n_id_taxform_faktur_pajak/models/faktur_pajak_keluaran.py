@@ -1027,32 +1027,39 @@ class FakturPajakKeluaran(models.Model):
                         "uom_quantity": aml.quantity or 1.0,
                         "uom_id": aml.product_uom_id and aml.product_uom_id.id,
                         "price_unit": aml.credit / (aml.quantity or 1.0),
+                        "base_amount": aml.credit / (aml.quantity or 1.0),
                         "tax_ids": [(6, 0, [self.tax_id.id])],
                     }
                     Detail.create(data)
+        self.detail_ids._recompute_price_unit_from_base_amount()
         self._recompute_standard_tax()
 
     def action_compute_tax(self):
-        """Recompute the header tax summary from the detail lines.
+        """Recompute detail ``price_unit`` and the header tax summary.
 
-        Public action bound to the "Compute Tax" button; delegates to
-        the accounting mixin's ``_recompute_standard_tax`` for each
-        record, so ``tax_ids``/``amount_tax`` reflect taxes edited
-        manually on ``detail_ids`` after the document was created or
-        reloaded.
+        Public action bound to the "Compute Tax" button. First
+        re-derives each detail line's ``price_unit`` from its
+        ``base_amount`` (in case a line's tax was corrected via a
+        direct write, bypassing the tree-view onchange), then
+        delegates to the accounting mixin's ``_recompute_standard_tax``
+        for each record, so ``tax_ids``/``amount_tax`` reflect taxes
+        edited manually on ``detail_ids`` after the document was
+        created or reloaded.
         """
         for record in self.sudo():
+            record.detail_ids._recompute_price_unit_from_base_amount()
             record._recompute_standard_tax()
 
     @ssi_decorator.pre_confirm_action()
     def _01_compute_tax(self):
-        """Recompute the header tax summary before confirmation.
+        """Recompute detail ``price_unit`` and header tax before confirm.
 
         Runs as a ``pre_confirm_action`` hook so ``tax_ids`` reflects
         the current detail lines even when the user forgot to click
         "Compute Tax" after editing a line's tax manually.
         """
         self.ensure_one()
+        self.detail_ids._recompute_price_unit_from_base_amount()
         self._recompute_standard_tax()
 
     @api.constrains(

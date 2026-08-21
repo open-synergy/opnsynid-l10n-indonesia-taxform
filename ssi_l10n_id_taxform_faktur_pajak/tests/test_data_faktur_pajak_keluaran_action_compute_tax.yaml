@@ -445,3 +445,153 @@ scenarios:
           amount_total:
             type: "value"
             expected: 1110000.0
+
+      # --- base_amount / Include-tax bug (found via live data FPK id=14 /
+      # invoice CLM/2607/001): action_reload_detail copies aml.credit
+      # (always tax-exclusive) into a detail line's price_unit. That is
+      # correct only while the line's tax stays an Exclude-type tax. Once
+      # a user corrects the line's tax (the workflow above) to an
+      # Include-type tax matching the source invoice,
+      # account.tax.compute_all treats the unchanged price_unit as
+      # already tax-inclusive and strips tax out of it a second time,
+      # silently shrinking the DPP/PPN below the invoice's real amounts.
+      # The fix anchors the tax-exclusive base in `base_amount` and
+      # re-derives `price_unit` from it whenever the tax changes.
+      - step: "Create an 11% output VAT (include)"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax_11_include"
+        values:
+          name:
+            "EVAL: 'Test Compute Tax FPK VAT 11pct Include %d' %
+            env['account.tax'].search_count([])"
+          amount_type: "percent"
+          amount: 11.0
+          type_tax_use: "sale"
+          price_include: true
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+          refund_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "EVAL: registry['tax_account'].id"
+
+      - step: "Create a third Faktur Pajak Keluaran draft (base_amount scenario)"
+        action: "create"
+        model: "faktur_pajak_keluaran"
+        save_as: "fpk_base_amount"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['fp_type_open'].id"
+          tax_id: "EVAL: registry['tax_12'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          klikpajak_backend_id: "EVAL: registry['klikpajak_backend'].id"
+          date: 2026-01-15
+          efaktur_mode: "detail"
+
+      # `base_amount` is the tax-exclusive DPP `action_reload_detail`
+      # would have copied from the source invoice line's accounting
+      # entry (`aml.credit`) -- it must never change afterwards.
+      - step: "Create a detail line with base_amount anchored, taxed at 11% (exclude)"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_base_amount"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk_base_amount'].id"
+          name: "Test Compute Tax FPK Base Amount Line"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 1000000.0
+          base_amount: 1000000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_11'].id"
+
+      - step: "DPP matches base_amount while the line's tax is Exclude"
+        action: "assert"
+        target: "detail_base_amount"
+        asserts:
+          price_subtotal:
+            type: "value"
+            expected: 1000000.0
+
+      - step:
+          "Manually correct the base_amount line's tax to 11% Include (simulates the
+          Compute Tax workflow above)"
+        action: "write"
+        target: "detail_base_amount"
+        as_user: "base.user_admin"
+        values:
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_11_include'].id"
+
+      - step: "Call action_compute_tax after switching to the Include tax"
+        action: "call"
+        target: "fpk_base_amount"
+        method: "action_compute_tax"
+        as_user: "base.user_admin"
+
+      - step:
+          "FIX: price_unit is grossed up and DPP/PPN stay anchored to base_amount,
+          instead of shrinking from stripping tax twice"
+        action: "assert"
+        target: "detail_base_amount"
+        asserts:
+          price_unit:
+            type: "value"
+            expected: 1110000.0
+          price_subtotal:
+            type: "value"
+            expected: 1000000.0
+          price_tax:
+            type: "value"
+            expected: 110000.0
+
+      - step:
+          "Create a manual detail line without base_amount (not sourced from an invoice)"
+        action: "create"
+        model: "faktur_pajak_keluaran_detail"
+        save_as: "detail_manual"
+        as_user: "base.user_admin"
+        values:
+          faktur_pajak_keluaran_id: "EVAL: registry['fpk_base_amount'].id"
+          name: "Test Compute Tax FPK Manual Line"
+          account_id: "EVAL: registry['income_account'].id"
+          uom_quantity: 1
+          price_unit: 500000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "EVAL: registry['tax_11_include'].id"
+
+      - step: "Call action_compute_tax again"
+        action: "call"
+        target: "fpk_base_amount"
+        method: "action_compute_tax"
+        as_user: "base.user_admin"
+
+      - step: "A line without base_amount is left untouched by action_compute_tax"
+        action: "assert"
+        target: "detail_manual"
+        asserts:
+          price_unit:
+            type: "value"
+            expected: 500000.0

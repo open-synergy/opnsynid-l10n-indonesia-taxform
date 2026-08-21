@@ -595,4 +595,3 @@ scenarios:
           price_unit:
             type: "value"
             expected: 500000.0
-

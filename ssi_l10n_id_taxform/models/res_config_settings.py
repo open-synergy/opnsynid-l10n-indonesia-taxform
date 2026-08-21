@@ -6,6 +6,12 @@ from odoo import fields, models
 
 
 class ResConfigSettings(models.TransientModel):
+    """
+    Adds installation toggles for the optional taxform bukti potong
+    sub-modules to the Settings screen, so administrators can enable
+    each tax form module without navigating to Apps.
+    """
+
     _name = "res.config.settings"
     _inherit = [
         "res.config.settings",

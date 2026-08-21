@@ -7,6 +7,6 @@ from . import (
     res_config_settings,
     l10n_id_tax_year,
     l10n_id_tax_period,
-    taxform_objek_pajak,
+    l10n_id_taxform_objek_pajak,
     res_partner,
 )

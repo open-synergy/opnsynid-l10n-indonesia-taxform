@@ -6,6 +6,13 @@ from odoo import api, fields, models
 
 
 class HrPayslip(models.Model):
+    """
+    Adds Indonesian PPh 21 tax period tracking to the payslip.
+    Resolves which tax period/year the payslip's date falls into and
+    whether the payslip is issued in the employee's joining tax year, so
+    the PPh 21 salary rule can pick the correct computation basis.
+    """
+
     _inherit = "hr.payslip"
 
     @api.depends(
@@ -13,6 +20,16 @@ class HrPayslip(models.Model):
         "date",
     )
     def _compute_payslip_tax_period(self):
+        """Resolve the tax period/year matching the payslip's ``date``.
+
+        Looks up the ``l10n_id.tax_period`` that contains the payslip
+        date and stores it, along with its parent tax year, on
+        ``tax_period_id``/``tax_year_id``. When the resolved tax year
+        matches the employee's ``joining_tax_year_id``,
+        ``joining_tax_month`` is set to the month the employee joined in;
+        otherwise it defaults to ``1``. Both period/year fields are left
+        empty when no matching tax period is configured.
+        """
         for payslip in self:
             obj_period = self.env["l10n_id.tax_period"]
             payslip.joining_tax_month = 1

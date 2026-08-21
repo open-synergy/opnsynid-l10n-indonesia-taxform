@@ -9,5 +9,8 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestL10nIdTaxformPph21Payslip(YamlTransactionCase):
+    """Test the PPh 21 tax period computation on employee and payslip."""
+
     def test_l10n_id_taxform_pph_21_payslip(self):
+        """Run the PPh 21 payslip tax period computation scenario."""
         self.run_yaml_scenario("test_data_l10n_id_taxform_pph_21_payslip.yaml")

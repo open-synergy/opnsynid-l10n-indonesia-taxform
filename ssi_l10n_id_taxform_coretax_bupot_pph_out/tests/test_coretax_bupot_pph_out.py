@@ -10,7 +10,23 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestCoretaxBupotPPhOut(YamlTransactionCase):
+    """Cover the Coretax XML export for an outgoing Bukti Potong PPh 23.
+
+    Exercises ``_coretax_format_number``,
+    ``_prepare_coretax_bupot_pph_out_values``, and the ``UserError``
+    guards raised when the withholder or wajib pajak identity data
+    required by the DGT Coretax XML schema is missing.
+    """
+
     def setUp(self):
+        """Create one PPh 23 Bukti Potong with a taxed line.
+
+        Sets NPWP/NITKU on the company (pemotong) partner, creates a
+        domestic wajib pajak with NPWP, and creates the KPP, tax
+        period, journal, account, move, and tax records needed to
+        confirm a ``l10n_id.bukti_potong_pph_f113306_out`` with one
+        line tagged with ``coretax_tax_object_code``.
+        """
         super().setUp()
 
         # Withholder (pemotong) identity on the company partner.

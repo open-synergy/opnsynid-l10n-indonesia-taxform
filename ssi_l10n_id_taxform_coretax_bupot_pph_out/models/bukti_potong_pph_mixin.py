@@ -9,6 +9,15 @@ from odoo.exceptions import UserError
 
 
 class BuktiPotongPPhMixin(models.AbstractModel):
+    """Adds Coretax XML export to an outgoing Bukti Potong PPh document.
+
+    Builds the DGT Coretax ``MmWithholding`` XML from the withholder
+    (``pemotong_pajak_id``), the wajib pajak, and each line with a
+    positive tax amount, then exposes it through
+    ``action_export_coretax_bupot_pph_out_xml`` as a downloadable
+    ``ir.attachment``.
+    """
+
     _inherit = "l10n_id.bukti_potong_pph_mixin"
 
     def _coretax_format_number(self, value):

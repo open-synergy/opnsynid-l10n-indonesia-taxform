@@ -139,11 +139,32 @@ class KlikpajakBackend(models.Model):
     )
 
     def _get_klikpajak_date_header(self):
+        """Build the ``Date`` header value for a Klikpajak request.
+
+        Formats the current UTC time as an HTTP-date string (RFC
+        1123, e.g. ``Mon, 21 Aug 2026 09:00:00 GMT``) via
+        ``wsgiref.handlers.format_date_time``. Klikpajak signs
+        requests over UTC-formatted date strings, so this is the
+        value that is expected to also appear in the ``date:`` line
+        signed by :meth:`_get_signature`.
+
+        :return: HTTP-date formatted UTC timestamp string.
+        """
         self.ensure_one()
         now_timestamp = time.mktime(datetime.utcnow().timetuple())
         return format_date_time(now_timestamp)
 
     def _get_klikpajak_sale_invoice_params(self):
+        """Build the query parameters for the Create Sale Invoice call.
+
+        Used when calling ``sale_invoice_api`` (the e-Faktur "create
+        sale invoice" endpoint): asks Klikpajak to auto-approve and
+        auto-calculate the submitted invoice, so no separate approve
+        call is required for backends configured this way.
+
+        :return: dict with ``auto_approval`` and ``auto_calculate``,
+            both set to the string ``"true"``.
+        """
         self.ensure_one()
         return {
             "auto_approval": "true",
@@ -151,12 +172,32 @@ class KlikpajakBackend(models.Model):
         }
 
     def _get_klikpajak_header(self):
+        """Build the base HTTP headers shared by every Klikpajak call.
+
+        Currently only the ``Date`` header (see
+        :meth:`_get_klikpajak_date_header`). :meth:`_get_header`
+        extends this dict with ``Authorization`` before a request is
+        sent.
+
+        :return: dict with the ``Date`` header.
+        """
         self.ensure_one()
         return {
             "Date": self._get_klikpajak_date_header(),
         }
 
     def _get_klikpajak_authorization_header(self, signature):
+        """Build the ``Authorization`` header for HMAC authentication.
+
+        Composes the ``hmac`` authentication scheme Klikpajak expects:
+        ``username`` set to ``client_id``, fixed
+        ``algorithm="hmac-sha256"``, ``headers="date request-line"``
+        (naming the two signed lines), and the given ``signature``.
+
+        :param str signature: base64-encoded HMAC-SHA256 signature,
+            as returned by :meth:`_get_signature`.
+        :return: the fully formatted ``Authorization`` header value.
+        """
         self.ensure_one()
         result = 'hmac username="%s",' % self.client_id
         result += ' algorithm="hmac-sha256",'
@@ -165,6 +206,23 @@ class KlikpajakBackend(models.Model):
         return result
 
     def _get_signature(self, date, path, method):
+        """Compute the HMAC-SHA256 signature of one API request.
+
+        Signs the two-line payload ``"date: <date>\\n<method> <path>
+        HTTP/1.1"`` using ``client_secret`` as the HMAC key, then
+        base64-encodes the resulting digest. This is the ``date`` +
+        request-line pair the ``Authorization`` header (see
+        :meth:`_get_klikpajak_authorization_header`) declares as
+        signed via ``headers="date request-line"``.
+
+        :param str date: HTTP-date string to sign, normally the
+            value returned by :meth:`_get_klikpajak_date_header`.
+        :param str path: request path (or full URL — see
+            :meth:`_get_hmac`) to sign as part of the request line.
+        :param str method: HTTP method to sign, upper case (e.g.
+            ``"POST"``).
+        :return: base64-encoded HMAC-SHA256 signature string.
+        """
         secret = self.client_secret
         request_line = method + " " + path + " HTTP/1.1"
         payload_tupple = ("date: " + date, request_line)
@@ -181,6 +239,21 @@ class KlikpajakBackend(models.Model):
         return signature
 
     def _get_header(self, path, method):
+        """Build the full HTTP headers for one signed Klikpajak call.
+
+        Combines :meth:`_get_klikpajak_header` (which carries a UTC
+        ``Date``) with a freshly computed ``Authorization`` header:
+        ``path``/``method`` are signed with the *local* current
+        timestamp via :meth:`_get_signature` and
+        :meth:`_get_klikpajak_authorization_header` — a separate
+        timestamp from the one already in the ``Date`` header above.
+
+        :param str path: request path being called and signed.
+        :param str method: HTTP method of the request, upper case
+            (e.g. ``"POST"``).
+        :return: dict of headers, including ``Date`` and
+            ``Authorization``.
+        """
         self.ensure_one()
         result = self._get_klikpajak_header()
         date = format_date_time(datetime.now().timestamp())
@@ -194,6 +267,17 @@ class KlikpajakBackend(models.Model):
         return result
 
     def _get_hmac(self):
+        """Compute the HMAC signature for the Create Sale Invoice call.
+
+        Signs ``base_url`` + ``sale_invoice_api`` as a ``POST``
+        request, using the current local timestamp (see
+        :meth:`_get_signature`). Used by :meth:`action_get_hmac` to
+        let a user verify the configured ``client_id``/
+        ``client_secret`` pair produces a signature, without sending
+        an actual request to Klikpajak.
+
+        :return: base64-encoded HMAC-SHA256 signature string.
+        """
         self.ensure_one()
         date = format_date_time(datetime.now().timestamp())
         api_url = self.base_url + self.sale_invoice_api
@@ -201,6 +285,20 @@ class KlikpajakBackend(models.Model):
         return result
 
     def action_get_hmac(self):
+        """Show the computed HMAC signature to the user.
+
+        For every record in ``self``, computes the signature via
+        :meth:`_get_hmac` and raises a ``ValidationError`` carrying
+        the result — this dialog is the only way the value is
+        surfaced, since :meth:`_get_hmac` is never stored on a field.
+        Intended as a manual check that the configured ``client_id``/
+        ``client_secret`` pair signs correctly; it does not call the
+        Klikpajak API and does not change ``state``.
+
+        :raises ValidationError: always, carrying the computed
+            signature as its message — this is the expected way the
+            action reports its result, not a failure.
+        """
         for record in self:
             result = record._get_hmac()
             raise ValidationError(  # pylint: disable=translation-required

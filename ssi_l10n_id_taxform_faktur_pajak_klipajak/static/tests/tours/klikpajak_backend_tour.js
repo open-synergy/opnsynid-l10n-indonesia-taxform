@@ -491,5 +491,79 @@ odoo.define(
                 ]
             )
         );
+
+        // IK: docs/klikpajak_backend/06-test-hmac.md
+        tour.register(
+            "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_test_hmac",
+            {
+                test: true,
+                url: "/web",
+            },
+            [].concat(
+                // ── Flow 1 — Open the Backends menu.
+                openKlikpajakBackendList(),
+                [
+                    // ── Flow 2 — Find and open the record to test.
+                    {
+                        content: "Open the record",
+                        trigger:
+                            ".o_data_row:contains(TOUR KLIKPAJAK BACKEND Test HMAC) .o_data_cell:first",
+                        extra_trigger: ".o_list_view",
+                    },
+                    {
+                        content: "Record is open",
+                        trigger: ".o_form_view",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+
+                    // ── Flow 3 — Click the Test HMAC button. This action
+                    // always raises a ValidationError to surface its
+                    // result -- the dialog it opens is the EXPECTED
+                    // outcome, not a tour failure (docs/klikpajak_backend/
+                    // 06-test-hmac.md Post-Condition). extra_trigger is the
+                    // mandatory settle gate for 14.0 header-button clicks
+                    // (odoo-development-ui-test
+                    // patterns-dialogs-and-wizards.md §F).
+                    {
+                        content: "Click the Test HMAC button",
+                        trigger: ".o_statusbar_buttons button[name='action_get_hmac']",
+                        extra_trigger: ".o_form_view",
+                    },
+
+                    // ── Post-Condition — A dialog shows the computed HMAC
+                    // signature. Only the dialog TYPE (title "Validation
+                    // Error", from the ValidationError -> WarningDialog
+                    // mapping in web.CrashManager) is asserted here, not
+                    // the signature value itself -- the tour verifies the
+                    // result is surfaced to the user, not that the value
+                    // is arithmetically correct (odoo-development-ui-test
+                    // boundary: value correctness is unit-test territory).
+                    {
+                        content: "Result dialog is displayed",
+                        trigger: ".modal-title:contains(Validation Error)",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+                    {
+                        content: "Close the dialog",
+                        trigger: ".modal-footer button.btn-primary",
+                        in_modal: true,
+                    },
+                    {
+                        // Gerbang modal-tertutup wajib sesudah dialog
+                        // (odoo-development-ui-test
+                        // patterns-dialogs-and-wizards.md §G).
+                        content: "Dialog is closed and the record is unchanged",
+                        trigger: "body:not(:has(.modal))",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+                ]
+            )
+        );
     }
 );

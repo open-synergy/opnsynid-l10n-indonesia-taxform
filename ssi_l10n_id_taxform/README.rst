@@ -14,6 +14,13 @@ Work Instruction
 ================
 
 * `Create Contact <docs/res_partner/index.html>`_
+* `Create Tax Year <docs/l10n_id_tax_year/index.html>`_
+* `Edit Tax Year <docs/l10n_id_tax_year/index.html>`_
+* `Delete Tax Year <docs/l10n_id_tax_year/index.html>`_
+* `Create Period for Tax Year <docs/l10n_id_tax_year/index.html>`_
+* `Create Tax Period <docs/l10n_id_tax_period/index.html>`_
+* `Edit Tax Period <docs/l10n_id_tax_period/index.html>`_
+* `Delete Tax Period <docs/l10n_id_tax_period/index.html>`_
 
 
 Installation

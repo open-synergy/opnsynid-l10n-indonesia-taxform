@@ -13,6 +13,14 @@
                 type="text/javascript"
                 src="/ssi_l10n_id_taxform/static/tests/tours/res_partner_tour.js"
             />
+            <script
+                type="text/javascript"
+                src="/ssi_l10n_id_taxform/static/tests/tours/l10n_id_tax_year_tour.js"
+            />
+            <script
+                type="text/javascript"
+                src="/ssi_l10n_id_taxform/static/tests/tours/l10n_id_tax_period_tour.js"
+            />
         </xpath>
     </template>
 </odoo>

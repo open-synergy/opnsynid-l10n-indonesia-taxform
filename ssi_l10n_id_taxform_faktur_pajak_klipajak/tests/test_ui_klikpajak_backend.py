@@ -22,10 +22,18 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
     def setUpClass(cls):
         """Create one dedicated backend record per tour.
 
-        ``admin`` already holds ``base.group_system`` (Settings) and,
-        through ``base.group_user``, ``base.group_no_one`` (Technical
-        Features) via demo data, so no extra group grant is needed for
-        the Settings > Technical > Klik Pajak menu to render.
+        ``admin`` already holds ``base.group_no_one`` (implied by
+        ``base.group_user``), but group membership alone does not
+        render the Settings > Technical menu: ``ir.ui.menu.
+        _visible_menu_ids()`` also strips any menu under
+        ``base.group_no_one`` unless the session is in developer
+        mode (``if not debug: groups = groups -
+        self.env.ref('base.group_no_one')``,
+        ``odoo/addons/base/models/ir_ui_menu.py``). That is why every
+        ``start_tour`` call below opens ``/web?debug=1`` instead of
+        plain ``/web`` -- without it, ``base.menu_custom`` (Technical)
+        never renders and the first navigation step of every tour
+        times out.
 
         The restart tour's fixture is created already ``running`` and
         linked to the company, mirroring the real state left behind by
@@ -84,7 +92,7 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
         IK: docs/klikpajak_backend/01-create.md
         """
         self.start_tour(
-            "/web",
+            "/web?debug=1",
             "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_create",
             login="admin",
         )
@@ -95,7 +103,7 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
         IK: docs/klikpajak_backend/03-delete.md
         """
         self.start_tour(
-            "/web",
+            "/web?debug=1",
             "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_delete",
             login="admin",
         )
@@ -106,7 +114,7 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
         IK: docs/klikpajak_backend/02-edit.md
         """
         self.start_tour(
-            "/web",
+            "/web?debug=1",
             "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_edit",
             login="admin",
         )
@@ -117,7 +125,7 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
         IK: docs/klikpajak_backend/05-restart.md
         """
         self.start_tour(
-            "/web",
+            "/web?debug=1",
             "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_restart",
             login="admin",
         )
@@ -134,7 +142,7 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
         nothing left to demote.
         """
         self.start_tour(
-            "/web",
+            "/web?debug=1",
             "ssi_l10n_id_taxform_faktur_pajak_klipajak_klikpajak_backend_running",
             login="admin",
         )

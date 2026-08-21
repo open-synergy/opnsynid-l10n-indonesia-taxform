@@ -9,6 +9,10 @@
 ## Pre-Condition
 
 - **Access:** User is in group _Settings — Technical Features_ (`base.group_system`).
+- **Access:** Developer mode is active (e.g. open `/web?debug=1`, or enable it via
+  **Settings > General Settings > Developer Tools**). The **Technical** menu lives under
+  `base.group_no_one`, which stays hidden from the menu bar for any session outside
+  developer mode — even for users who already hold the group.
 
 ## Flow
 

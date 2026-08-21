@@ -227,10 +227,17 @@ odoo.define(
                         content: "Open the Parameters tab",
                         trigger: ".o_notebook .nav-link:contains(Parameters)",
                     },
+                    // The o2m list row's <td> cells carry no [name]
+                    // attribute in 14.0 -- only class/tabindex/title. Select
+                    // the Value column by its position instead: the tree
+                    // view declares <field name="name"/><field
+                    // name="type"/><field name="value"/> in that order
+                    // (views/klikpajak_backend_views.xml), so the Value cell
+                    // is the third .o_data_cell of the row.
                     {
                         content: "Click the parameter row's Value cell",
                         trigger:
-                            ".o_data_row:contains(TOUR_PARAM_EDIT) .o_data_cell[name='value']",
+                            ".o_data_row:contains(TOUR_PARAM_EDIT) .o_data_cell:eq(2)",
                     },
                     {
                         content: "Change the Value",
@@ -386,9 +393,20 @@ odoo.define(
 
                     // ── Flow 3 — Click the Running button. No confirm=
                     // dialog on this button, so no OK step here.
+                    // extra_trigger is the mandatory settle gate for 14.0
+                    // header-button clicks (odoo-development-ui-test
+                    // patterns-dialogs-and-wizards.md §F) -- it does NOT by
+                    // itself fix a dead click (step "succeeded" with no
+                    // call_button RPC). The dead click this tour hit earlier
+                    // was caused by empty required client_id/client_secret
+                    // on the fixture record (auth_method defaults to
+                    // "hmac"), which made Odoo's pre-action revalidation
+                    // silently reject the click; fixed in
+                    // tests/test_ui_klikpajak_backend.py _create_backend().
                     {
                         content: "Click the Running button",
                         trigger: ".o_statusbar_buttons button[name='action_running']",
+                        extra_trigger: ".o_form_view",
                     },
 
                     // ── Post-Condition — Status changes to Running, and the
@@ -443,10 +461,13 @@ odoo.define(
                     },
 
                     // ── Flow 3 — Click the Restart button. No confirm=
-                    // dialog on this button, so no OK step here.
+                    // dialog on this button, so no OK step here. See the
+                    // Running tour above for why extra_trigger is mandatory
+                    // here and what actually caused the dead click.
                     {
                         content: "Click the Restart button",
                         trigger: ".o_statusbar_buttons button[name='action_restart']",
+                        extra_trigger: ".o_form_view",
                     },
 
                     // ── Post-Condition — Status changes back to Draft, and

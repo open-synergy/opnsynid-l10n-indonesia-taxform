@@ -69,6 +69,26 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
     def _create_backend(cls, name, state="draft", parameter_lines=None):
         """Create a ``klikpajak_backend`` record for tour Pre-Condition.
 
+        ``client_id``/``client_secret`` are always set even though the
+        Flow under test never touches them: ``auth_method`` defaults to
+        ``"hmac"``, and the form view marks both fields
+        ``required`` whenever ``auth_method == "hmac"``
+        (``views/klikpajak_backend_views.xml``). A fixture left with
+        those fields empty is *invisible* damage -- the record reads
+        fine and the list/form open normally -- but the Odoo 14 web
+        client always re-validates the currently loaded record before
+        acting on Save **or** any statusbar button (``type="object"``),
+        even on an untouched read-only form. That re-validation fails
+        silently from the tour's point of view: the click step still
+        reports "succeeded" (the DOM element was found and clicked),
+        but the client shows an "Invalid fields: Client ID / Client
+        Secret" notification instead of ever sending the
+        ``call_button``/``write`` RPC, so ``state`` never changes.
+        Confirmed locally via ``test-module-ci-local.sh --digest``: the
+        browser log recorded that exact "Invalid fields" line at the
+        moment of each failing click, and ``call_button`` count for
+        those steps was 0.
+
         :param str name: Name of the backend record.
         :param str state: Initial ``state`` value.
         :param list parameter_lines: Optional ``(0, 0, {...})`` command
@@ -81,6 +101,8 @@ class TestUiKlikpajakBackend(HttpSavepointCase):
             "code": "/",
             "base_url": "https://sandbox.klikpajak.id",
             "state": state,
+            "client_id": "fixture-client-id",
+            "client_secret": "fixture-client-secret",
         }
         if parameter_lines:
             vals["parameter_value_ids"] = parameter_lines

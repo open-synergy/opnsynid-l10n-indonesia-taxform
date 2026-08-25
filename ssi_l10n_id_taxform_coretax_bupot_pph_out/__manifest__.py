@@ -4,7 +4,7 @@
 # pylint: disable=locally-disabled, manifest-required-author
 {
     "name": "Indonesia's Taxform - Coretax Bukti Potong PPh Out XML Export",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.1.0",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
@@ -15,6 +15,7 @@
     "installable": True,
     "application": False,
     "depends": [
+        "ssi_l10n_id_taxform",
         "ssi_l10n_id_taxform_bukti_potong_pph_mixin",
         "ssi_l10n_id_taxform_bukti_potong_pph_f113306",
     ],

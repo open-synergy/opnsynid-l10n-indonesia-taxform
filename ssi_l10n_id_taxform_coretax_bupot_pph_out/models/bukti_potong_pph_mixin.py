@@ -85,7 +85,7 @@ Solution: Set the NPWP of the wajib pajak partner
             "tax_period_year": self.tax_period_id.date_start.year,
             "counterpart_opt": counterpart_opt,
             "counterpart_tin": tin,
-            "tax_object_code": line.coretax_tax_object_code or "",
+            "tax_object_code": line.coretax_tax_object_code.code or "",
             "gross": self._coretax_format_number(line.amount),
             "withholding_tax": self._coretax_format_number(line.amount_tax),
             "withholding_date": fields.Date.to_string(self.date),
@@ -123,13 +123,27 @@ Solution: Add lines with a non-zero tax amount before exporting
             "lines": lines,
         }
 
+    def _get_coretax_bupot_pph_out_template_xmlid(self):
+        """Return the XML ID of the QWeb template used to render the
+        Coretax export.
+
+        Extension point: override in a glue module (mis. the f113301
+        BP21 module) to render a richer template without changing the
+        export button or the base rendering context for other bukti
+        potong types.
+
+        :return: full XML ID of a ``qweb`` template record
+        """
+        self.ensure_one()
+        return "ssi_l10n_id_taxform_coretax_bupot_pph_out.coretax_bupot_pph_out"
+
     def action_export_coretax_bupot_pph_out_xml(self):
         """Generate the Coretax XML file for this outgoing bukti potong PPh,
         attach it to the record, and return a download URL action."""
         self.ensure_one()
         values = self._prepare_coretax_bupot_pph_out_values()
         xml_bytes = self.env["ir.qweb"]._render(
-            "ssi_l10n_id_taxform_coretax_bupot_pph_out.coretax_bupot_pph_out",
+            self._get_coretax_bupot_pph_out_template_xmlid(),
             values,
         )
         xml_content = b'<?xml version="1.0" encoding="UTF-8"?>\n' + xml_bytes

@@ -27,6 +27,8 @@
                 </xpath>
                 <xpath expr="//field[@name='wajib_pajak_id']" position="after">
                     <field name="id_tku_penerima" />
+                </xpath>
+                <xpath expr="//field[@name='pemotong_pajak_id']" position="after">
                     <field name="id_tku_pemotong" />
                 </xpath>
                 <xpath expr="//group[@name='header_right']" position="inside">

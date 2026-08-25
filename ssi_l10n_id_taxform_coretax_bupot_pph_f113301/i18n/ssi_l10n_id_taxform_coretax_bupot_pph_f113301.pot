@@ -1,0 +1,623 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_f113301/models/l10n_id_bukti_potong_pph_f113301_out.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Generate Coretax BP21 (f.1.1.33.01) Out XML\n"
+"Database ID: %s\n"
+"Problem: This document has no %s configured\n"
+"Solution: Set the PTKP Category and Withholding Date before exporting\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_f113301/reports/report_ssi_l10n_id_taxform_coretax_bupot_pph_f113301_xml.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Print Coretax BP21 (f.1.1.33.01) XML\n"
+"Database ID: %s\n"
+"Problem: This document is not yet Done (current status: %s)\n"
+"Solution: Confirm and approve the document before printing the\n"
+"Coretax XML\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_f113301/models/l10n_id_bukti_potong_pph_f113301_out_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set Rate Computation on a BP21 line\n"
+"Database ID: %s\n"
+"Problem: Automatic rate computation is only supported for the TER\n"
+"tariff type, but the selected Coretax Tax Object Code is not TER\n"
+"Solution: Select Manual and enter the rate by hand, or choose a tax\n"
+"object code whose Tariff Type is TER\n"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.actions.report,print_report_name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.coretax_xml_report
+msgid "\"coretax_bupot_pph_f113301_%s\" % (object.name or object.id)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_needaction
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__active
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__active
+msgid "Active"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_ids
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_exception_decoration
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_state
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_type_icon
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__withholding_date
+msgid ""
+"Actual date the tax was withheld, used as the ``WithholdingDate`` element of"
+" the Coretax XML. Not always the same as Date (the document date)."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_attachment_count
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__rate_computation_method
+msgid ""
+"Automatic is only supported when the Coretax Tax Object Code's Tariff Type "
+"is TER; every other tariff regime (PS17/Harian/Pesangon/Pensiun) must be "
+"entered manually."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_l10n_id_bukti_potong_pph_f113301_out
+msgid "Bukti Potong PPh 21/26 f.1.1.33.01 Out"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_l10n_id_bukti_potong_pph_f113301_out_line
+msgid "Bukti Potong PPh 21/26 f.1.1.33.01 Out Line"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__company_id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__company_id
+msgid "Company"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.bukti_potong_pph_f113301_out_view_form_coretax
+#: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_view_form_coretax
+msgid "Coretax"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_report_ssi_l10n_id_taxform_coretax_bupot_pph_f113301_xml
+msgid "Coretax BP21 (f.1.1.33.01) Withholding XML Report"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__create_uid
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__create_date
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__tariff_type
+msgid ""
+"DGT tariff regime used to determine the withholding rate for withholding "
+"lines using this tax object."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__fasilitas_pajak_id
+msgid ""
+"DGT tax facility applied to this income item, used as the ``TaxCertificate``"
+" element of the Coretax XML. Left empty when no facility applies."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__dpp
+msgid "DPP"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__dpp
+msgid ""
+"Dasar Pengenaan Pajak: ``amount`` multiplied by the ``deemed`` factor of the"
+" selected Coretax Tax Object Code (1.0 when the tax object has no deemed "
+"factor set)."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__reference_document_date
+msgid "Date of the reference document."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__deemed
+msgid "Deemed"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__name
+msgid "Description"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__display_name
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_report_ssi_l10n_id_taxform_coretax_bupot_pph_f113301_xml__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__fasilitas_pajak_id
+msgid "Fasilitas Pajak"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_follower_ids
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_channel_ids
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_partner_ids
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_type_icon
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__deemed
+msgid ""
+"Fraction of gross income used as the DPP (Dasar Pengenaan Pajak) for this "
+"tax object, e.g. 0.5 for 50% deemed profit. Leave at 1.0 (100%) when the "
+"full gross income is the DPP."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_taxform_objek_pajak__tariff_type__harian
+msgid "Harian"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_report_ssi_l10n_id_taxform_coretax_bupot_pph_f113301_xml__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__id_tku_pemotong
+msgid "ID TKU Pemotong"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__id_tku_penerima
+msgid "ID TKU Penerima"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_exception_icon
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_exception_icon
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_needaction
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_unread
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_needaction
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_has_error
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_is_follower
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.actions.act_window,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.taxform_jenis_dokumen_referensi_action
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__reference_document_type_id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__code
+#: model:ir.ui.menu,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_jenis_dokumen_referensi_menu
+#: model:res.groups,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_jenis_dokumen_referensi_configurator_group
+msgid "Jenis Dokumen Referensi"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__tariff_type
+msgid "Jenis Tarif"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.actions.act_window,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.taxform_kode_fasilitas_pajak_action
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__code
+#: model:ir.ui.menu,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_kode_fasilitas_pajak_menu
+#: model:res.groups,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_kode_fasilitas_pajak_configurator_group
+msgid "Kode Fasilitas Pajak"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak____last_update
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_report_ssi_l10n_id_taxform_coretax_bupot_pph_f113301_xml____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__write_uid
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__write_date
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_main_attachment_id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_bukti_potong_pph_f113301_out_line__rate_computation_method__manual
+msgid "Manual"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__active
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__active
+msgid ""
+"Master data status\n"
+"\n"
+"* Inactive data can not be selected when creating new transaction\n"
+"* Transaction with inactive master data can still be viewed\n"
+"* Set master data as inactive if master data no longger needed,\n"
+"but master data already used on transaction"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__code
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__code
+msgid ""
+"Master data unique identifier.\n"
+"\n"
+"* Fill with '/' if You do not need unique identifier\n"
+"* Click 'Generate Code' button to automatically assign code.\n"
+"  Sequence template mush be set to perform this action\n"
+"  Only master data with '/' code will be assign automatic code"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_has_error
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_ids
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__id_tku_pemotong
+msgid ""
+"NITKU of the pemotong pajak (withholder), used as the "
+"``IDPlaceOfBusinessActivity`` element of the Coretax XML. Set on the "
+"Pemotong Pajak partner record."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__id_tku_penerima
+msgid ""
+"NITKU of the wajib pajak (income recipient), used as the "
+"``IDPlaceOfBusinessActivityOfIncomeRecipient`` element of the Coretax XML. "
+"Set on the Wajib Pajak partner record."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_summary
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_type_id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__reference_document_number
+msgid "Nomor Dokumen Referensi"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__note
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__note
+msgid "Note"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_needaction_counter
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_has_error_counter
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_needaction_counter
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_has_error_counter
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__reference_document_number
+msgid "Number of the reference document."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_unread_counter
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_bukti_potong_pph_f113301_out_line__rate_computation_method__auto
+msgid "Otomatis"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_taxform_objek_pajak__tariff_type__ps17
+msgid "PS17 (Pasal 17)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__ptkp_category_id
+msgid ""
+"PTKP status of the wajib pajak, used as the ``StatusTaxExemption`` element "
+"of the Coretax XML and as the PTKP lookup key for automatic TER rate "
+"computation on this document's lines."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_taxform_objek_pajak__tariff_type__pensiun
+msgid "Pensiun"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__rate_computation_method
+msgid "Perhitungan Tarif"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_taxform_objek_pajak__tariff_type__pesangon
+msgid "Pesangon"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_user_id
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__ptkp_category_id
+msgid "Status PTKP"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_state
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_taxform_objek_pajak__tariff_type__ter
+msgid "TER (Tarif Efektif Rata-Rata)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__reference_document_date
+msgid "Tanggal Dokumen Referensi"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__withholding_date
+msgid "Tanggal Pemotongan"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__rate
+msgid "Tarif"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__manual_rate
+msgid "Tarif (Manual)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_l10n_id_taxform_jenis_dokumen_referensi
+msgid "Taxform Jenis Dokumen Referensi"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_l10n_id_taxform_kode_fasilitas_pajak
+msgid "Taxform Kode Fasilitas Pajak"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_l10n_id_taxform_objek_pajak
+msgid "Taxform Objek Pajak"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_exception_decoration
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__reference_document_type_id
+msgid ""
+"Type of the source document (invoice, contract, etc.) this income item is "
+"reported against, used as the ``Document`` element of the Coretax XML."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_unread
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_unread_counter
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__website_message_ids
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__website_message_ids
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__manual_rate
+msgid "Withholding rate entered manually, as a fraction (e.g. 0.05 for 5%)."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__rate
+msgid ""
+"Withholding rate used as the ``Rate`` element of the Coretax XML. Automatic "
+"(TER) or manual depending on Rate Computation."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.actions.report,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.coretax_xml_report
+msgid "[XML] Coretax"
+msgstr ""

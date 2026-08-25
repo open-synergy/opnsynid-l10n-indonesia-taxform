@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template id="xml">
+        <MmBulkWithholding xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <TIN t-esc="company_tin" />
+            <IDPlaceOfBusinessActivity t-esc="company_id_tku" />
+            <ListOfMmWithholding>
+                <t t-foreach="lines" t-as="line">
+                    <MmWithholding>
+                        <TaxPeriodMonth t-esc="line['tax_period_month']" />
+                        <TaxPeriodYear t-esc="line['tax_period_year']" />
+                        <CounterpartOpt t-esc="line['counterpart_opt']" />
+                        <CounterpartPassport xsi:nil="true" />
+                        <CounterpartTin t-esc="line['counterpart_tin']" />
+                        <StatusTaxExemption t-esc="line['status_tax_exemption']" />
+                        <TaxCertificate t-esc="line['tax_certificate']" />
+                        <TaxObjectCode t-esc="line['tax_object_code']" />
+                        <Gross t-esc="line['gross']" />
+                        <Deemed t-esc="line['deemed']" />
+                        <Rate t-esc="line['rate']" />
+                        <WithholdingTax t-esc="line['withholding_tax']" />
+                        <t t-if="line['document_type']">
+                            <Document t-esc="line['document_type']" />
+                            <DocumentNumber t-esc="line['document_number']" />
+                            <DocumentDate t-esc="line['document_date']" />
+                        </t>
+                        <IDPlaceOfBusinessActivity
+                            t-esc="line['id_place_of_business_activity']"
+                        />
+                        <IDPlaceOfBusinessActivityOfIncomeRecipient
+                            t-esc="line['id_place_of_business_activity_of_income_recipient']"
+                        />
+                        <WithholdingDate t-esc="line['withholding_date']" />
+                    </MmWithholding>
+                </t>
+            </ListOfMmWithholding>
+        </MmBulkWithholding>
+    </template>
+</odoo>

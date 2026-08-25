@@ -120,6 +120,14 @@ scenarios:
           amount: 2.0
           amount_type: "percent"
 
+      - step: "Create Coretax tax object code 23-100-04"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "23-100-04"
+          name: "PPh 23 Interest Income Test (Missing NPWP Wajib Pajak)"
+
       - step: "Create Bukti Potong PPh 23 Out with one taxed line"
         action: "create"
         model: "l10n_id.bukti_potong_pph_f113306_out"
@@ -140,7 +148,7 @@ scenarios:
                 move_line_id: "REC: move_line.id"
                 amount_computation_method: "manual"
                 manual_amount: 10000000.0
-                coretax_tax_object_code: "23-100-01"
+                coretax_tax_object_code: "REC: objek_pajak.id"
 
       - step: "Preparing Coretax values raises for missing wajib pajak NPWP"
         action: "call"

@@ -16,8 +16,10 @@ class BuktiPotongPPhLineMixin(models.AbstractModel):
 
     _inherit = "l10n_id.bukti_potong_pph_line_mixin"
 
-    coretax_tax_object_code = fields.Char(
+    coretax_tax_object_code = fields.Many2one(
         string="Coretax Tax Object Code",
+        comodel_name="l10n_id.taxform_objek_pajak",
+        ondelete="restrict",
         help=(
             "Tax object code used in the Coretax XML export "
             "(e.g. 23-100-01 for PPh 23 interest income)."

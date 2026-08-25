@@ -128,6 +128,14 @@ class TestCoretaxBupotPPhOut(YamlTransactionCase):
             }
         )
 
+        # Coretax tax object code master record.
+        self.objek_pajak = self.env["l10n_id.taxform_objek_pajak"].create(
+            {
+                "code": "23-100-01",
+                "name": "PPh 23 Interest Income Test",
+            }
+        )
+
         # Bukti Potong PPh 23 Out record with one line.
         self.bukpot = self.env["l10n_id.bukti_potong_pph_f113306_out"].create(
             {
@@ -148,7 +156,7 @@ class TestCoretaxBupotPPhOut(YamlTransactionCase):
                             "move_line_id": self.move_line.id,
                             "amount_computation_method": "manual",
                             "manual_amount": 10000000.0,
-                            "coretax_tax_object_code": "23-100-01",
+                            "coretax_tax_object_code": self.objek_pajak.id,
                         },
                     )
                 ],
@@ -218,7 +226,7 @@ class TestCoretaxBupotPPhOut(YamlTransactionCase):
                             "move_line_id": self.move_line.id,
                             "amount_computation_method": "manual",
                             "manual_amount": 0.0,
-                            "coretax_tax_object_code": "23-100-01",
+                            "coretax_tax_object_code": self.objek_pajak.id,
                         },
                     )
                 ]

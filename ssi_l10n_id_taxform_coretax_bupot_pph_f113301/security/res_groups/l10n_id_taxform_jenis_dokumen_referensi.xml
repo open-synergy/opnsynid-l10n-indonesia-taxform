@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<record
+        id="l10n_id_taxform_jenis_dokumen_referensi_configurator_group"
+        model="res.groups"
+    >
+    <field name="name">Jenis Dokumen Referensi</field>
+    <field
+            name="category_id"
+            ref="ssi_l10n_id_taxform.indonesia_taxform_configurator_module_category"
+        />
+    <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+</record>
+
+</odoo>

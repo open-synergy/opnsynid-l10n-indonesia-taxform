@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<record id="l10n_id_taxform_objek_pajak_view_form_coretax" model="ir.ui.view">
+    <field name="name">l10n_id.taxform_objek_pajak.coretax - form</field>
+    <field name="model">l10n_id.taxform_objek_pajak</field>
+    <field
+            name="inherit_id"
+            ref="ssi_l10n_id_taxform.l10n_id_taxform_objek_pajak_view_form"
+        />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//notebook/page[@name='note']" position="before">
+                <page name="coretax" string="Coretax">
+                    <group name="coretax_group_1">
+                        <field name="deemed" />
+                        <field name="tariff_type" />
+                    </group>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+</odoo>

@@ -43,15 +43,31 @@ msgid ""
 "\n"
 "Context: Set Rate Computation on a BP21 line\n"
 "Database ID: %s\n"
-"Problem: Automatic rate computation is only supported for the TER\n"
-"tariff type, but the selected Coretax Tax Object Code is not TER\n"
+"Problem: Automatic rate computation is only supported for the TER and\n"
+"Final (Tarif Tetap per Kode Objek Pajak) tariff types, but the\n"
+"selected Coretax Tax Object Code is neither\n"
 "Solution: Select Manual and enter the rate by hand, or choose a tax\n"
-"object code whose Tariff Type is TER\n"
+"object code whose Tariff Type is TER or Final\n"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
 #: model:ir.actions.report,print_report_name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.coretax_xml_report
 msgid "\"coretax_bupot_pph_f113301_%s\" % (object.name or object.id)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:l10n_id.taxform_objek_pajak,code:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_02
+msgid "21-402-02"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:l10n_id.taxform_objek_pajak,code:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_03
+msgid "21-402-03"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:l10n_id.taxform_objek_pajak,code:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_04
+msgid "21-402-04"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
@@ -107,8 +123,8 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__rate_computation_method
 msgid ""
 "Automatic is only supported when the Coretax Tax Object Code's Tariff Type "
-"is TER; every other tariff regime (PS17/Harian/Pesangon/Pensiun) must be "
-"entered manually."
+"is TER or Final (Tarif Tetap per Kode Objek Pajak); every other tariff "
+"regime (PS17/Harian/Pesangon/Pensiun) must be entered manually."
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
@@ -209,6 +225,19 @@ msgid "Fasilitas Pajak"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_taxform_objek_pajak__tariff_type__final_flat
+msgid "Final (Tarif Tetap per Kode Objek Pajak)"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__fixed_rate
+msgid ""
+"Fixed withholding rate applied when Tariff Type is Final (Tarif Tetap per "
+"Kode Objek Pajak), as a fraction (e.g. 0.05 for 5%). Ignored for every other"
+" tariff type."
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__message_follower_ids
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__message_follower_ids
 msgid "Followers"
@@ -243,6 +272,30 @@ msgstr ""
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.selection__l10n_id_taxform_objek_pajak__tariff_type__harian
 msgid "Harian"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:l10n_id.taxform_objek_pajak,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_04
+msgid ""
+"Honor atau Imbalan Lain yang Dibebankan kepada APBN atau APBD yang Diterima "
+"oleh PNS Golongan I dan Golongan II, Anggota TNI dan Anggota POLRI Golongan "
+"Pangkat Tamtama dan Bintara, dan Pensiunannya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:l10n_id.taxform_objek_pajak,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_02
+msgid ""
+"Honor atau Imbalan Lain yang Dibebankan kepada APBN atau APBD yang Diterima "
+"oleh PNS Golongan III, Anggota TNI dan Anggota POLRI Golongan Pangkat "
+"Perwira Pertama, dan Pensiunannya"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:l10n_id.taxform_objek_pajak,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_03
+msgid ""
+"Honor atau Imbalan Lain yang Dibebankan kepada APBN atau APBD yang Diterima "
+"oleh Pejabat Negara, PNS Golongan IV, Anggota TNI dan Anggota POLRI Golongan"
+" Pangkat Perwira Menengah dan Perwira Tinggi, dan Pensiunannya"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
@@ -554,6 +607,11 @@ msgid "Tarif (Manual)"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_objek_pajak__fixed_rate
+msgid "Tarif Tetap"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
 #: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_l10n_id_taxform_jenis_dokumen_referensi
 msgid "Taxform Jenis Dokumen Referensi"
 msgstr ""
@@ -614,7 +672,7 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__rate
 msgid ""
 "Withholding rate used as the ``Rate`` element of the Coretax XML. Automatic "
-"(TER) or manual depending on Rate Computation."
+"(TER or Final) or manual depending on Rate Computation."
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301

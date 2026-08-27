@@ -70,8 +70,9 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         default="manual",
         help=(
             "Automatic is only supported when the Coretax Tax Object "
-            "Code's Tariff Type is TER; every other tariff regime "
-            "(PS17/Harian/Pesangon/Pensiun) must be entered manually."
+            "Code's Tariff Type is TER or Final (Tarif Tetap per Kode "
+            "Objek Pajak); every other tariff regime (PS17/Harian/"
+            "Pesangon/Pensiun) must be entered manually."
         ),
     )
     manual_rate = fields.Float(
@@ -85,8 +86,8 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         compute_sudo=True,
         help=(
             "Withholding rate used as the ``Rate`` element of the "
-            "Coretax XML. Automatic (TER) or manual depending on "
-            "Rate Computation."
+            "Coretax XML. Automatic (TER or Final) or manual "
+            "depending on Rate Computation."
         ),
     )
 
@@ -111,29 +112,31 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         "manual_rate",
         "dpp",
         "coretax_tax_object_code.tariff_type",
+        "coretax_tax_object_code.fixed_rate",
         "bukti_potong_id.ptkp_category_id",
         "bukti_potong_id.date",
     )
     def _compute_rate(self):
         """Compute the withholding rate.
 
-        Automatic computation only runs for the TER tariff type,
-        looking up ``l10n_id.pph_21_ter`` with the header's PTKP
-        category. It never raises: incomplete TER data (missing
-        table/PTKP line) falls back to ``0.0`` here so a draft line
-        can still be saved — the export step
-        (``_prepare_coretax_bupot_line``) is what validates the rate
-        is usable before the Coretax XML is generated.
+        Automatic computation runs for two tariff types: TER (looking
+        up ``l10n_id.pph_21_ter`` with the header's PTKP category) and
+        Final/Tarif Tetap (taking the tax object's ``fixed_rate`` as
+        is). It never raises: incomplete TER data (missing table/PTKP
+        line) falls back to ``0.0`` here so a draft line can still be
+        saved — the export step (``_prepare_coretax_bupot_line``) is
+        what validates the rate is usable before the Coretax XML is
+        generated.
 
         :return: nothing; assigns ``rate``
         """
         for line in self:
             result = line.manual_rate
-            if (
-                line.rate_computation_method == "auto"
-                and line.coretax_tax_object_code.tariff_type == "ter"
-            ):
+            tariff_type = line.coretax_tax_object_code.tariff_type
+            if line.rate_computation_method == "auto" and tariff_type == "ter":
                 result = line._get_auto_ter_rate()
+            elif line.rate_computation_method == "auto" and tariff_type == "final_flat":
+                result = line.coretax_tax_object_code.fixed_rate
             line.rate = result
 
     def _get_auto_ter_rate(self):
@@ -157,11 +160,12 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         "rate_computation_method",
     )
     def _check_rate_computation_method(self):
-        """Reject automatic rate computation outside the TER regime.
+        """Reject automatic rate computation outside the supported
+        tariff regimes.
 
         :raises ValidationError: when ``rate_computation_method`` is
-            ``auto`` on a line whose tax object is not tariff type
-            TER
+            ``auto`` on a line whose tax object is neither tariff
+            type TER nor Final (Tarif Tetap per Kode Objek Pajak)
         """
         for line in self:
             if not line._check_rate_computation_method_condition():
@@ -169,10 +173,11 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
                     """
 Context: Set Rate Computation on a BP21 line
 Database ID: %s
-Problem: Automatic rate computation is only supported for the TER
-tariff type, but the selected Coretax Tax Object Code is not TER
+Problem: Automatic rate computation is only supported for the TER and
+Final (Tarif Tetap per Kode Objek Pajak) tariff types, but the
+selected Coretax Tax Object Code is neither
 Solution: Select Manual and enter the rate by hand, or choose a tax
-object code whose Tariff Type is TER
+object code whose Tariff Type is TER or Final
 """
                     % (line.id,)
                 )
@@ -187,4 +192,4 @@ object code whose Tariff Type is TER
         self.ensure_one()
         if self.rate_computation_method != "auto":
             return True
-        return self.coretax_tax_object_code.tariff_type == "ter"
+        return self.coretax_tax_object_code.tariff_type in ("ter", "final_flat")

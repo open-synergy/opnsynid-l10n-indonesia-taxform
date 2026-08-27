@@ -36,9 +36,19 @@ class L10nIdTaxformObjekPajak(models.Model):
             ("harian", "Harian"),
             ("pesangon", "Pesangon"),
             ("pensiun", "Pensiun"),
+            ("final_flat", "Final (Tarif Tetap per Kode Objek Pajak)"),
         ],
         help=(
             "DGT tariff regime used to determine the withholding rate "
             "for withholding lines using this tax object."
+        ),
+    )
+    fixed_rate = fields.Float(
+        string="Tarif Tetap",
+        default=0.0,
+        help=(
+            "Fixed withholding rate applied when Tariff Type is Final "
+            "(Tarif Tetap per Kode Objek Pajak), as a fraction (e.g. "
+            "0.05 for 5%). Ignored for every other tariff type."
         ),
     )

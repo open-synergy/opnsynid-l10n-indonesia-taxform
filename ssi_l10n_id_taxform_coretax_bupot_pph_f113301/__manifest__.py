@@ -24,6 +24,7 @@
         "security/res_groups/l10n_id_taxform_jenis_dokumen_referensi.xml",
         "security/ir_model_access/l10n_id_taxform_kode_fasilitas_pajak.xml",
         "security/ir_model_access/l10n_id_taxform_jenis_dokumen_referensi.xml",
+        "data/taxform_objek_pajak_data.xml",
         "views/taxform_objek_pajak_views.xml",
         "views/taxform_kode_fasilitas_pajak_views.xml",
         "views/taxform_jenis_dokumen_referensi_views.xml",

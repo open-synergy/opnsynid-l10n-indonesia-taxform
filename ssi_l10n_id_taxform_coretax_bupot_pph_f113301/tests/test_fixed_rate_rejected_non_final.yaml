@@ -1,0 +1,141 @@
+scenarios:
+  - name: "Auto rate is rejected for a non-TER, non-final_flat tariff type"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TY402C"
+          code: "TY402C"
+          date_start: 2036-01-01
+          date_end: 2036-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2036 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2036-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal 402C"
+          code: "TJ402C"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable 402C"
+          code: "22402TST402C"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with a debit/credit line pair"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit 402C"
+                debit: 2000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit 402C"
+                debit: 0.0
+                credit: 2000000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Pesangon Test 402C"
+          type_tax_use: "purchase"
+          amount: 5.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type Pesangon"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-99"
+          name: "Test Pesangon Tariff Type"
+          tariff_type: "pesangon"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test 402C"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak 402C"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak 402C"
+          is_company: true
+
+      - step: "Auto rate on a Pesangon line must be rejected"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Automatic rate computation is only supported"
+        values:
+          date: 2036-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Pesangon Line"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 2000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"

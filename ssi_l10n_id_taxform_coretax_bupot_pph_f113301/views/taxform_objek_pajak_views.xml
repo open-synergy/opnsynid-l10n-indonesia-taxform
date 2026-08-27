@@ -18,6 +18,7 @@
                     <group name="coretax_group_1">
                         <field name="deemed" />
                         <field name="tariff_type" />
+                        <field name="fixed_rate" />
                     </group>
                 </page>
             </xpath>

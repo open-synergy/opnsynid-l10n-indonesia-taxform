@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record
+        id="l10n_id_taxform_objek_pajak_21_402_04"
+        forcecreate="True"
+        model="l10n_id.taxform_objek_pajak"
+    >
+    <field name="code">21-402-04</field>
+    <field name="active">True</field>
+    <field
+            name="name"
+        >Honor atau Imbalan Lain yang Dibebankan kepada APBN atau APBD yang Diterima oleh PNS Golongan I dan Golongan II, Anggota TNI dan Anggota POLRI Golongan Pangkat Tamtama dan Bintara, dan Pensiunannya</field>
+    <field name="tariff_type">final_flat</field>
+    <field name="fixed_rate">0.0</field>
+</record>
+
+<record
+        id="l10n_id_taxform_objek_pajak_21_402_02"
+        forcecreate="True"
+        model="l10n_id.taxform_objek_pajak"
+    >
+    <field name="code">21-402-02</field>
+    <field name="active">True</field>
+    <field
+            name="name"
+        >Honor atau Imbalan Lain yang Dibebankan kepada APBN atau APBD yang Diterima oleh PNS Golongan III, Anggota TNI dan Anggota POLRI Golongan Pangkat Perwira Pertama, dan Pensiunannya</field>
+    <field name="tariff_type">final_flat</field>
+    <field name="fixed_rate">0.05</field>
+</record>
+
+<record
+        id="l10n_id_taxform_objek_pajak_21_402_03"
+        forcecreate="True"
+        model="l10n_id.taxform_objek_pajak"
+    >
+    <field name="code">21-402-03</field>
+    <field name="active">True</field>
+    <field
+            name="name"
+        >Honor atau Imbalan Lain yang Dibebankan kepada APBN atau APBD yang Diterima oleh Pejabat Negara, PNS Golongan IV, Anggota TNI dan Anggota POLRI Golongan Pangkat Perwira Menengah dan Perwira Tinggi, dan Pensiunannya</field>
+    <field name="tariff_type">final_flat</field>
+    <field name="fixed_rate">0.15</field>
+</record>
+</odoo>

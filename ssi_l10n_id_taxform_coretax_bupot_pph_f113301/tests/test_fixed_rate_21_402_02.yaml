@@ -1,0 +1,165 @@
+scenarios:
+  - name: "Auto rate for tax object 21-402-02 uses its fixed_rate"
+    steps:
+      - step: "Get the 21-402-02 tax object code from module data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_02"
+        save_as: "objek_pajak"
+
+      - step: "Assert the master data was loaded with the expected tariff"
+        action: "assert"
+        target: "objek_pajak"
+        asserts:
+          tariff_type:
+            type: "value"
+            expected: "final_flat"
+          fixed_rate:
+            type: "value"
+            expected: 0.05
+
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TY402A"
+          code: "TY402A"
+          date_start: 2036-01-01
+          date_end: 2036-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2036 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2036-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal 402A"
+          code: "TJ402A"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable 402A"
+          code: "22402TST402A"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with a debit/credit line pair"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit 402A"
+                debit: 5000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit 402A"
+                debit: 0.0
+                credit: 5000000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Final Test 402A"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test 402A"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak 402A"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak 402A"
+          is_company: true
+
+      - step: "Create Bukti Potong PPh F113301 Out with one auto final_flat line"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2036-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Honor Golongan III"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 5000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the created line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+        limit: 1
+        save_as: "line"
+
+      - step: "Assert the rate equals the tax object's fixed_rate"
+        action: "assert"
+        target: "line"
+        asserts:
+          rate_computation_method:
+            type: "value"
+            expected: "auto"
+          rate:
+            type: "value"
+            expected: 0.05

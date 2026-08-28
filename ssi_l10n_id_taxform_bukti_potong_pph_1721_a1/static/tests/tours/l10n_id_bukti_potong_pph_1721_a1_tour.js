@@ -137,10 +137,24 @@ odoo.define(
             ];
         }
 
+        // The field selected just before Save (Wajib Pajak on edit,
+        // Period Akhir on create) triggers an onchange RPC that
+        // recomputes several other fields on this model. `extra_trigger`
+        // holds the click until `body` no longer carries the `oe_wait`
+        // class Loading.on_rpc_event() (web/static/src/js/chrome/
+        // loading.js) adds the instant a non-shadow RPC is dispatched
+        // and removes the instant it completes -- unlike the 3s-delayed
+        // `o_ui_blocked`, this reflects any RPC immediately, so it is a
+        // true gate rather than one that matches seconds too late. Without
+        // it, Save can race ahead of that onchange and the record never
+        // reaches the readonly Post-Condition below (CI run 33072927047,
+        // "Invalid fields: Period Akhir" logged 9ms after Save was
+        // clicked -- see issue #230).
         var saveSteps = [
             {
                 content: "Save the record",
                 trigger: ".o_form_button_save",
+                extra_trigger: "body:not(.oe_wait)",
             },
             {
                 content: "Record is saved",

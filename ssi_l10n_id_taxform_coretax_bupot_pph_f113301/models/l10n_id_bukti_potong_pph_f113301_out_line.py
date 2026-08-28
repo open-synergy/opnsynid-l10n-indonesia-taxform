@@ -92,6 +92,18 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             "depending on Rate Computation."
         ),
     )
+    amount_tax = fields.Float(
+        string="Tax Amount",
+        compute="_compute_amount_tax",
+        store=True,
+        compute_sudo=True,
+        help=(
+            "Withheld tax amount, computed as ``dpp`` multiplied by "
+            "``rate`` — independent of ``tax_id``'s own percentage. "
+            "``tax_id`` is only used to resolve the debit/credit "
+            "account for this line."
+        ),
+    )
 
     @api.depends(
         "amount",
@@ -152,6 +164,33 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             elif line.rate_computation_method == "auto" and tariff_type == "final_flat":
                 result = line.coretax_tax_object_code.fixed_rate
             line.rate = result
+
+    @api.depends(
+        "dpp",
+        "rate",
+    )
+    def _compute_amount_tax(self):
+        """Compute the withheld tax amount from this line's DPP and rate.
+
+        Overrides the mixin's ``_compute_amount``, which derives
+        ``amount_tax`` from ``line.tax_id.compute_all()`` — a
+        computation that silently yields ``0.0`` whenever ``tax_id``
+        is set to a 0% tax, as users are instructed to do on this
+        line to avoid double-counting a rate already captured by
+        ``dpp``/``rate``. ``amount_tax`` is instead derived directly
+        from this line's own ``dpp`` and ``rate``, which are always
+        populated regardless of ``tax_id``'s percentage. ``tax_id``
+        keeps its role of resolving the debit/credit account via
+        ``_select_tax_account()``. ``amount`` is unaffected and
+        remains computed by the mixin's ``_compute_amount``.
+
+        :return: nothing; assigns ``amount_tax``
+        """
+        for line in self:
+            result = 0.0
+            currency = line.bukti_potong_id.company_id.currency_id
+            result = currency.round(line.dpp * line.rate)
+            line.amount_tax = result
 
     def _get_auto_ter_rate(self):
         """Look up the TER rate for this line's DPP and header PTKP

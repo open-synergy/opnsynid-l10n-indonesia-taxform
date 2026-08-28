@@ -1,0 +1,186 @@
+scenarios:
+  - name: "Auto PS17 rate for a taxpayer with no prior PS17 lines this year"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TY17FIRST"
+          code: "TY17FIRST"
+          date_start: 2037-01-01
+          date_end: 2037-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2037 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2037-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal PS17 First"
+          code: "TJ17FRST"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable PS17 First"
+          code: "22402TSTP17A"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with a debit/credit line pair"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit PS17 First"
+                debit: 30000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit PS17 First"
+                debit: 0.0
+                credit: 30000000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 PS17 Test First"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type PS17"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-01"
+          name: "Test PS17 Tariff Type First"
+          tariff_type: "ps17"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test PS17 First"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak PS17 First"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak PS17 First"
+          is_company: true
+
+      - step: "Create the PPh 21 Rate table for this tax year"
+        action: "create"
+        model: "l10n_id.pph_21_rate"
+        save_as: "rate_table"
+        values:
+          code: "RATE17FRST"
+          name: "Rate Table PS17 First"
+          date_start: 2037-01-01
+
+      - step: "Add the progressive brackets (UU HPP: 5/15/25/30/35%)"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 0.0
+          pph_rate: 5.0
+
+      - step: "Add the second bracket"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 60000000.0
+          pph_rate: 15.0
+
+      - step: "Create Bukti Potong PPh F113301 Out with one auto PS17 line"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2037-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "PS17 Line First"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 30000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the created line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+        limit: 1
+        save_as: "line"
+
+      - step: "Assert the rate is the first bracket rate, no accumulation"
+        action: "assert"
+        target: "line"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 30000000.0
+          rate_computation_method:
+            type: "value"
+            expected: "auto"
+          rate:
+            type: "value"
+            expected: 0.05

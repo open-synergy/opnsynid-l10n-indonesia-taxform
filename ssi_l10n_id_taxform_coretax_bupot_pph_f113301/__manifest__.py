@@ -5,7 +5,7 @@
 {
     "name": "Indonesia's Taxform - Coretax Bukti Potong PPh 21/26 f.1.1.33.01"
     " Out XML Export",
-    "version": "14.0.1.1.1",
+    "version": "14.0.1.1.2",
     "category": "localization",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",

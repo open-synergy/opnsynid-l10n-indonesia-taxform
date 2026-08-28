@@ -1,0 +1,245 @@
+scenarios:
+  - name: "A cancelled PS17 document does not count toward cumulative_before"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TY17CNCL"
+          code: "TY17CNCL"
+          date_start: 2038-01-01
+          date_end: 2038-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2038 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2038-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal PS17 Cancel"
+          code: "TJ17CNCL"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable PS17 Cancel"
+          code: "22402TSTP17B"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move for the first (to-be-cancelled) document"
+        action: "create"
+        model: "account.move"
+        save_as: "move1"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit PS17 Cancel 1"
+                debit: 50000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit PS17 Cancel 1"
+                debit: 0.0
+                credit: 50000000.0
+
+      - step: "Find the first debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move1.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line1"
+
+      - step: "Create account move for the second document"
+        action: "create"
+        model: "account.move"
+        save_as: "move2"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit PS17 Cancel 2"
+                debit: 30000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit PS17 Cancel 2"
+                debit: 0.0
+                credit: 30000000.0
+
+      - step: "Find the second debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move2.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line2"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 PS17 Test Cancel"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type PS17"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-100-02"
+          name: "Test PS17 Tariff Type Cancel"
+          tariff_type: "ps17"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test PS17 Cancel"
+          is_company: true
+
+      - step: "Create wajib pajak partner (shared by both documents)"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak PS17 Cancel"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak PS17 Cancel"
+          is_company: true
+
+      - step: "Create the PPh 21 Rate table for this tax year"
+        action: "create"
+        model: "l10n_id.pph_21_rate"
+        save_as: "rate_table"
+        values:
+          code: "RATE17CNCL"
+          name: "Rate Table PS17 Cancel"
+          date_start: 2038-01-01
+
+      - step: "Add the progressive brackets (UU HPP: 5/15/25/30/35%)"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 0.0
+          pph_rate: 5.0
+
+      - step: "Add the second bracket"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 60000000.0
+          pph_rate: 15.0
+
+      - step: "Create the first document with a manual PS17 line (dpp 50.000.000)"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot1"
+        values:
+          date: 2038-10-10
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "PS17 Line To Be Cancelled"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line1.id"
+                amount_computation_method: "manual"
+                manual_amount: 50000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "manual"
+                manual_rate: 0.05
+
+      - step:
+          "Force the first document to Cancelled (fixture shortcut, not testing the
+          workflow itself)"
+        action: "write"
+        target: "bukpot1"
+        values:
+          state: "cancel"
+
+      - step: "Create the second (draft) document with an auto PS17 line"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot2"
+        values:
+          date: 2038-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "PS17 Line Second Document"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line2.id"
+                amount_computation_method: "manual"
+                manual_amount: 30000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the second document's line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot2.id"]
+        limit: 1
+        save_as: "line2"
+
+      - step:
+          "Assert the cancelled first document did not contribute to cumulative_before"
+        action: "assert"
+        target: "line2"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 30000000.0
+          rate:
+            type: "value"
+            expected: 0.05

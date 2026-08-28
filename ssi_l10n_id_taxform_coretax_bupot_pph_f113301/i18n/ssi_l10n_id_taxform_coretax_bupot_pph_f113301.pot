@@ -612,6 +612,11 @@ msgid "Tarif Tetap"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__amount_tax
+msgid "Tax Amount"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
 #: model:ir.model,name:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.model_l10n_id_taxform_jenis_dokumen_referensi
 msgid "Taxform Jenis Dokumen Referensi"
 msgstr ""
@@ -661,6 +666,14 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__website_message_ids
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__website_message_ids
 msgid "Website communication history"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out_line__amount_tax
+msgid ""
+"Withheld tax amount, computed as ``dpp`` multiplied by ``rate`` — "
+"independent of ``tax_id``'s own percentage. ``tax_id`` is only used to "
+"resolve the debit/credit account for this line."
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301

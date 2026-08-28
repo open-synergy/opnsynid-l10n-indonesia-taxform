@@ -223,26 +223,49 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
     @api.depends(
         "dpp",
         "rate",
+        "amount",
+        "tax_id",
     )
     def _compute_amount_tax(self):
-        """Compute the withheld tax amount from this line's DPP and
-        rate.
+        """Compute the withheld tax amount, preferring DPP x rate but
+        falling back to ``tax_id.compute_all()`` for legacy lines.
 
-        Independent of ``_compute_amount``/``amount`` on purpose (see
-        that method's docstring for why): ``amount_tax`` no longer
-        comes from ``line.tax_id.compute_all()`` — a computation that
-        silently yields ``0.0`` whenever ``tax_id`` is set to a 0%
-        tax, as users are instructed to do on this line to avoid
-        double-counting a rate already captured by ``dpp``/``rate``.
-        ``tax_id`` keeps its role of resolving the debit/credit
-        account via ``_select_tax_account()``.
+        ``amount_tax`` comes from ``dpp`` multiplied by ``rate``
+        **only when both are positive** — i.e. only for lines that
+        actually went through the Coretax DPP/Tarif configuration
+        added by this module. Lines created through the pre-existing
+        flow of ``l10n_id.bukti_potong_pph_f113301_out_line`` (e.g.
+        ``ssi_l10n_id_taxform_bukti_potong_pph_f113301`` demo/tour
+        fixtures, which predate this module and never populate
+        ``coretax_tax_object_code``/``manual_rate``) leave ``rate``
+        at its default ``0.0``: applying the ``dpp`` x ``rate``
+        formula unconditionally would silently zero out their
+        ``amount_tax`` and trip
+        ``_constrains_total_tax_final``\\ 's "Total tax has to be
+        greater than 0" on documents that were valid before this
+        module's ``dpp``/``rate`` fields existed. For those, this
+        falls back to the mixin's original computation (``tax_id``
+        applied on ``amount``) so pre-existing data keeps working
+        unmodified — an explicit, user-confirmed design decision
+        (see issue #232 discussion), not an inference of this
+        method.
 
         :return: nothing; assigns ``amount_tax``
         """
         for line in self:
             result = 0.0
-            currency = line.bukti_potong_id.company_id.currency_id
-            result = currency.round(line.dpp * line.rate)
+            if line.dpp > 0.0 and line.rate > 0.0:
+                currency = line.bukti_potong_id.company_id.currency_id
+                result = currency.round(line.dpp * line.rate)
+            elif line.amount != 0.0:
+                taxes = line.tax_id.compute_all(
+                    line.amount,
+                    line.bukti_potong_id.company_id.currency_id,
+                    1.0,
+                    product=False,
+                    partner=False,
+                )
+                result = taxes["total_included"] - taxes["total_excluded"]
             line.amount_tax = result
 
     def _get_auto_ter_rate(self):

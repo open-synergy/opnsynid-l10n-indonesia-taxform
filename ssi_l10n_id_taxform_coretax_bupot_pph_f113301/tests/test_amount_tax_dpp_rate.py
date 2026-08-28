@@ -15,7 +15,10 @@ class TestAmountTaxDppRate(YamlTransactionCase):
     ``amount_tax`` from this line's own ``dpp``/``rate`` instead of
     ``tax_id.compute_all()``, so a ``tax_id`` deliberately set to 0%
     (to avoid double-counting a rate already captured by ``dpp``/
-    ``rate``) no longer forces ``amount_tax`` to 0.
+    ``rate``) no longer forces ``amount_tax`` to 0 — and the fallback
+    to ``tax_id.compute_all()`` that still applies to lines whose
+    ``dpp``/``rate`` were never configured (pre-existing lines from
+    ``ssi_l10n_id_taxform_bukti_potong_pph_f113301``).
     """
 
     def test_amount_tax_from_dpp_rate(self):
@@ -29,3 +32,12 @@ class TestAmountTaxDppRate(YamlTransactionCase):
         ``_constrains_total_tax_final`` (existing behaviour,
         unchanged by the ``dpp`` x ``rate`` override)."""
         self.run_yaml_scenario("test_amount_tax_zero_rate_rejected.yaml")
+
+    def test_amount_tax_fallback_tax_id(self):
+        """A line that never went through the Coretax rate
+        configuration (``rate`` left at its default ``0.0``, as on
+        pre-existing ``ssi_l10n_id_taxform_bukti_potong_pph_f113301``
+        lines) still gets ``amount_tax`` from ``tax_id.compute_all()``,
+        exactly as before this module's ``dpp`` x ``rate`` override
+        existed."""
+        self.run_yaml_scenario("test_amount_tax_fallback_tax_id.yaml")

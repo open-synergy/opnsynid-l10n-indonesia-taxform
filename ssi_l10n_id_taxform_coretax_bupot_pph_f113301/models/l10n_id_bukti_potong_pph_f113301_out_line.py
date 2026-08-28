@@ -92,6 +92,18 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             "depending on Rate Computation."
         ),
     )
+    amount_tax = fields.Float(
+        string="Tax Amount",
+        compute="_compute_amount_tax",
+        store=True,
+        compute_sudo=True,
+        help=(
+            "Withheld tax amount, computed as ``dpp`` multiplied by "
+            "``rate`` — independent of ``tax_id``'s own percentage. "
+            "``tax_id`` is only used to resolve the debit/credit "
+            "account for this line."
+        ),
+    )
 
     @api.depends(
         "amount",
@@ -152,6 +164,109 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             elif line.rate_computation_method == "auto" and tariff_type == "final_flat":
                 result = line.coretax_tax_object_code.fixed_rate
             line.rate = result
+
+    @api.depends(
+        "income_move_line_ids",
+        "income_move_line_ids.debit",
+        "income_move_line_ids.credit",
+        "amount_computation_method",
+        "manual_amount",
+    )
+    def _compute_amount(self):
+        """Override the mixin's ``_compute_amount`` to stop it from
+        also assigning ``amount_tax``.
+
+        ``amount`` and ``amount_tax`` share one compute method in the
+        mixin (``ssi_l10n_id_taxform_bukti_potong_pph_mixin.models.
+        l10n_id_bukti_potong_pph_line_mixin.
+        L10nIdBuktiPotongPphLineMixin._compute_amount``), and that
+        method's body unconditionally assigns ``line.amount_tax`` too
+        (from ``line.tax_id.compute_all()``) as a direct side effect
+        — not merely as a declared ``compute=``. Redeclaring
+        ``amount_tax`` with a separate ``compute=`` elsewhere does
+        not stop this: the mixin's method still runs (for ``amount``)
+        and its direct assignment to ``amount_tax`` still overwrites
+        whatever the separate compute produced.
+
+        The only way to stop the side effect is to replace the
+        method's body for this model. This override therefore
+        **duplicates** the mixin's ``amount``-only logic verbatim
+        (same ``@api.depends``, same branches) and simply omits the
+        ``amount_tax``-related statements — it deliberately does NOT
+        call ``super()``, since doing so would re-run the very
+        ``tax_id.compute_all()`` side effect this override exists to
+        remove. ``amount_tax`` is computed independently by
+        ``_compute_amount_tax`` below.
+
+        Kept deliberately WITHOUT ``dpp``/``rate`` in
+        ``@api.depends``: adding either here would depend ``amount``
+        (this field) on ``dpp``, whose own compute (``_compute_dpp``)
+        already depends on ``amount`` — a circular dependency that
+        made Odoo's recompute silently stall on ``0.0`` for ``dpp``,
+        ``rate``, and ``amount_tax`` alike (observed in CI, not just
+        theorised).
+
+        :return: nothing; assigns ``amount``
+        """
+        for line in self:
+            result = 0.0
+            if line.amount_computation_method == "auto":
+                for move_line in line.income_move_line_ids:
+                    if line.bukti_potong_id.direction == "in":
+                        result += move_line.credit
+                    else:
+                        result += move_line.debit
+            else:
+                result = line.manual_amount
+            line.amount = result
+
+    @api.depends(
+        "dpp",
+        "rate",
+        "amount",
+        "tax_id",
+    )
+    def _compute_amount_tax(self):
+        """Compute the withheld tax amount, preferring DPP x rate but
+        falling back to ``tax_id.compute_all()`` for legacy lines.
+
+        ``amount_tax`` comes from ``dpp`` multiplied by ``rate``
+        **only when both are positive** — i.e. only for lines that
+        actually went through the Coretax DPP/Tarif configuration
+        added by this module. Lines created through the pre-existing
+        flow of ``l10n_id.bukti_potong_pph_f113301_out_line`` (e.g.
+        ``ssi_l10n_id_taxform_bukti_potong_pph_f113301`` demo/tour
+        fixtures, which predate this module and never populate
+        ``coretax_tax_object_code``/``manual_rate``) leave ``rate``
+        at its default ``0.0``: applying the ``dpp`` x ``rate``
+        formula unconditionally would silently zero out their
+        ``amount_tax`` and trip
+        ``_constrains_total_tax_final``\\ 's "Total tax has to be
+        greater than 0" on documents that were valid before this
+        module's ``dpp``/``rate`` fields existed. For those, this
+        falls back to the mixin's original computation (``tax_id``
+        applied on ``amount``) so pre-existing data keeps working
+        unmodified — an explicit, user-confirmed design decision
+        (see issue #232 discussion), not an inference of this
+        method.
+
+        :return: nothing; assigns ``amount_tax``
+        """
+        for line in self:
+            result = 0.0
+            if line.dpp > 0.0 and line.rate > 0.0:
+                currency = line.bukti_potong_id.company_id.currency_id
+                result = currency.round(line.dpp * line.rate)
+            elif line.amount != 0.0:
+                taxes = line.tax_id.compute_all(
+                    line.amount,
+                    line.bukti_potong_id.company_id.currency_id,
+                    1.0,
+                    product=False,
+                    partner=False,
+                )
+                result = taxes["total_included"] - taxes["total_excluded"]
+            line.amount_tax = result
 
     def _get_auto_ter_rate(self):
         """Look up the TER rate for this line's DPP and header PTKP

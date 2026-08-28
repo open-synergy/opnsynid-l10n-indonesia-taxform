@@ -92,18 +92,6 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             "depending on Rate Computation."
         ),
     )
-    amount_tax = fields.Float(
-        string="Tax Amount",
-        compute="_compute_amount_tax",
-        store=True,
-        compute_sudo=True,
-        help=(
-            "Withheld tax amount, computed as ``dpp`` multiplied by "
-            "``rate`` — independent of ``tax_id``'s own percentage. "
-            "``tax_id`` is only used to resolve the debit/credit "
-            "account for this line."
-        ),
-    )
 
     @api.depends(
         "amount",
@@ -166,31 +154,41 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             line.rate = result
 
     @api.depends(
+        "income_move_line_ids",
+        "income_move_line_ids.debit",
+        "income_move_line_ids.credit",
+        "amount_computation_method",
+        "manual_amount",
         "dpp",
         "rate",
     )
-    def _compute_amount_tax(self):
-        """Compute the withheld tax amount from this line's DPP and rate.
+    def _compute_amount(self):
+        """Extend the mixin's amount/tax computation to derive
+        ``amount_tax`` from this line's own DPP and rate.
 
-        Overrides the mixin's ``_compute_amount``, which derives
-        ``amount_tax`` from ``line.tax_id.compute_all()`` — a
+        ``amount`` and ``amount_tax`` share one compute method
+        (``mixin.l10n_id.bukti_potong_pph_line_mixin._compute_amount``),
+        so overriding ``amount_tax`` in isolation (a separate
+        ``compute=``) does not work: the mixin's method still runs
+        for ``amount`` and its body unconditionally re-assigns
+        ``amount_tax`` too, from ``line.tax_id.compute_all()`` — a
         computation that silently yields ``0.0`` whenever ``tax_id``
         is set to a 0% tax, as users are instructed to do on this
         line to avoid double-counting a rate already captured by
-        ``dpp``/``rate``. ``amount_tax`` is instead derived directly
-        from this line's own ``dpp`` and ``rate``, which are always
-        populated regardless of ``tax_id``'s percentage. ``tax_id``
-        keeps its role of resolving the debit/credit account via
-        ``_select_tax_account()``. ``amount`` is unaffected and
-        remains computed by the mixin's ``_compute_amount``.
+        ``dpp``/``rate``. This override runs the base computation
+        first (unchanged, still solely responsible for ``amount``),
+        then overwrites ``amount_tax`` with ``dpp`` multiplied by
+        ``rate``. ``tax_id`` keeps its role of resolving the
+        debit/credit account via ``_select_tax_account()``.
 
-        :return: nothing; assigns ``amount_tax``
+        :return: nothing; assigns ``amount`` (via the base
+            implementation) and ``amount_tax``
         """
+        _super = super()
+        _super._compute_amount()
         for line in self:
-            result = 0.0
             currency = line.bukti_potong_id.company_id.currency_id
-            result = currency.round(line.dpp * line.rate)
-            line.amount_tax = result
+            line.amount_tax = currency.round(line.dpp * line.rate)
 
     def _get_auto_ter_rate(self):
         """Look up the TER rate for this line's DPP and header PTKP

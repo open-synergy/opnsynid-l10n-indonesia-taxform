@@ -116,7 +116,7 @@ scenarios:
         model: "l10n_id.taxform_objek_pajak"
         save_as: "objek_pajak"
         values:
-          code: "21-100-02"
+          code: "21-999-02"
           name: "Test PS17 Tariff Type Cancel"
           tariff_type: "ps17"
 

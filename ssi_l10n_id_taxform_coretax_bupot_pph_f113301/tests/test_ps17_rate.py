@@ -81,7 +81,7 @@ class TestPs17Rate(YamlTransactionCase):
         )
         objek_pajak = self.env["l10n_id.taxform_objek_pajak"].create(
             {
-                "code": "21-100-03",
+                "code": "21-999-03",
                 "name": "Test PS17 Tariff Type Cross",
                 "tariff_type": "ps17",
             }

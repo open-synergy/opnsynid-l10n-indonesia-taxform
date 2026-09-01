@@ -1,0 +1,250 @@
+scenarios:
+  - name:
+      "A saved (real-id) PS17 line still correctly counts a prior done line's DPP and
+      excludes only itself"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TY17SCND"
+          code: "TY17SCND"
+          date_start: 2041-01-01
+          date_end: 2041-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2041 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2041-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal PS17 Second"
+          code: "TJ17SCD"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable PS17 Second"
+          code: "22402TSTP17E"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move for the first (already-done) document"
+        action: "create"
+        model: "account.move"
+        save_as: "move1"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit PS17 Second 1"
+                debit: 30000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit PS17 Second 1"
+                debit: 0.0
+                credit: 30000000.0
+
+      - step: "Find the first debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move1.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line1"
+
+      - step: "Create account move for the second document"
+        action: "create"
+        model: "account.move"
+        save_as: "move2"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit PS17 Second 2"
+                debit: 20000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit PS17 Second 2"
+                debit: 0.0
+                credit: 20000000.0
+
+      - step: "Find the second debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move2.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line2"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 PS17 Test Second"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type PS17"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-05"
+          name: "Test PS17 Tariff Type Second"
+          tariff_type: "ps17"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test PS17 Second"
+          is_company: true
+
+      - step: "Create wajib pajak partner (shared by both documents)"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak PS17 Second"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak PS17 Second"
+          is_company: true
+
+      - step: "Create the PPh 21 Rate table for this tax year"
+        action: "create"
+        model: "l10n_id.pph_21_rate"
+        save_as: "rate_table"
+        values:
+          code: "RATE17SCND"
+          name: "Rate Table PS17 Second"
+          date_start: 2041-01-01
+
+      - step: "Add the progressive brackets (UU HPP: 5/15/25/30/35%)"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 0.0
+          pph_rate: 5.0
+
+      - step: "Add the second bracket"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 60000000.0
+          pph_rate: 15.0
+
+      - step: "Create the first document with an auto PS17 line (dpp 30.000.000)"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot1"
+        values:
+          date: 2041-10-10
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "PS17 Line First (Second-Line Scenario)"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line1.id"
+                amount_computation_method: "manual"
+                manual_amount: 30000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step:
+          "Force the first document to Done (fixture shortcut, not testing the approval
+          workflow itself)"
+        action: "write"
+        target: "bukpot1"
+        values:
+          state: "done"
+
+      - step:
+          "Create the second (draft, real-id) document with an auto PS17 line, both
+          within the same bracket"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot2"
+        values:
+          date: 2041-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "PS17 Line Second (Second-Line Scenario)"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line2.id"
+                amount_computation_method: "manual"
+                manual_amount: 20000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the second document's line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot2.id"]
+        limit: 1
+        save_as: "line2"
+
+      - step:
+          "Assert the done first line's DPP is counted as cumulative_before (30M + 20M
+          still within the 5% bracket, so the marginal rate stays exactly 0.05 — proving
+          the first line was found in previous_lines, not wrongly excluded)"
+        action: "assert"
+        target: "line2"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 20000000.0
+          rate:
+            type: "value"
+            expected: 0.05

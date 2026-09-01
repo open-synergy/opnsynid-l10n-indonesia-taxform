@@ -109,13 +109,18 @@ scenarios:
           name: "Test Wajib Pajak PS17 Onchange"
           is_company: false
 
-      - step: "Create pemotong pajak partner"
+      - step:
+          "Create the TTD (signatory) partner, a non-company contact of the withholding
+          company's own partner (pemotong_pajak_id defaults to the current company's
+          partner for an 'out' document, and ttd_id's domain requires
+          commercial_partner_id to match it)"
         action: "create"
         model: "res.partner"
-        save_as: "pemotong_pajak"
+        save_as: "ttd"
         values:
-          name: "PT Test Pemotong Pajak PS17 Onchange"
-          is_company: true
+          name: "Test TTD PS17 Onchange"
+          is_company: false
+          parent_id: "EVAL: env.user.company_id.partner_id.id"
 
       - step: "Create the PPh 21 Rate table for this tax year"
         action: "create"
@@ -162,7 +167,7 @@ scenarios:
           - set:
               wajib_pajak_id: "REC: wajib_pajak"
           - set:
-              pemotong_pajak_id: "REC: pemotong_pajak"
+              ttd_id: "REC: ttd"
           - new:
               field: "line_ids"
               values:

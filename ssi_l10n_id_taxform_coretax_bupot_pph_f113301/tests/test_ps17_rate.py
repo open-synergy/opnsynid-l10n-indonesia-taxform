@@ -28,6 +28,21 @@ class TestPs17Rate(YamlTransactionCase):
         another line's cumulative DPP."""
         self.run_yaml_scenario("test_ps17_cancelled_excluded.yaml")
 
+    def test_ps17_onchange_unsaved(self):
+        """Setting Rate Computation Auto + a PS17 tax object on a
+        brand-new, unsaved (``NewId``) line — exactly like a user
+        filling the line popup before saving the document — computes
+        the rate without raising, using the same ``search()`` domain
+        as a saved line (regression for issue #236)."""
+        self.run_yaml_scenario("test_ps17_onchange_unsaved.yaml")
+
+    def test_ps17_second_line_after_first_done(self):
+        """A saved (real-id) PS17 line still finds a prior ``done``
+        line in ``previous_lines`` and still excludes only itself,
+        now that the exclusion clause is conditional on the id being
+        a real integer rather than a ``NewId`` (issue #236)."""
+        self.run_yaml_scenario("test_ps17_second_line_after_first_done.yaml")
+
     def test_ps17_cumulative_cross_bracket(self):
         """Effective rate for a line crossing a bracket boundary
         equals the marginal tax divided by this line's own DPP.

@@ -6,6 +6,7 @@ from datetime import date
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.models import NewId
 
 
 class L10nIdBuktiPotongPphF113301OutLine(models.Model):
@@ -330,23 +331,32 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         lines already accounted for in the current tax year.
 
         Only ``done`` documents are counted (draft/cancel/reject are
-        excluded), and this line itself is always excluded so a line
-        being edited (typically still draft) never counts itself as
-        part of its own cumulative-before amount.
+        excluded). This line itself is excluded by id **only when it
+        is already saved** (``self.id`` is a real integer, not an
+        ``odoo.models.NewId``): a plain ``("id", "!=", self.id)``
+        crashes ``search()`` at the SQL level for an unsaved line
+        (``self.id`` is a ``NewId``, not an integer, e.g. during an
+        onchange in the form before the record is saved). Dropping
+        the exclusion for unsaved lines is safe — the domain already
+        restricts to ``state == "done"``, and an unsaved/new line can
+        never be ``done``, so it could never have matched its own
+        exclusion clause anyway.
 
         :param wajib_pajak: recipient (``res.partner``) whose PS17
             lines are being accumulated
         :param doc_date: document date used to derive the tax year
         :return: a ``search()`` domain (list of tuples)
         """
-        return [
+        domain = [
             ("bukti_potong_id.wajib_pajak_id", "=", wajib_pajak.id),
             ("bukti_potong_id.date", ">=", date(doc_date.year, 1, 1)),
             ("bukti_potong_id.date", "<=", date(doc_date.year, 12, 31)),
             ("bukti_potong_id.state", "=", "done"),
             ("coretax_tax_object_code.tariff_type", "=", "ps17"),
-            ("id", "!=", self.id),
         ]
+        if not isinstance(self.id, NewId):
+            domain.append(("id", "!=", self.id))
+        return domain
 
     @api.constrains(
         "rate_computation_method",

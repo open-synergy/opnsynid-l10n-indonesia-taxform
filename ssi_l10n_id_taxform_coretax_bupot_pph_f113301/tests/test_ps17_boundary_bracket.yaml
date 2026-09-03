@@ -1,27 +1,27 @@
 scenarios:
-  - name: "Auto PS17 rate for a taxpayer with no prior PS17 lines this year"
+  - name: "Auto PS17 rate for a DPP landing exactly on a bracket boundary"
     steps:
       - step: "Create tax year"
         action: "create"
         model: "l10n_id.tax_year"
         save_as: "tax_year"
         values:
-          name: "TY17FIRST"
-          code: "TY17FIRST"
-          date_start: 2037-01-01
-          date_end: 2037-12-31
+          name: "TY17BND"
+          code: "TY17BND"
+          date_start: 2040-01-01
+          date_end: 2040-12-31
 
       - step: "Generate tax periods for the year"
         action: "call"
         target: "tax_year"
         method: "action_create_period"
 
-      - step: "Find the October 2037 tax period"
+      - step: "Find the October 2040 tax period"
         action: "search"
         model: "l10n_id.tax_period"
         domain:
           - ["year_id", "=", "REC: tax_year.id"]
-          - ["date_start", "=", 2037-10-01]
+          - ["date_start", "=", 2040-10-01]
         limit: 1
         save_as: "tax_period"
 
@@ -30,8 +30,8 @@ scenarios:
         model: "account.journal"
         save_as: "journal"
         values:
-          name: "Test Journal PS17 First"
-          code: "TJ17FRST"
+          name: "Test Journal PS17 Boundary"
+          code: "TJ17BND"
           type: "general"
 
       - step: "Create account for the bukti potong"
@@ -39,8 +39,8 @@ scenarios:
         model: "account.account"
         save_as: "account"
         values:
-          name: "Test PPh 21 Payable PS17 First"
-          code: "22402TSTP17A"
+          name: "Test PPh 21 Payable PS17 Boundary"
+          code: "22402TSTP17D"
           user_type_id: "account.data_account_type_current_liabilities"
 
       - step: "Create account move with a debit/credit line pair"
@@ -53,15 +53,15 @@ scenarios:
             - - 0
               - 0
               - account_id: "REC: account.id"
-                name: "Test Debit PS17 First"
-                debit: 5000000.0
+                name: "Test Debit PS17 Boundary"
+                debit: 500000000.0
                 credit: 0.0
             - - 0
               - 0
               - account_id: "REC: account.id"
-                name: "Test Credit PS17 First"
+                name: "Test Credit PS17 Boundary"
                 debit: 0.0
-                credit: 5000000.0
+                credit: 500000000.0
 
       - step: "Find the debit move line"
         action: "search"
@@ -77,7 +77,7 @@ scenarios:
         model: "account.tax"
         save_as: "tax"
         values:
-          name: "PPh 21 PS17 Test First"
+          name: "PPh 21 PS17 Test Boundary"
           type_tax_use: "purchase"
           amount: 0.0
           amount_type: "percent"
@@ -87,8 +87,8 @@ scenarios:
         model: "l10n_id.taxform_objek_pajak"
         save_as: "objek_pajak"
         values:
-          code: "21-999-01"
-          name: "Test PS17 Tariff Type First"
+          code: "21-999-04"
+          name: "Test PS17 Tariff Type Boundary"
           tariff_type: "ps17"
 
       - step: "Create KPP partner"
@@ -96,7 +96,7 @@ scenarios:
         model: "res.partner"
         save_as: "kpp"
         values:
-          name: "KPP Test PS17 First"
+          name: "KPP Test PS17 Boundary"
           is_company: true
 
       - step: "Create wajib pajak partner"
@@ -104,7 +104,7 @@ scenarios:
         model: "res.partner"
         save_as: "wajib_pajak"
         values:
-          name: "Test Wajib Pajak PS17 First"
+          name: "Test Wajib Pajak PS17 Boundary"
           is_company: false
 
       - step: "Create pemotong pajak partner"
@@ -112,7 +112,7 @@ scenarios:
         model: "res.partner"
         save_as: "pemotong_pajak"
         values:
-          name: "PT Test Pemotong Pajak PS17 First"
+          name: "PT Test Pemotong Pajak PS17 Boundary"
           is_company: true
 
       - step: "Create the PPh 21 Rate table for this tax year"
@@ -120,11 +120,11 @@ scenarios:
         model: "l10n_id.pph_21_rate"
         save_as: "rate_table"
         values:
-          code: "RATE17FRST"
-          name: "Rate Table PS17 First"
-          date_start: 2037-01-01
+          code: "RATE17BND"
+          name: "Rate Table PS17 Boundary"
+          date_start: 2040-01-01
 
-      - step: "Add the progressive brackets (UU HPP: 5/15/25/30/35%)"
+      - step: "Add the first bracket (UU HPP: 5/15/25/30/35%)"
         action: "create"
         model: "l10n_id.pph_21_rate_line"
         values:
@@ -140,12 +140,38 @@ scenarios:
           min_income: 60000000.0
           pph_rate: 15.0
 
-      - step: "Create Bukti Potong PPh F113301 Out with one auto PS17 line"
+      - step: "Add the third bracket"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 250000000.0
+          pph_rate: 25.0
+
+      - step: "Add the fourth bracket"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 500000000.0
+          pph_rate: 30.0
+
+      - step: "Add the fifth bracket"
+        action: "create"
+        model: "l10n_id.pph_21_rate_line"
+        values:
+          rate_id: "REC: rate_table.id"
+          min_income: 5000000000.0
+          pph_rate: 35.0
+
+      - step:
+          "Create Bukti Potong PPh F113301 Out with one auto PS17 line, DPP exactly on
+          the third-bracket boundary (500.000.000)"
         action: "create"
         model: "l10n_id.bukti_potong_pph_f113301_out"
         save_as: "bukpot"
         values:
-          date: 2037-10-15
+          date: 2040-10-15
           tax_period_id: "REC: tax_period.id"
           journal_id: "REC: journal.id"
           account_id: "REC: account.id"
@@ -155,11 +181,11 @@ scenarios:
           line_ids:
             - - 0
               - 0
-              - name: "PS17 Line First"
+              - name: "PS17 Line Boundary"
                 tax_id: "REC: tax.id"
                 move_line_id: "REC: move_line.id"
                 amount_computation_method: "manual"
-                manual_amount: 5000000.0
+                manual_amount: 500000000.0
                 coretax_tax_object_code: "REC: objek_pajak.id"
                 rate_computation_method: "auto"
 
@@ -172,20 +198,21 @@ scenarios:
         save_as: "line"
 
       - step:
-          "Assert the rate is the first bracket rate, no accumulation, and amount_tax is
-          dpp x rate (single bracket)"
+          "Assert the rate is the third (25%) bracket's nominal rate, not the blended
+          rate (18,8%), and amount_tax is the cumulative progressive tax on 500.000.000
+          (94.000.000)"
         action: "assert"
         target: "line"
         asserts:
           dpp:
             type: "value"
-            expected: 5000000.0
+            expected: 500000000.0
           rate_computation_method:
             type: "value"
             expected: "auto"
           rate:
             type: "value"
-            expected: 0.05
+            expected: 0.25
           amount_tax:
             type: "value"
-            expected: 250000.0
+            expected: 94000000.0

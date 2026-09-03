@@ -14,8 +14,13 @@ class TestPs17Rate(YamlTransactionCase):
     Covers cumulative-per-tax-year rate lookup for BP21 lines whose
     Coretax Tax Object Code has Tariff Type PS17: the first line for a
     recipient in a tax year (no accumulation), a document cancelled
-    before completion (excluded from the accumulation), and a second
-    line whose cumulative DPP crosses a bracket boundary.
+    before completion (excluded from the accumulation), a DPP that
+    lands exactly on a bracket boundary, and a second line whose
+    cumulative DPP crosses a bracket boundary. ``rate`` is asserted as
+    the nominal UU HPP bracket rate of the highest layer touched
+    (5/15/25/30/35%) — never a blended/averaged value — while
+    ``amount_tax`` is asserted as the cumulative progressive tax,
+    independent of ``rate``.
     """
 
     def test_ps17_first_bracket(self):
@@ -43,14 +48,22 @@ class TestPs17Rate(YamlTransactionCase):
         a real integer rather than a ``NewId`` (issue #236)."""
         self.run_yaml_scenario("test_ps17_second_line_after_first_done.yaml")
 
+    def test_ps17_boundary_bracket(self):
+        """A DPP landing exactly on a bracket boundary
+        (500.000.000) shows the nominal rate of that bracket
+        (0.25), not the pre-fix blended rate (0.188)."""
+        self.run_yaml_scenario("test_ps17_boundary_bracket.yaml")
+
     def test_ps17_cumulative_cross_bracket(self):
-        """Effective rate for a line crossing a bracket boundary
-        equals the marginal tax divided by this line's own DPP.
+        """Rate for a line crossing a bracket boundary is the
+        nominal rate of the bracket touched by cumulative DPP
+        *after* this line; ``amount_tax`` is the marginal tax on
+        that cumulative DPP.
 
         Pure Python — trigger P2 (L-04: ``odoo_yaml_test`` has no
-        float-tolerance assert; the expected effective rate is
-        derived here from the same progressive-bracket formula the
-        production code uses, so it must be compared with
+        float-tolerance assert; the expected rate/tax are derived
+        here from the same progressive-bracket formula the
+        production code uses, so they must be compared with
         ``assertAlmostEqual`` rather than a plain YAML ``value``
         assert).
         """
@@ -233,11 +246,33 @@ class TestPs17Rate(YamlTransactionCase):
                     total_tax += rate * (penghasilan_kena_pajak - min_income)
             return total_tax
 
+        def bracket_rate(cumulative_dpp):
+            """Independently derive the nominal bracket rate.
+
+            Replicates ``_get_ps17_bracket_rate`` from the same UU
+            HPP brackets declared above, so the expected value is
+            not just an echo of the code under test.
+
+            :param cumulative_dpp: cumulative taxable income
+            :return: the nominal bracket rate as a fraction
+            """
+            if cumulative_dpp <= 60000000.0:
+                return 0.05
+            elif cumulative_dpp <= 250000000.0:
+                return 0.15
+            elif cumulative_dpp <= 500000000.0:
+                return 0.25
+            elif cumulative_dpp <= 5000000000.0:
+                return 0.30
+            else:
+                return 0.35
+
         cumulative_before = 50000000.0
         cumulative_after = 70000000.0
-        expected_rate = (
-            compute_progressive_tax(cumulative_after)
-            - compute_progressive_tax(cumulative_before)
-        ) / 20000000.0
+        expected_rate = bracket_rate(cumulative_after)
+        expected_amount_tax = compute_progressive_tax(
+            cumulative_after
+        ) - compute_progressive_tax(cumulative_before)
 
         self.assertAlmostEqual(second_line.rate, expected_rate, places=6)
+        self.assertAlmostEqual(second_line.amount_tax, expected_amount_tax, places=6)

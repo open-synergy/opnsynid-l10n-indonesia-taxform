@@ -12,9 +12,10 @@ class TestTaxformObjekPajakFixedRate(YamlTransactionCase):
     """Scenario tests for the ``final_flat`` tariff type / ``fixed_rate``.
 
     Covers automatic rate computation for the 21-402-xx Coretax tax
-    object codes (Honorarium/Imbalan Lain APBN/APBD per Golongan) and
-    the regression guard rejecting automatic computation for tariff
-    types other than TER and Final.
+    object codes (Honorarium/Imbalan Lain APBN/APBD per Golongan), the
+    regression guard rejecting automatic computation for tariff types
+    other than TER/PS17/Final, and the fallback to ``0.0`` (no error)
+    once an already-auto line's tax object code is cleared.
     """
 
     def test_fixed_rate_21_402_02(self):
@@ -28,3 +29,8 @@ class TestTaxformObjekPajakFixedRate(YamlTransactionCase):
     def test_fixed_rate_rejected_non_final(self):
         """Auto rate is rejected for a Pesangon (non-TER/final) line."""
         self.run_yaml_scenario("test_fixed_rate_rejected_non_final.yaml")
+
+    def test_rate_auto_without_tax_object_code(self):
+        """Auto rate falls back to 0.0, without error, once the tax
+        object code is cleared on an already-``auto`` line."""
+        self.run_yaml_scenario("test_rate_auto_without_tax_object_code.yaml")

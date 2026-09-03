@@ -72,10 +72,11 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         required=True,
         default="manual",
         help=(
-            "Automatic is only supported when the Coretax Tax Object "
-            "Code's Tariff Type is TER, PS17 (Pasal 17), or Final "
-            "(Tarif Tetap per Kode Objek Pajak); every other tariff "
-            "regime (Harian/Pesangon/Pensiun) must be entered manually."
+            "Automatic is supported for every Coretax Tax Object Code "
+            "Tariff Type (TER, PS17/Pasal 17, Harian, Pesangon, "
+            "Pensiun, or Final/Tarif Tetap per Kode Objek Pajak). "
+            "Left empty on the tax object code, Manual is the only "
+            "option."
         ),
     )
     manual_rate = fields.Float(
@@ -135,17 +136,20 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
     def _compute_rate(self):
         """Compute the withholding rate.
 
-        Automatic computation runs for three tariff types: TER
-        (looking up ``l10n_id.pph_21_ter`` with the header's PTKP
+        Automatic computation runs for every supported tariff type:
+        TER (looking up ``l10n_id.pph_21_ter`` with the header's PTKP
         category), PS17/Pasal 17 (a nominal UU HPP bracket lookup on
         the cumulative-per-tax-year DPP, see
-        ``_get_ps17_bracket_rate``), and Final/Tarif Tetap (taking
-        the tax object's ``fixed_rate`` as is). It never raises:
-        incomplete data (missing PTKP line, missing recipient) falls
-        back to ``0.0`` here so a draft line can still be saved — the
-        export step (``_prepare_coretax_bupot_line``) is what
-        validates the rate is usable before the Coretax XML is
-        generated.
+        ``_get_ps17_bracket_rate``), Final/Tarif Tetap (taking the
+        tax object's ``fixed_rate`` as is), and Harian/Pesangon/
+        Pensiun (a non-cumulative, per-line bracket lookup on this
+        line's own ``dpp`` — see ``_get_harian_bracket_rate``,
+        ``_get_pesangon_bracket_rate``, ``_get_pensiun_bracket_rate``).
+        It never raises: incomplete data (missing PTKP line, missing
+        recipient) falls back to ``0.0`` here so a draft line can
+        still be saved — the export step
+        (``_prepare_coretax_bupot_line``) is what validates the rate
+        is usable before the Coretax XML is generated.
 
         Note: this compute cannot react to changes on *other* BP21
         documents that alter the cumulative history (Odoo
@@ -165,6 +169,12 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
                 result = line._get_auto_ps17_rate()
             elif line.rate_computation_method == "auto" and tariff_type == "final_flat":
                 result = line.coretax_tax_object_code.fixed_rate
+            elif line.rate_computation_method == "auto" and tariff_type == "harian":
+                result = line._get_harian_bracket_rate(line.dpp)
+            elif line.rate_computation_method == "auto" and tariff_type == "pesangon":
+                result = line._get_pesangon_bracket_rate(line.dpp)
+            elif line.rate_computation_method == "auto" and tariff_type == "pensiun":
+                result = line._get_pensiun_bracket_rate(line.dpp)
             line.rate = result
 
     @api.depends(
@@ -388,6 +398,72 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         else:
             return 0.35
 
+    @api.model
+    def _get_harian_bracket_rate(self, dpp):
+        """Look up the nominal Harian (daily wage) bracket rate for a
+        single line's DPP.
+
+        Mirrors the ``Rate`` formula of the client's Coretax
+        submission tool proven valid for XML submission (``BP21
+        Excel to XML v.4.xlsx``, sheet DATA, column X). Unlike PS17,
+        this is **not** cumulative across documents: only this
+        line's own ``dpp`` is used.
+
+        :param dpp: taxable income (DPP) of this line
+        :return: the nominal bracket rate as a fraction, ``0.0`` or
+            ``0.005``
+        """
+        if dpp <= 450000.0:
+            return 0.0
+        elif dpp <= 2500000.0:
+            return 0.005
+        else:
+            return 0.0
+
+    @api.model
+    def _get_pesangon_bracket_rate(self, dpp):
+        """Look up the nominal Pesangon (severance pay) bracket rate
+        for a single line's DPP.
+
+        Mirrors the ``Rate`` formula of the client's Coretax
+        submission tool proven valid for XML submission (``BP21
+        Excel to XML v.4.xlsx``, sheet DATA, column Y). Unlike PS17,
+        this is **not** cumulative across documents: only this
+        line's own ``dpp`` is used.
+
+        :param dpp: taxable income (DPP) of this line
+        :return: the nominal bracket rate as a fraction, one of
+            ``0.0``, ``0.05``, ``0.15``, or ``0.25``
+        """
+        if dpp <= 50000000.0:
+            return 0.0
+        elif dpp <= 100000000.0:
+            return 0.05
+        elif dpp <= 500000000.0:
+            return 0.15
+        else:
+            return 0.25
+
+    @api.model
+    def _get_pensiun_bracket_rate(self, dpp):
+        """Look up the nominal Pensiun (pension) bracket rate for a
+        single line's DPP.
+
+        Mirrors the ``Rate`` formula of the client's Coretax
+        submission tool proven valid for XML submission (``BP21
+        Excel to XML v.4.xlsx``, sheet DATA, column Z). Unlike PS17,
+        this is **not** cumulative across documents: only this
+        line's own ``dpp`` is used.
+
+        :param dpp: taxable income (DPP) of this line
+        :return: the nominal bracket rate as a fraction, ``0.0`` or
+            ``0.05``
+        """
+        if dpp <= 50000000.0:
+            return 0.0
+        else:
+            return 0.05
+
     def _get_auto_ps17_tax_amount(self):
         """Compute the PS17 (Pasal 17) withheld tax amount as the
         marginal tax on this line's cumulative DPP.
@@ -466,12 +542,12 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         "rate_computation_method",
     )
     def _check_rate_computation_method(self):
-        """Reject automatic rate computation outside the supported
-        tariff regimes.
+        """Reject automatic rate computation when no tariff regime is
+        set on the tax object.
 
         :raises ValidationError: when ``rate_computation_method`` is
-            ``auto`` on a line whose tax object is none of TER, PS17
-            (Pasal 17), or Final (Tarif Tetap per Kode Objek Pajak)
+            ``auto`` on a line whose tax object has no Tariff Type
+            selected
         """
         for line in self:
             if not line._check_rate_computation_method_condition():
@@ -479,11 +555,12 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
                     """
 Context: Set Rate Computation on a BP21 line
 Database ID: %s
-Problem: Automatic rate computation is only supported for the TER,
-PS17 (Pasal 17), and Final (Tarif Tetap per Kode Objek Pajak) tariff
-types, but the selected Coretax Tax Object Code is none of these
+Problem: Automatic rate computation requires the selected Coretax Tax
+Object Code to have a Tariff Type (TER, PS17/Pasal 17, Harian,
+Pesangon, Pensiun, or Final/Tarif Tetap per Kode Objek Pajak), but
+none is set
 Solution: Select Manual and enter the rate by hand, or choose a tax
-object code whose Tariff Type is TER, PS17, or Final
+object code with a Tariff Type set
 """
                     % (line.id,)
                 )
@@ -502,4 +579,7 @@ object code whose Tariff Type is TER, PS17, or Final
             "ter",
             "final_flat",
             "ps17",
+            "harian",
+            "pesangon",
+            "pensiun",
         )

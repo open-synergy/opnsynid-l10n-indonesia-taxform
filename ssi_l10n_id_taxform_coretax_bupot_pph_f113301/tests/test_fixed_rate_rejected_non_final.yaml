@@ -1,5 +1,5 @@
 scenarios:
-  - name: "Auto rate is rejected for a non-TER, non-final_flat tariff type"
+  - name: "Auto rate is rejected for a tax object code without a Tariff Type"
     steps:
       - step: "Create tax year"
         action: "create"
@@ -77,19 +77,18 @@ scenarios:
         model: "account.tax"
         save_as: "tax"
         values:
-          name: "PPh 21 Pesangon Test 402C"
+          name: "PPh 21 No Tariff Type Test 402C"
           type_tax_use: "purchase"
           amount: 5.0
           amount_type: "percent"
 
-      - step: "Create a tax object code with tariff type Pesangon"
+      - step: "Create a tax object code without a Tariff Type"
         action: "create"
         model: "l10n_id.taxform_objek_pajak"
         save_as: "objek_pajak"
         values:
           code: "21-999-99"
-          name: "Test Pesangon Tariff Type"
-          tariff_type: "pesangon"
+          name: "Test No Tariff Type"
 
       - step: "Create KPP partner"
         action: "create"
@@ -115,12 +114,13 @@ scenarios:
           name: "PT Test Pemotong Pajak 402C"
           is_company: true
 
-      - step: "Auto rate on a Pesangon line must be rejected"
+      - step: "Auto rate on a line without a Tariff Type must be rejected"
         action: "create"
         model: "l10n_id.bukti_potong_pph_f113301_out"
         expect_error:
           type: "ValidationError"
-          message_contains: "Automatic rate computation is only supported"
+          message_contains:
+            "Automatic rate computation requires the selected Coretax Tax"
         values:
           date: 2036-10-15
           tax_period_id: "REC: tax_period.id"
@@ -132,7 +132,7 @@ scenarios:
           line_ids:
             - - 0
               - 0
-              - name: "Pesangon Line"
+              - name: "No Tariff Type Line"
                 tax_id: "REC: tax.id"
                 move_line_id: "REC: move_line.id"
                 amount_computation_method: "manual"

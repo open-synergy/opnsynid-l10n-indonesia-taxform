@@ -1,0 +1,746 @@
+scenarios:
+  - name: "Auto Harian rate is the nominal bracket rate, including boundaries"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TYHAR"
+          code: "TYHAR"
+          date_start: 2042-01-01
+          date_end: 2042-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2042 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2042-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal Harian"
+          code: "TJHAR"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable Harian"
+          code: "22402TSTHAR"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with three debit/credit line pairs"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Harian At Boundary"
+                debit: 450000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Harian At Boundary"
+                debit: 0.0
+                credit: 450000.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Harian Above Boundary"
+                debit: 450001.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Harian Above Boundary"
+                debit: 0.0
+                credit: 450001.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Harian Mid Bracket"
+                debit: 1000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Harian Mid Bracket"
+                debit: 0.0
+                credit: 1000000.0
+
+      - step: "Find the move line at the lower boundary (450.000)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 450000.0]
+        limit: 1
+        save_as: "move_line_at_boundary"
+
+      - step: "Find the move line just above the lower boundary (450.001)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 450001.0]
+        limit: 1
+        save_as: "move_line_above_boundary"
+
+      - step: "Find the move line mid-bracket (1.000.000)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 1000000.0]
+        limit: 1
+        save_as: "move_line_mid"
+
+      - step: "Create a withholding tax at 0%"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Harian Test"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type Harian"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-20"
+          name: "Test Harian Tariff Type"
+          tariff_type: "harian"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Harian"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Harian"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Harian"
+          is_company: true
+
+      - step: "Create Bukti Potong PPh F113301 Out with three auto Harian lines"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2042-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Harian At Boundary"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_at_boundary.id"
+                amount_computation_method: "manual"
+                manual_amount: 450000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+            - - 0
+              - 0
+              - name: "Harian Above Boundary"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_above_boundary.id"
+                amount_computation_method: "manual"
+                manual_amount: 450001.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+            - - 0
+              - 0
+              - name: "Harian Mid Bracket"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_mid.id"
+                amount_computation_method: "manual"
+                manual_amount: 1000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the line at the lower boundary"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Harian At Boundary"]
+        limit: 1
+        save_as: "line_at_boundary"
+
+      - step: "Find the line just above the lower boundary"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Harian Above Boundary"]
+        limit: 1
+        save_as: "line_above_boundary"
+
+      - step: "Find the mid-bracket line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Harian Mid Bracket"]
+        limit: 1
+        save_as: "line_mid"
+
+      - step: "Assert the rate at 450.000 is 0.0 (lower boundary, inclusive)"
+        action: "assert"
+        target: "line_at_boundary"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 450000.0
+          rate:
+            type: "value"
+            expected: 0.0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+
+      - step: "Assert the rate at 450.001 is 0.005 (just above the boundary)"
+        action: "assert"
+        target: "line_above_boundary"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 450001.0
+          rate:
+            type: "value"
+            expected: 0.005
+
+      - step: "Assert the rate mid-bracket (1.000.000) is 0.005 and amount_tax follows"
+        action: "assert"
+        target: "line_mid"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 1000000.0
+          rate:
+            type: "value"
+            expected: 0.005
+          amount_tax:
+            type: "value"
+            expected: 5000.0
+
+  - name: "Auto Pesangon rate is the nominal bracket rate, including boundaries"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TYPES"
+          code: "TYPES"
+          date_start: 2043-01-01
+          date_end: 2043-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2043 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2043-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal Pesangon"
+          code: "TJPES"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable Pesangon"
+          code: "22402TSTPES"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with three debit/credit line pairs"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Pesangon At Boundary"
+                debit: 50000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Pesangon At Boundary"
+                debit: 0.0
+                credit: 50000000.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Pesangon Above Boundary"
+                debit: 50000001.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Pesangon Above Boundary"
+                debit: 0.0
+                credit: 50000001.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Pesangon Mid Bracket"
+                debit: 75000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Pesangon Mid Bracket"
+                debit: 0.0
+                credit: 75000000.0
+
+      - step: "Find the move line at the lower boundary (50.000.000)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 50000000.0]
+        limit: 1
+        save_as: "move_line_at_boundary"
+
+      - step: "Find the move line just above the lower boundary (50.000.001)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 50000001.0]
+        limit: 1
+        save_as: "move_line_above_boundary"
+
+      - step: "Find the move line mid-bracket (75.000.000)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 75000000.0]
+        limit: 1
+        save_as: "move_line_mid"
+
+      - step: "Create a withholding tax at 0%"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Pesangon Test"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type Pesangon"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-21"
+          name: "Test Pesangon Tariff Type"
+          tariff_type: "pesangon"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Pesangon"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Pesangon"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Pesangon"
+          is_company: true
+
+      - step: "Create Bukti Potong PPh F113301 Out with three auto Pesangon lines"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2043-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Pesangon At Boundary"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_at_boundary.id"
+                amount_computation_method: "manual"
+                manual_amount: 50000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+            - - 0
+              - 0
+              - name: "Pesangon Above Boundary"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_above_boundary.id"
+                amount_computation_method: "manual"
+                manual_amount: 50000001.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+            - - 0
+              - 0
+              - name: "Pesangon Mid Bracket"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_mid.id"
+                amount_computation_method: "manual"
+                manual_amount: 75000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the line at the lower boundary"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Pesangon At Boundary"]
+        limit: 1
+        save_as: "line_at_boundary"
+
+      - step: "Find the line just above the lower boundary"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Pesangon Above Boundary"]
+        limit: 1
+        save_as: "line_above_boundary"
+
+      - step: "Find the mid-bracket line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Pesangon Mid Bracket"]
+        limit: 1
+        save_as: "line_mid"
+
+      - step: "Assert the rate at 50.000.000 is 0.0 (lower boundary, inclusive)"
+        action: "assert"
+        target: "line_at_boundary"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 50000000.0
+          rate:
+            type: "value"
+            expected: 0.0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+
+      - step: "Assert the rate at 50.000.001 is 0.05 (just above the boundary)"
+        action: "assert"
+        target: "line_above_boundary"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 50000001.0
+          rate:
+            type: "value"
+            expected: 0.05
+
+      - step: "Assert the rate mid-bracket (75.000.000) is 0.05 and amount_tax follows"
+        action: "assert"
+        target: "line_mid"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 75000000.0
+          rate:
+            type: "value"
+            expected: 0.05
+          amount_tax:
+            type: "value"
+            expected: 3750000.0
+
+  - name: "Auto Pensiun rate is the nominal bracket rate, including the boundary"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TYPEN"
+          code: "TYPEN"
+          date_start: 2044-01-01
+          date_end: 2044-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2044 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2044-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal Pensiun"
+          code: "TJPEN"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable Pensiun"
+          code: "22402TSTPEN"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with two debit/credit line pairs"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Pensiun At Boundary"
+                debit: 50000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Pensiun At Boundary"
+                debit: 0.0
+                credit: 50000000.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Pensiun Above Boundary"
+                debit: 60000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Pensiun Above Boundary"
+                debit: 0.0
+                credit: 60000000.0
+
+      - step: "Find the move line at the boundary (50.000.000)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 50000000.0]
+        limit: 1
+        save_as: "move_line_at_boundary"
+
+      - step: "Find the move line above the boundary (60.000.000)"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 60000000.0]
+        limit: 1
+        save_as: "move_line_above_boundary"
+
+      - step: "Create a withholding tax at 0%"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Pensiun Test"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type Pensiun"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-22"
+          name: "Test Pensiun Tariff Type"
+          tariff_type: "pensiun"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Pensiun"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Pensiun"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Pensiun"
+          is_company: true
+
+      - step: "Create Bukti Potong PPh F113301 Out with two auto Pensiun lines"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2044-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Pensiun At Boundary"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_at_boundary.id"
+                amount_computation_method: "manual"
+                manual_amount: 50000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+            - - 0
+              - 0
+              - name: "Pensiun Above Boundary"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line_above_boundary.id"
+                amount_computation_method: "manual"
+                manual_amount: 60000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the line at the boundary"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Pensiun At Boundary"]
+        limit: 1
+        save_as: "line_at_boundary"
+
+      - step: "Find the line above the boundary"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+          - ["name", "=", "Pensiun Above Boundary"]
+        limit: 1
+        save_as: "line_above_boundary"
+
+      - step: "Assert the rate at 50.000.000 is 0.0 (boundary, inclusive)"
+        action: "assert"
+        target: "line_at_boundary"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 50000000.0
+          rate:
+            type: "value"
+            expected: 0.0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+
+      - step:
+          "Assert the rate above 50.000.000 (60.000.000) is 0.05, amount_tax follows"
+        action: "assert"
+        target: "line_above_boundary"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 60000000.0
+          rate:
+            type: "value"
+            expected: 0.05
+          amount_tax:
+            type: "value"
+            expected: 3000000.0

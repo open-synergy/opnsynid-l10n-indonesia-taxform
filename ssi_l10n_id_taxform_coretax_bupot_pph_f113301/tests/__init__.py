@@ -5,3 +5,4 @@
 from . import test_amount_tax_dpp_rate
 from . import test_ps17_rate
 from . import test_taxform_objek_pajak_fixed_rate
+from . import test_ter_auto_rate

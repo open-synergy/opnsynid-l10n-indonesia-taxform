@@ -1,0 +1,209 @@
+scenarios:
+  - name: "Auto TER rate for a DPP below PTKP (0% bracket)"
+    steps:
+      - step: "Create PTKP category for TER"
+        action: "create"
+        model: "l10n_id.ptkp_category"
+        save_as: "ptkp_categ"
+        values:
+          name: "TK/0 TER Below PTKP"
+          code: "TK0TERBP"
+
+      - step: "Create TER record"
+        action: "create"
+        model: "l10n_id.pph_21_ter"
+        save_as: "ter"
+        values:
+          name: "TER Below PTKP Test"
+          code: "TERBLWPTKP"
+          date_start: 2038-01-01
+
+      - step: "Create TER line"
+        action: "create"
+        model: "l10n_id.pph_21_ter_line"
+        save_as: "ter_line"
+        values:
+          ter_id: "REC: ter.id"
+          name: "Kategori TK/0"
+          code: "TK0"
+          ptkp_category_ids:
+            - "REC: ptkp_categ.id"
+
+      - step: "Add the 0% bracket"
+        action: "create"
+        model: "l10n_id.pph_21_ter_line_categ"
+        values:
+          ter_line_id: "REC: ter_line.id"
+          min_income: 0.0
+          pph_rate: 0.0
+
+      - step: "Add the 6% bracket, unreached by this DPP"
+        action: "create"
+        model: "l10n_id.pph_21_ter_line_categ"
+        values:
+          ter_line_id: "REC: ter_line.id"
+          min_income: 5000000.0
+          pph_rate: 6.0
+
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TYTERBP"
+          code: "TYTERBP"
+          date_start: 2038-01-01
+          date_end: 2038-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2038 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2038-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal TER Below PTKP"
+          code: "TJTERBP"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable TER Below PTKP"
+          code: "22402TSTTERB"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with a debit/credit line pair"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit TER Below PTKP"
+                debit: 3000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit TER Below PTKP"
+                debit: 0.0
+                credit: 3000000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 TER Below PTKP Test"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type TER"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-07"
+          name: "Test TER Tariff Type Below PTKP"
+          tariff_type: "ter"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test TER Below PTKP"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak TER Below PTKP"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak TER Below PTKP"
+          is_company: true
+
+      - step: "Create Bukti Potong PPh F113301 Out with one auto TER line"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2038-10-15
+          tax_period_id: "REC: tax_period.id"
+          ptkp_category_id: "REC: ptkp_categ.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "TER Line Below PTKP"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 3000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the created line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+        limit: 1
+        save_as: "line"
+
+      - step: "Assert the rate and amount_tax are both zero"
+        action: "assert"
+        target: "line"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 3000000.0
+          rate_computation_method:
+            type: "value"
+            expected: "auto"
+          rate:
+            type: "value"
+            expected: 0.0
+          amount_tax:
+            type: "value"
+            expected: 0.0

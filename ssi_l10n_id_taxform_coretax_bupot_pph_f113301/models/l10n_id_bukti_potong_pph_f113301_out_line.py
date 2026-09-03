@@ -296,6 +296,13 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         """Look up the TER rate for this line's DPP and header PTKP
         category.
 
+        ``Pph21TerLine.compute_tax()`` returns ``rate`` as a raw
+        percentage (e.g. ``6.0`` for 6%, matching the ``pph_rate``
+        bracket field it is read from) rather than a fraction, so the
+        result is divided by 100 here to match this module's own
+        ``rate`` convention (a fraction, e.g. ``0.06`` for 6% — see
+        ``manual_rate``/``fixed_rate``/``_get_ps17_bracket_rate``).
+
         :return: the TER rate as a fraction, or ``0.0`` when the TER
             table or PTKP category is not (yet) configured
         """
@@ -305,7 +312,7 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             return 0.0
         try:
             ter = self.env["l10n_id.pph_21_ter"].find(self.bukti_potong_id.date)
-            return ter.compute_tax(self.dpp, [ptkp_category.id])["rate"]
+            return ter.compute_tax(self.dpp, [ptkp_category.id])["rate"] / 100.0
         except ValidationError:
             return 0.0
 

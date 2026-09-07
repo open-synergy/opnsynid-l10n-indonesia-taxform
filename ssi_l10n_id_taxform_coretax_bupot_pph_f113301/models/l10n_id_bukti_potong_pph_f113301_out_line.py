@@ -244,7 +244,7 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
         """Compute the withheld tax amount, preferring DPP x rate but
         falling back to ``tax_id.compute_all()`` for legacy lines.
 
-        Three branches, checked in order:
+        Six branches, checked in order:
 
         1. **PS17 (Pasal 17), automatic.** ``amount_tax`` comes from
            ``_get_auto_ps17_tax_amount()`` — the marginal tax on the
@@ -253,12 +253,28 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
            bracket rate (see ``_get_ps17_bracket_rate``), which is a
            single-layer lookup and would silently under/over-state
            the tax for any DPP that straddles more than one bracket.
-        2. **Everything else with a positive ``dpp``/``rate``.**
+        2. **TER, Final/Tarif Tetap, or Harian, automatic.**
+           ``amount_tax`` is ``dpp`` multiplied by ``rate`` — same
+           value as before, but this branch no longer requires
+           ``rate > 0.0``: a tariff lookup that legitimately resolves
+           to 0% (e.g. TER/Harian below its threshold) still lands
+           here and yields ``0.0`` instead of falling through to the
+           legacy fallback (branch 6) below.
+        3. **Pesangon (severance pay), automatic.** ``amount_tax``
+           comes from ``_get_pesangon_tax_amount()`` — the marginal
+           tax on this line's own ``dpp`` across the Pesangon
+           bracket table — **not** ``dpp`` x ``rate``, since ``rate``
+           here is only the nominal rate of the highest bracket
+           touched (see ``_get_pesangon_bracket_rate``).
+        4. **Pensiun (pension), automatic.** ``amount_tax`` comes
+           from ``_get_pensiun_tax_amount()``, the Pensiun-table
+           counterpart of branch 3.
+        5. **Everything else with a positive ``dpp``/``rate``.**
            ``amount_tax`` is ``dpp`` multiplied by ``rate`` — i.e.
-           lines that went through the Coretax DPP/Tarif
-           configuration added by this module (TER, Final, or manual
-           rate entry).
-        3. **Legacy fallback.** Lines created through the
+           non-automatic lines (manual rate entry) or automatic
+           lines whose tax object has no tariff type at all, that
+           happen to carry a positive ``rate``.
+        6. **Legacy fallback.** Lines created through the
            pre-existing flow of
            ``l10n_id.bukti_potong_pph_f113301_out_line`` (e.g.
            ``ssi_l10n_id_taxform_bukti_potong_pph_f113301`` demo/tour
@@ -274,27 +290,49 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
            applied on ``amount``) so pre-existing data keeps working
            unmodified — an explicit, user-confirmed design decision
            (see issue #232 discussion), not an inference of this
-           method.
+           method. This branch is also deliberately reached by
+           manual lines whose ``manual_rate`` is a genuine ``0.0``
+           (e.g. ``test_amount_tax_zero_rate_rejected.yaml``): unlike
+           the automatic tariff lookups above, a manual rate of zero
+           still means "data not filled in yet", not a resolved
+           0% tariff.
 
         :return: nothing; assigns ``amount_tax``
         """
         for line in self:
             result = 0.0
             tariff_type = line.coretax_tax_object_code.tariff_type
+            currency = line.bukti_potong_id.company_id.currency_id
             if (
                 line.rate_computation_method == "auto"
                 and tariff_type == "ps17"
                 and line.dpp > 0.0
             ):
-                currency = line.bukti_potong_id.company_id.currency_id
                 result = currency.round(line._get_auto_ps17_tax_amount())
+            elif (
+                line.rate_computation_method == "auto"
+                and tariff_type in ("ter", "final_flat", "harian")
+                and line.dpp > 0.0
+            ):
+                result = currency.round(line.dpp * line.rate)
+            elif (
+                line.rate_computation_method == "auto"
+                and tariff_type == "pesangon"
+                and line.dpp > 0.0
+            ):
+                result = currency.round(line._get_pesangon_tax_amount(line.dpp))
+            elif (
+                line.rate_computation_method == "auto"
+                and tariff_type == "pensiun"
+                and line.dpp > 0.0
+            ):
+                result = currency.round(line._get_pensiun_tax_amount(line.dpp))
             elif line.dpp > 0.0 and line.rate > 0.0:
-                currency = line.bukti_potong_id.company_id.currency_id
                 result = currency.round(line.dpp * line.rate)
             elif line.amount != 0.0:
                 taxes = line.tax_id.compute_all(
                     line.amount,
-                    line.bukti_potong_id.company_id.currency_id,
+                    currency,
                     1.0,
                     product=False,
                     partner=False,
@@ -463,6 +501,79 @@ class L10nIdBuktiPotongPphF113301OutLine(models.Model):
             return 0.0
         else:
             return 0.05
+
+    @api.model
+    def _compute_bracket_tax_amount(self, dpp, brackets):
+        """Compute the marginal (layered) tax on a single DPP over a
+        bracket table, non-cumulative across documents.
+
+        Shared by ``_get_pesangon_tax_amount`` and
+        ``_get_pensiun_tax_amount`` so the layered-sum algorithm is
+        written once. For every layer touched by ``dpp`` (strictly
+        above its lower bound), the taxable slice of that layer is
+        ``min(dpp, upper) - lower`` — a layer with no upper bound
+        (the topmost one) uses ``dpp`` itself as its effective upper
+        bound, so it only ever taxes the portion of ``dpp`` above its
+        ``lower``. The layer contributions are summed and returned
+        as a raw ``float``; rounding is left to the caller
+        (``_compute_amount_tax``), matching the existing pattern of
+        ``_get_auto_ps17_tax_amount``.
+
+        :param dpp: taxable income (DPP) of this line
+        :param brackets: list of ``(lower, upper, rate)`` tuples,
+            ordered by ``lower`` ascending; ``upper`` is ``None`` for
+            the topmost, unbounded layer
+        :return: the marginal tax amount as a raw (unrounded) float
+        """
+        result = 0.0
+        for lower, upper, rate in brackets:
+            if dpp <= lower:
+                continue
+            layer_upper = dpp if upper is None else upper
+            taxable_in_layer = min(dpp, layer_upper) - lower
+            if taxable_in_layer > 0.0:
+                result += taxable_in_layer * rate
+        return result
+
+    @api.model
+    def _get_pesangon_tax_amount(self, dpp):
+        """Compute the marginal Pesangon (severance pay) tax amount
+        for a single line's DPP.
+
+        Same bracket boundaries as ``_get_pesangon_bracket_rate``,
+        but layered/marginal (each bracket's own rate applies only to
+        the slice of ``dpp`` that falls within it) rather than a flat
+        ``dpp`` x single-rate calculation — mirroring how UU HPP
+        Pasal 17 tax is layered, per PP 68/2009.
+
+        :param dpp: taxable income (DPP) of this line
+        :return: the marginal tax amount as a raw (unrounded) float
+        """
+        brackets = [
+            (0.0, 50000000.0, 0.0),
+            (50000000.0, 100000000.0, 0.05),
+            (100000000.0, 500000000.0, 0.15),
+            (500000000.0, None, 0.25),
+        ]
+        return self._compute_bracket_tax_amount(dpp, brackets)
+
+    @api.model
+    def _get_pensiun_tax_amount(self, dpp):
+        """Compute the marginal Pensiun (pension) tax amount for a
+        single line's DPP.
+
+        Same bracket boundary as ``_get_pensiun_bracket_rate``, but
+        layered/marginal rather than a flat ``dpp`` x single-rate
+        calculation, per PP 68/2009.
+
+        :param dpp: taxable income (DPP) of this line
+        :return: the marginal tax amount as a raw (unrounded) float
+        """
+        brackets = [
+            (0.0, 50000000.0, 0.0),
+            (50000000.0, None, 0.05),
+        ]
+        return self._compute_bracket_tax_amount(dpp, brackets)
 
     def _get_auto_ps17_tax_amount(self):
         """Compute the PS17 (Pasal 17) withheld tax amount as the

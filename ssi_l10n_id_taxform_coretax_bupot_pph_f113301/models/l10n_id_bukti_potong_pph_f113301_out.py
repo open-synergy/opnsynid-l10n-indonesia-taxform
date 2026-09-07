@@ -101,6 +101,88 @@ class L10nIdBuktiPotongPphF113301Out(models.Model):
         """
         self.withholding_date = self.date
 
+    def _all_lines_auto_computed(self):
+        """Tell whether every active line of this document went
+        through an automatic Coretax tariff lookup with a known
+        tariff type.
+
+        An "active" line is one whose ``amount`` is not zero — an
+        empty/unfilled line is not considered when deciding whether
+        the document as a whole is fully automatic. A document with
+        no active lines at all (e.g. a brand-new, still-empty
+        document) is **not** exempted: it returns ``False`` so the
+        base "Total tax has to be greater than 0" rule keeps applying
+        to it exactly as before.
+
+        The check is intentionally "all active lines", not "at least
+        one" — a per-user-confirmed design decision (see issue #245
+        discussion) — so a document mixing a legitimate 0%-tariff
+        auto line with a manual line whose rate has simply not been
+        filled in yet still fails validation as before.
+
+        :return: ``True`` when this document has at least one active
+            line and every active line is
+            ``rate_computation_method == "auto"`` with a Coretax Tax
+            Object Code Tariff Type in ``ter``, ``final_flat``,
+            ``ps17``, ``harian``, ``pesangon``, or ``pensiun``;
+            ``False`` otherwise
+        """
+        self.ensure_one()
+        active_lines = self.line_ids.filtered(lambda ln: ln.amount != 0.0)
+        if not active_lines:
+            return False
+        known_tariff_types = (
+            "ter",
+            "final_flat",
+            "ps17",
+            "harian",
+            "pesangon",
+            "pensiun",
+        )
+        return all(
+            line.rate_computation_method == "auto"
+            and line.coretax_tax_object_code.tariff_type in known_tariff_types
+            for line in active_lines
+        )
+
+    @api.constrains(
+        "total_tax_final",
+    )
+    def _constrains_total_tax_final(self):
+        """Override the mixin's constraint to exempt documents whose
+        active lines are entirely auto-computed with a known tariff
+        type.
+
+        The base rule (``ssi_l10n_id_taxform_bukti_potong_pph_mixin``)
+        treats ``total_tax_final <= 0.0`` on a non-empty document as
+        incomplete data — reasonable for manual rate entry, since a
+        rate of ``0.0`` there almost always means "not filled in
+        yet". It is wrong for the Coretax automatic tariff lookups
+        added by this module: several tariff types (TER/Harian below
+        their threshold, or Pesangon/Pensiun at/under their exempt
+        bracket) legitimately resolve to a 0% rate, and a document
+        made up entirely of such lines has a genuinely correct
+        ``total_tax_final`` of ``0.0``.
+
+        This override replaces the base method's body outright
+        (rather than extending it with ``super()``): the base method
+        lives in another module's mixin model, so there is no
+        narrower hook to attach to — the same reasoning documented on
+        ``L10nIdBuktiPotongPphF113301OutLine._compute_amount``.
+
+        :raises UserError: when ``total_tax_final`` is not greater
+            than zero while ``line_ids`` is not empty, unless every
+            active line is auto-computed with a known tariff type
+            (see ``_all_lines_auto_computed``)
+        """
+        for record in self:
+            if (
+                record.total_tax_final <= 0.0
+                and len(record.line_ids) > 0
+                and not record._all_lines_auto_computed()
+            ):
+                raise UserError(_("Total tax has to be greater than 0"))
+
     def _get_coretax_bupot_pph_out_template_xmlid(self):
         """Render the BP21-specific Coretax template instead of the
         base ``MmWithholding`` template.

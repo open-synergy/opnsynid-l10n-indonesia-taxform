@@ -515,7 +515,9 @@ scenarios:
             type: "value"
             expected: 0.05
 
-      - step: "Assert the rate mid-bracket (75.000.000) is 0.05 and amount_tax follows"
+      - step:
+          "Assert the rate mid-bracket (75.000.000) is 0.05 and amount_tax is marginal
+          (0% x 50.000.000 + 5% x 25.000.000), not flat"
         action: "assert"
         target: "line_mid"
         asserts:
@@ -527,7 +529,7 @@ scenarios:
             expected: 0.05
           amount_tax:
             type: "value"
-            expected: 3750000.0
+            expected: 1250000.0
 
   - name: "Auto Pensiun rate is the nominal bracket rate, including the boundary"
     steps:
@@ -731,7 +733,8 @@ scenarios:
             expected: 0.0
 
       - step:
-          "Assert the rate above 50.000.000 (60.000.000) is 0.05, amount_tax follows"
+          "Assert the rate above 50.000.000 (60.000.000) is 0.05, amount_tax is marginal
+          (0% x 50.000.000 + 5% x 10.000.000), not flat"
         action: "assert"
         target: "line_above_boundary"
         asserts:
@@ -743,4 +746,339 @@ scenarios:
             expected: 0.05
           amount_tax:
             type: "value"
-            expected: 3000000.0
+            expected: 500000.0
+
+  - name:
+      "A 0% auto tariff lookup (Harian below threshold) never falls back to
+      tax_id.compute_all()"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TYHARNF"
+          code: "TYHARNF"
+          date_start: 2045-01-01
+          date_end: 2045-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2045 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2045-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal Harian No Fallback"
+          code: "TJHARNF"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable Harian No Fallback"
+          code: "22402TSTHARNF"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with a debit/credit line pair below threshold"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Harian No Fallback"
+                debit: 200000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Harian No Fallback"
+                debit: 0.0
+                credit: 200000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 200000.0]
+        limit: 1
+        save_as: "move_line"
+
+      - step:
+          "Create a withholding tax at a nonzero 10% — if the fallback ran, it would
+          wrongly apply this rate to amount_tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Harian No Fallback Test 10%"
+          type_tax_use: "purchase"
+          amount: 10.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type Harian"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-24"
+          name: "Test Harian No Fallback Tariff Type"
+          tariff_type: "harian"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Harian No Fallback"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Harian No Fallback"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Harian No Fallback"
+          is_company: true
+
+      - step:
+          "Create Bukti Potong PPh F113301 Out with one auto Harian line below threshold"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2045-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Harian No Fallback Line"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 200000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the created line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+        limit: 1
+        save_as: "line"
+
+      - step:
+          "Assert amount_tax is 0.0 (the resolved 0% tariff), not the tax_id's own 10%
+          (20.000.0) nor negative"
+        action: "assert"
+        target: "line"
+        asserts:
+          dpp:
+            type: "value"
+            expected: 200000.0
+          rate:
+            type: "value"
+            expected: 0.0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+
+  - name:
+      "A document whose only line is a 0% auto tariff lookup can be saved
+      (total_tax_final = 0 is exempted)"
+    steps:
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "TYHAREX"
+          code: "TYHAREX"
+          date_start: 2046-01-01
+          date_end: 2046-12-31
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2046 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", 2046-10-01]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Journal Harian Exempt"
+          code: "TJHAREX"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 21 Payable Harian Exempt"
+          code: "22402TSTHAREX"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move with a debit/credit line pair below threshold"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Harian Exempt"
+                debit: 300000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Harian Exempt"
+                debit: 0.0
+                credit: 300000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", "=", 300000.0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create a withholding tax at 0%"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Harian Exempt Test 0%"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create a tax object code with tariff type Harian"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "21-999-25"
+          name: "Test Harian Exempt Tariff Type"
+          tariff_type: "harian"
+
+      - step: "Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Harian Exempt"
+          is_company: true
+
+      - step: "Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Harian Exempt"
+          is_company: false
+
+      - step: "Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Harian Exempt"
+          is_company: true
+
+      - step:
+          "Create Bukti Potong PPh F113301 Out with the ONLY line being a 0% auto Harian
+          line — must NOT raise 'Total tax has to be greater than 0'"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        values:
+          date: 2046-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Harian Exempt Line"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 300000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+                rate_computation_method: "auto"
+
+      - step: "Find the created line"
+        action: "search"
+        model: "l10n_id.bukti_potong_pph_f113301_out_line"
+        domain:
+          - ["bukti_potong_id", "=", "REC: bukpot.id"]
+        limit: 1
+        save_as: "line"
+
+      - step: "Assert the document and its only line were created and are 0%"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          total_tax_final:
+            type: "value"
+            expected: 0.0
+
+      - step: "Assert the line's amount_tax is 0.0 (not rejected, not negative)"
+        action: "assert"
+        target: "line"
+        asserts:
+          amount_tax:
+            type: "value"
+            expected: 0.0

@@ -41,7 +41,12 @@
                 >
                     <field name="fasilitas_pajak_id" optional="hide" />
                     <field name="dpp" optional="hide" />
-                    <field name="rate" optional="hide" />
+                    <field
+                        name="rate"
+                        widget="percentage"
+                        digits="[16, 2]"
+                        optional="hide"
+                    />
                 </xpath>
                 <xpath
                     expr="//field[@name='line_ids']//form//group[@name='grp_main']"
@@ -61,7 +66,12 @@
                                 name="manual_rate"
                                 attrs="{'invisible': [('rate_computation_method', '=', 'auto')]}"
                             />
-                            <field name="rate" readonly="1" />
+                            <field
+                                name="rate"
+                                widget="percentage"
+                                digits="[16, 2]"
+                                readonly="1"
+                            />
                         </group>
                     </group>
                 </xpath>

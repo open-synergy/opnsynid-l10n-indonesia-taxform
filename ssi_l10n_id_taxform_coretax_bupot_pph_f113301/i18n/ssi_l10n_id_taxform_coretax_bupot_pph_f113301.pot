@@ -633,6 +633,12 @@ msgid "Taxform Objek Pajak"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_f113301/models/l10n_id_bukti_potong_pph_f113301_out.py:0
+#, python-format
+msgid "Total tax has to be greater than 0"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_jenis_dokumen_referensi__activity_exception_decoration
 #: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_taxform_kode_fasilitas_pajak__activity_exception_decoration
 msgid "Type of the exception activity on record."

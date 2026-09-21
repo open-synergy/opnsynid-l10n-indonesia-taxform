@@ -18,6 +18,7 @@
         "ssi_l10n_id_taxform_bukti_potong_pph_f113301",
         "ssi_l10n_id_taxform_coretax_bupot_pph_out",
         "report_xml",
+        "web_tour",
     ],
     "data": [
         "security/res_groups/l10n_id_taxform_kode_fasilitas_pajak.xml",
@@ -31,6 +32,7 @@
         "reports/coretax_bupot_pph_f113301_out_template.xml",
         "reports/coretax_bupot_pph_f113301_out_report.xml",
         "views/bukti_potong_pph_f113301_out_views.xml",
+        "views/assets.xml",
     ],
     "demo": [],
 }

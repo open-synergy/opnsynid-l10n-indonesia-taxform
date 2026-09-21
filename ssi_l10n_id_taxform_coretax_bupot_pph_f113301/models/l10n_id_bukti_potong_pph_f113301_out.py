@@ -24,6 +24,23 @@ class L10nIdBuktiPotongPphF113301Out(models.Model):
         "l10n_id.bukti_potong_pph_f113301_out",
     ]
 
+    # Sequence attribute
+    # do not create a document number since the number is given by
+    # Coretax, not by the internal sequence
+    _create_sequence_state = False
+
+    name = fields.Char(
+        default="/",
+        required=True,
+        copy=False,
+        readonly=True,
+        states={
+            "confirm": [
+                ("readonly", False),
+            ],
+        },
+    )
+
     @api.model
     def _default_withholding_date(self):
         """Return today's date as the default withholding date.

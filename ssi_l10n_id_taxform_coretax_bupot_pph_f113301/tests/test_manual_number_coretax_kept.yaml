@@ -1,0 +1,188 @@
+scenarios:
+  - name: "Manual Coretax number set at confirm survives action_done"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year Manual Number Kept"
+          code: "TYMANKEEP"
+          date_start: 2039-01-01
+          date_end: 2039-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "01/2039 Manual Number Kept"
+          code: "0139MANK"
+          date_start: 2039-01-01
+          date_end: 2039-01-31
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 21/26 Payable Manual Number Kept"
+          code: "22402MANKEEP"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 21/26 Journal Manual Number Kept"
+          code: "PJMANK"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Manual Number Kept"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Manual Number Kept"
+          is_company: false
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Manual Number Kept"
+          is_company: true
+
+      - step: "Setup - Get f113301 Out type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113301.bukti_potong_pph_type_f113301_out"
+        save_as: "bp_type"
+
+      - step: "Setup - Create account move with a debit/credit line pair"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Manual Number Kept"
+                debit: 10000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Manual Number Kept"
+                debit: 0.0
+                credit: 10000000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Manual Number Kept Test"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+
+      - step: "Create Bukti Potong PPh F113301 Out with one manual-rate line"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2039-01-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 10000000.0
+                rate_computation_method: "manual"
+                manual_rate: 0.05
+
+      - step: "Assert bukpot created in draft with default number"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          name:
+            type: "value"
+            expected: "/"
+
+      - step: "Confirm bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Set the Coretax number manually while Waiting for Approval"
+        action: "write"
+        target: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          name: "BP-CORETAX-0001"
+
+      - step: "Approve bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Assert the manually-set number was not overridden"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          name:
+            type: "value"
+            expected: "BP-CORETAX-0001"

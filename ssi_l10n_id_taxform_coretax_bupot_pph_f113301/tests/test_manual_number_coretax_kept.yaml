@@ -96,6 +96,11 @@ scenarios:
                 debit: 0.0
                 credit: 10000000.0
 
+      - step: "Post the source journal entry"
+        action: "call"
+        target: "move"
+        method: "action_post"
+
       - step: "Find the debit move line"
         action: "search"
         model: "account.move.line"

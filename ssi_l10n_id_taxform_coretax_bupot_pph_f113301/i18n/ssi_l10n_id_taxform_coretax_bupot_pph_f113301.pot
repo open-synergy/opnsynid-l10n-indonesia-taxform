@@ -57,6 +57,11 @@ msgid "\"coretax_bupot_pph_f113301_%s\" % (object.name or object.id)"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__name
+msgid "# Document"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
 #: model:l10n_id.taxform_objek_pajak,code:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.l10n_id_taxform_objek_pajak_21_402_02
 msgid "21-402-02"
 msgstr ""
@@ -636,6 +641,19 @@ msgstr ""
 #: code:addons/ssi_l10n_id_taxform_coretax_bupot_pph_f113301/models/l10n_id_bukti_potong_pph_f113301_out.py:0
 #, python-format
 msgid "Total tax has to be greater than 0"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_coretax_bupot_pph_f113301.field_l10n_id_bukti_potong_pph_f113301_out__name
+msgid ""
+"Transaction/document number\n"
+"\n"
+"* Unique indentifer of transaction\n"
+"* Leave '/' to automatically generate number\n"
+"* Change '/' into any number/identifier to manually assign number.\n"
+"  Manual number assignment can be done in 'Draft' state\n"
+"  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
+"* Transaction with number other than '/' can not be deleted."
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301

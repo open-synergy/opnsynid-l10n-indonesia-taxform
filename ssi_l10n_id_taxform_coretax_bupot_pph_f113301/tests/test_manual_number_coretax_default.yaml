@@ -1,0 +1,199 @@
+scenarios:
+  - name: "Default Coretax number is not auto-assigned on action_done"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year Manual Number Default"
+          code: "TYMANDFLT"
+          date_start: 2039-01-01
+          date_end: 2039-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "02/2039 Manual Number Default"
+          code: "0239MAND"
+          date_start: 2039-02-01
+          date_end: 2039-02-28
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 21/26 Payable Manual Number Default"
+          code: "22402MANDFLT"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 21/26 Journal Manual Number Default"
+          code: "PJMAND"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Manual Number Default"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Manual Number Default"
+          is_company: false
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Manual Number Default"
+          is_company: true
+
+      - step: "Setup - Get f113301 Out type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113301.bukti_potong_pph_type_f113301_out"
+        save_as: "bp_type"
+
+      - step: "Setup - Create account move with a debit/credit line pair"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit Manual Number Default"
+                debit: 10000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit Manual Number Default"
+                debit: 0.0
+                credit: 10000000.0
+
+      - step: "Post the source journal entry"
+        action: "call"
+        target: "move"
+        method: "action_post"
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create a withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 21 Manual Number Default Test"
+          type_tax_use: "purchase"
+          amount: 0.0
+          amount_type: "percent"
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - repartition_type: "base"
+                factor_percent: 100.0
+            - - 0
+              - 0
+              - repartition_type: "tax"
+                factor_percent: 100.0
+                account_id: "REC: account.id"
+
+      - step: "Create Bukti Potong PPh F113301 Out with one manual-rate line"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2039-02-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 10000000.0
+                rate_computation_method: "manual"
+                manual_rate: 0.05
+
+      - step: "Assert bukpot created in draft with default number"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          name:
+            type: "value"
+            expected: "/"
+
+      - step: "Confirm bukpot without setting a manual number"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+          name:
+            type: "value"
+            expected: "/"
+
+      - step: "Approve bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Assert the sequence did not auto-assign a number"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          name:
+            type: "value"
+            expected: "/"

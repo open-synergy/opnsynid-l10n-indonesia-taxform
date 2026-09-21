@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<!-- Widen the base module's "manual_number_ok" policy detail for
+     f.1.1.33.01 Out so it also allows the "confirm" state, on top of
+     the base "draft" state it already allows. This record is owned
+     by ssi_l10n_id_taxform_bukti_potong_pph_f113301 (same XML ID) —
+     only its ``state_ids`` field is amended here, and only takes
+     effect once this Coretax module is installed alongside it.
+     Without this, the "name" field stays readonly at "confirm" in
+     the form view (mixin_transaction_views.xml renders it with
+     attrs bound to "manual_number_ok", not to the field's own
+     ``states=``), even though the model already allows it. -->
+<record
+        id="ssi_l10n_id_taxform_bukti_potong_pph_f113301.policy_template_f113301_out_manual_number"
+        model="policy.template_detail"
+    >
+    <field
+            name="state_ids"
+            search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113301_out'),('value','in',['draft','confirm'])]"
+        />
+</record>
+
+</odoo>

@@ -18,6 +18,7 @@
         "ssi_l10n_id_taxform_bukti_potong_pph_f113301",
         "ssi_l10n_id_taxform_coretax_bupot_pph_out",
         "report_xml",
+        "web_tour",
     ],
     "data": [
         "security/res_groups/l10n_id_taxform_kode_fasilitas_pajak.xml",
@@ -25,12 +26,14 @@
         "security/ir_model_access/l10n_id_taxform_kode_fasilitas_pajak.xml",
         "security/ir_model_access/l10n_id_taxform_jenis_dokumen_referensi.xml",
         "data/taxform_objek_pajak_data.xml",
+        "data/policy_template_data.xml",
         "views/taxform_objek_pajak_views.xml",
         "views/taxform_kode_fasilitas_pajak_views.xml",
         "views/taxform_jenis_dokumen_referensi_views.xml",
         "reports/coretax_bupot_pph_f113301_out_template.xml",
         "reports/coretax_bupot_pph_f113301_out_report.xml",
         "views/bukti_potong_pph_f113301_out_views.xml",
+        "views/assets.xml",
     ],
     "demo": [],
 }

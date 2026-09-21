@@ -39,6 +39,12 @@ Usage
 3. The enriched XML file is downloaded automatically.
 
 
+Work Instruction
+================
+
+* `Input Coretax Number on Bukti Potong PPh f.1.1.33.01 Out <docs/l10n_id_bukti_potong_pph_f113301_out/07-input-nomor-coretax.html>`_
+
+
 Bug Tracker
 ===========
 

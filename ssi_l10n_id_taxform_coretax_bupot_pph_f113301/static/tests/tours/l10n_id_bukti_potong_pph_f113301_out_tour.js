@@ -90,7 +90,7 @@ odoo.define(
                     // Number field.
                     {
                         content: "Type the Coretax number into the Number field",
-                        trigger: ".oe_title .o_field_widget[name='name'] input",
+                        trigger: ".oe_title .o_field_widget[name='name']",
                         extra_trigger: ".o_form_view.o_form_editable",
                         run: "text BP-CORETAX-0001",
                     },

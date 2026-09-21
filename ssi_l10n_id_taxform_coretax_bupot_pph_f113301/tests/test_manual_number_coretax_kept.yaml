@@ -114,6 +114,16 @@ scenarios:
           type_tax_use: "purchase"
           amount: 0.0
           amount_type: "percent"
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - repartition_type: "base"
+                factor_percent: 100.0
+            - - 0
+              - 0
+              - repartition_type: "tax"
+                factor_percent: 100.0
+                account_id: "REC: account.id"
 
       - step: "Create Bukti Potong PPh F113301 Out with one manual-rate line"
         action: "create"

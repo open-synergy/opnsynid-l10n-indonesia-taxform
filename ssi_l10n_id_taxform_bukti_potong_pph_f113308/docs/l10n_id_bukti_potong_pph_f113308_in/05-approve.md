@@ -4,7 +4,7 @@
 > **Model:** `l10n_id.bukti_potong_pph_f113308_in`\
 > **Menu:** Taxform > Bukti Potong > PPh 26 (f.1.1.33.08) In\
 > **Actor:** approver on the approval level that is currently pending\
-> **State:** `confirm` → `confirm` | `done`\
+> **State:** `confirm` → `confirm` | `open`\
 > **Requires:** `04-confirm`
 
 ## Pre-Condition
@@ -27,7 +27,8 @@
 
 - If there are still pending approval levels, status remains **Waiting for Approval**
   and the next level becomes pending.
-- If all approval levels are fulfilled, the document is automatically finished and
-  status changes to **Done** — there is no separate **Done** button; the transition is
-  triggered automatically by the last approval, and the related accounting entry
-  (**Accounting** tab) is generated and posted.
+- If all approval levels are fulfilled, the document automatically moves to **On
+  Progress** status. The document number (Bukti Potong number) is assigned at this point
+  if it was left as `/`, and the field becomes editable for entering an official number
+  obtained from an external source (e.g. Coretax). Finishing the document afterwards is
+  a separate manual step — see `09-done.md`.

@@ -4,12 +4,12 @@
 > **Model:** `l10n_id.bukti_potong_pph_f113301_out`\
 > **Menu:** Taxform > Bukti Potong > PPh 21/26 Tidak Final (f.1.1.33.01) Out\
 > **Actor:** user in group `Bukti Potong PPh 21/26 F.1.1.33.01 Out / Validator`\
-> **State:** `draft` | `confirm` | `done` → `cancel`\
-> **Requires:** `01-create`
+> **State:** `done` → `cancel`\
+> **Requires:** `09-done`
 
 ## Pre-Condition
 
-- **Record:** Status is **Draft**, **Waiting for Approval**, or **Done**.
+- **Record:** Status is **Done**.
 - **Config:** The active `policy.template` grants `cancel_ok` for that state to the
   actor's group.
 - **Access:** User is in group `Bukti Potong PPh 21/26 F.1.1.33.01 Out / Validator`.

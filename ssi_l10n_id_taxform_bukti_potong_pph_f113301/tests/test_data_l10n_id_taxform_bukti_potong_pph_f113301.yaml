@@ -111,3 +111,341 @@ scenarios:
           state:
             type: "value"
             expected: "confirm"
+
+  - name: "Bukti Potong PPh F113301 - Cancel policy restricted to Done"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 F113301 Cancel"
+          code: "TY24F1CN"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "07/2024 Cancel"
+          code: "072024CN"
+          date_start: 2024-07-01
+          date_end: 2024-07-31
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 21/26 Payable Cancel Test"
+          code: "XPPH2126CN"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 21/26 Journal Cancel Test"
+          code: "XP2126CN"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Gambir Cancel"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Cancel"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Individual Cancel"
+          is_company: false
+
+      - step: "Get f113301 type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113301.bukti_potong_pph_type_f113301_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113301 Out"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-07-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+
+      - step: "Confirm bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Cancel is rejected while Waiting for Approval"
+        action: "call"
+        target: "bukpot"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "not allowed to cancel"
+
+      - step: "Approve bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Finish bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_done"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Cancel is allowed once Done"
+        action: "call"
+        target: "bukpot"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "cancel"
+
+  - name: "Bukti Potong PPh F113301 - Restart allowed before Done, not after Cancel"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 F113301 Restart"
+          code: "TY24F1RS"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "08/2024 Restart"
+          code: "082024RS"
+          date_start: 2024-08-01
+          date_end: 2024-08-31
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "PPh 21/26 Payable Restart Test"
+          code: "XPPH2126RS"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "PPh 21/26 Journal Restart Test"
+          code: "XP2126RS"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test Gambir Restart"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong Pajak Restart"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Test Wajib Pajak Individual Restart"
+          is_company: false
+
+      - step: "Get f113301 type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113301.bukti_potong_pph_type_f113301_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113301 Out - open document"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot_open"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-08-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+
+      - step: "Confirm bukpot_open"
+        action: "call"
+        target: "bukpot_open"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve bukpot_open"
+        action: "call"
+        target: "bukpot_open"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Restart is allowed while In Progress"
+        action: "call"
+        target: "bukpot_open"
+        method: "action_restart"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Create Bukti Potong PPh F113301 Out - cancelled document"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113301_out"
+        save_as: "bukpot_cancel"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-08-16
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+
+      - step: "Confirm bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Finish bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_done"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Cancel bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "cancel"
+
+      - step: "Restart is rejected once Cancelled"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_restart"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "not allowed to restart"

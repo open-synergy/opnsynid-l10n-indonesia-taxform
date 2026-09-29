@@ -144,6 +144,27 @@ if not document.approval_template_id:
     <field name="restrict_additional" eval="0" />
 </record>
 
+<!-- f113306 In done_ok -->
+<record id="policy_template_f113306_in_done" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113306_in" />
+    <field
+            name="field_id"
+            search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('name','=','done_ok')]"
+        />
+    <field name="restrict_state" eval="1" />
+    <field
+            name="state_ids"
+            search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','=','open')]"
+        />
+      <field name="restrict_user" eval="1" />
+      <field name="computation_method">use_group</field>
+      <field
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_in_user_group')])]"
+        />
+    <field name="restrict_additional" eval="0" />
+</record>
+
 <!-- f113306 In: manual_number_ok -->
 <record id="policy_template_f113306_in_manual_number" model="policy.template_detail">
     <field name="template_id" ref="policy_template_f113306_in" />
@@ -304,6 +325,27 @@ if not document.approval_template_id:
     <field
             name="group_ids"
             eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_out_validator_group')])]"
+        />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<!-- f113306 Out done_ok -->
+<record id="policy_template_f113306_out_done" model="policy.template_detail">
+    <field name="template_id" ref="policy_template_f113306_out" />
+    <field
+            name="field_id"
+            search="[('model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('name','=','done_ok')]"
+        />
+    <field name="restrict_state" eval="1" />
+    <field
+            name="state_ids"
+            search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','=','open')]"
+        />
+      <field name="restrict_user" eval="1" />
+      <field name="computation_method">use_group</field>
+      <field
+            name="group_ids"
+            eval="[(6,0,[ref('ssi_l10n_id_taxform_bukti_potong_pph_f113306.l10n_id_bukti_potong_pph_f113306_out_user_group')])]"
         />
     <field name="restrict_additional" eval="0" />
 </record>

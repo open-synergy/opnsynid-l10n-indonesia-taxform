@@ -114,6 +114,22 @@ class TestUiL10nIdBuktiPotongPphF113310Out(HttpSavepointCase):
         # policy.
         cls.order_approve.sudo().with_context(bypass_policy_check=True).action_confirm()
 
+        # Pre-Condition for the cancel tour: it drives the document
+        # from Draft through Confirm, Approve, and Done itself before
+        # clicking Cancel, so it needs the same withholding line
+        # fixture as the approve tour (``action_done`` requires at
+        # least one line).
+        income_move_line_cancel = cls._create_income_move_line(cls.wajib_pajak_cancel)
+        cls.env["l10n_id.bukti_potong_pph_f113310_out_line"].create(
+            {
+                "bukti_potong_id": cls.order_cancel.id,
+                "tax_id": cls.tax.id,
+                "move_line_id": income_move_line_cancel.id,
+                "amount_computation_method": "manual",
+                "manual_amount": 1000000.0,
+            }
+        )
+
     @classmethod
     def _create_wajib_pajak(cls, name):
         """Create a taxpayer partner used to pick from the Wajib Pajak

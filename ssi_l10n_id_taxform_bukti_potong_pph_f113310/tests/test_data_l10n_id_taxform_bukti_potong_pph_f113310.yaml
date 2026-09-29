@@ -415,7 +415,7 @@ scenarios:
         target: "bukpot"
         as_user: "base.user_admin"
         values:
-          name: "BP-MANUAL-F10O-001"
+          name: "BP-MANUAL-F113310O-001"
 
       - step: "Assert manual number applied"
         action: "assert"
@@ -423,7 +423,7 @@ scenarios:
         asserts:
           name:
             type: "value"
-            expected: "BP-MANUAL-F10O-001"
+            expected: "BP-MANUAL-F113310O-001"
 
       - step: "Finish bukpot keeps the manual number"
         action: "call"
@@ -437,7 +437,7 @@ scenarios:
             expected: "done"
           name:
             type: "value"
-            expected: "BP-MANUAL-F10O-001"
+            expected: "BP-MANUAL-F113310O-001"
 
   - name:
       "Bukti Potong PPh F113310 Out - Negatif (auto-sequence, tak berubah setelah Done)"
@@ -1378,7 +1378,7 @@ scenarios:
         target: "bukpot"
         as_user: "base.user_admin"
         values:
-          name: "BP-MANUAL-F10I-001"
+          name: "BP-MANUAL-F113310I-001"
 
       - step: "Assert manual number applied"
         action: "assert"
@@ -1386,7 +1386,7 @@ scenarios:
         asserts:
           name:
             type: "value"
-            expected: "BP-MANUAL-F10I-001"
+            expected: "BP-MANUAL-F113310I-001"
 
       - step: "Finish bukpot keeps the manual number"
         action: "call"
@@ -1400,7 +1400,7 @@ scenarios:
             expected: "done"
           name:
             type: "value"
-            expected: "BP-MANUAL-F10I-001"
+            expected: "BP-MANUAL-F113310I-001"
 
   - name:
       "Bukti Potong PPh F113310 In - Negatif (auto-sequence, tak berubah setelah Done)"

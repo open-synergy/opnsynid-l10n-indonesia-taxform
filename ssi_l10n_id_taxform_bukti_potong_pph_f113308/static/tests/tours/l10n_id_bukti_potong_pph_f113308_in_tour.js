@@ -223,12 +223,21 @@ odoo.define(
                         trigger: ".o_form_button_cancel",
                     },
                 ],
-                // ── Flow 4 — Click the Approve button.
+                // ── Flow 4 — Click the Approve button. The
+                // trigger waits for the statusbar buttons to be
+                // re-enabled after discarding the edit above --
+                // Odoo disables every ``.o_statusbar_buttons``
+                // button for the duration of each button click's
+                // async round-trip (``form_renderer.js``
+                // ``disableButtons``/``enableButtons``), and a
+                // click on a still-disabled button is silently
+                // ignored by the browser.
                 [
                     {
                         content: "Click the Approve button",
                         trigger:
-                            ".o_statusbar_buttons button[name='action_approve_approval']",
+                            ".o_statusbar_buttons " +
+                            "button[name='action_approve_approval']:not([disabled])",
                         extra_trigger: ".o_form_view",
                     },
                     // ── Flow 5 — Click OK on the confirmation dialog.
@@ -271,11 +280,15 @@ odoo.define(
                     },
                 ],
                 // ── IK: docs/l10n_id_bukti_potong_pph_f113308_in/09-done.md
-                // Flow 4 — Click the Done button.
+                // Flow 4 — Click the Done button. Same
+                // disabled-button race as Approve above, gated
+                // the same way.
                 [
                     {
                         content: "Click the Done button",
-                        trigger: ".o_statusbar_buttons button[name='action_done']",
+                        trigger:
+                            ".o_statusbar_buttons " +
+                            "button[name='action_done']:not([disabled])",
                         extra_trigger:
                             ".o_statusbar_status .o_arrow_button[data-value='open'].btn-primary",
                     },
@@ -305,7 +318,63 @@ odoo.define(
                 openMenuSteps,
                 // ── Flow 2 — Open the record to cancel.
                 openRecordSteps("TOUR PP CancelF113308I"),
-                // ── Flow 3 — Click the Cancel button.
+                // ── Flow 3 — Click the Confirm button.
+                [
+                    {
+                        content: "Click the Confirm button",
+                        trigger: ".o_statusbar_buttons button[name='action_confirm']",
+                        extra_trigger: ".o_form_view",
+                    },
+                    confirmDialogStep,
+                ],
+                // ── Flow 4 — the Cancel button is not
+                // available while Waiting for Approval —
+                // ``cancel_ok`` only applies to Done.
+                [
+                    {
+                        content:
+                            "Cancel button is not available while " +
+                            "Waiting for Approval",
+                        trigger:
+                            ".o_statusbar_buttons:not(:has(" +
+                            "button:contains(Cancel):not(.o_invisible_modifier)))",
+                        extra_trigger:
+                            ".o_statusbar_status .o_arrow_button" +
+                            "[data-value='confirm'].btn-primary",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+                ],
+                // ── Flow 5 — Click the Approve button
+                // (single approval level, so the document moves
+                // straight to On Progress). The trigger waits
+                // for the statusbar buttons to be re-enabled
+                // after the Confirm click above settles (same
+                // disabled-button race as the approve tour).
+                [
+                    {
+                        content: "Click the Approve button",
+                        trigger:
+                            ".o_statusbar_buttons " +
+                            "button[name='action_approve_approval']:not([disabled])",
+                        extra_trigger: ".o_form_view",
+                    },
+                    confirmDialogStep,
+                ],
+                // ── Flow 6 — Click the Done button.
+                [
+                    {
+                        content: "Click the Done button",
+                        trigger:
+                            ".o_statusbar_buttons " +
+                            "button[name='action_done']:not([disabled])",
+                        extra_trigger:
+                            ".o_statusbar_status .o_arrow_button[data-value='open'].btn-primary",
+                    },
+                    confirmDialogStep,
+                ],
+                // ── Flow 7 — Click the Cancel button.
                 //
                 // The Cancel button is type="action" with the wizard's
                 // numeric action id as `name` (resolved from
@@ -316,7 +385,8 @@ odoo.define(
                     {
                         content: "Click the Cancel button",
                         trigger: ".o_statusbar_buttons button",
-                        extra_trigger: ".o_form_view",
+                        extra_trigger:
+                            ".o_statusbar_status .o_arrow_button[data-value='done'].btn-primary",
                         run: function () {
                             var $cancel = $(".o_statusbar_buttons button").filter(
                                 function () {
@@ -333,18 +403,18 @@ odoo.define(
                             // Assertion only.
                         },
                     },
-                    // ── Flow 4 — Select the Cancellation Reason.
+                    // ── Flow 8 — Select the Cancellation Reason.
                     {
                         content: "Select the cancellation reason",
                         trigger:
                             ".o_field_widget[name='cancel_reason_id'] label:contains(TOUR Cancel Reason F113308 In)",
                     },
-                    // ── Flow 5 — Click Confirm.
+                    // ── Flow 9 — Click Confirm.
                     {
                         content: "Confirm the wizard",
                         trigger: ".modal-footer button[name='action_confirm']",
                     },
-                    // ── Flow 6 — Click OK on the confirmation dialog.
+                    // ── Flow 10 — Click OK on the confirmation dialog.
                     confirmDialogStep,
                 ],
                 // ── Post-Condition — status changes to Cancelled.

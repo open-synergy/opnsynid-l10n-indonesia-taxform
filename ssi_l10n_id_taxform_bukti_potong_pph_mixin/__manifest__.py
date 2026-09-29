@@ -15,6 +15,7 @@
         "account",
         "ssi_transaction_mixin",
         "ssi_transaction_confirm_mixin",
+        "ssi_transaction_open_mixin",
         "ssi_transaction_done_mixin",
         "ssi_transaction_cancel_mixin",
         "ssi_l10n_id_taxform",

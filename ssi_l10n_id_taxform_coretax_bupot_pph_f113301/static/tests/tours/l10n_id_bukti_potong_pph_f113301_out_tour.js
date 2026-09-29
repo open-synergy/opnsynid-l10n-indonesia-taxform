@@ -68,14 +68,13 @@ odoo.define(
             {test: true, url: "/web"},
             [].concat(
                 openMenuSteps,
-                // ── Flow 2 — Open the record that is Waiting for
-                // Approval.
+                // ── Flow 2 — Open the record that is On Progress.
                 openRecordSteps("TOUR WP InputNomorCoretaxF113301"),
                 [
                     {
-                        content: "Status is Waiting for Approval",
+                        content: "Status is On Progress",
                         trigger:
-                            ".o_statusbar_status .o_arrow_button[data-value='confirm'].btn-primary",
+                            ".o_statusbar_status .o_arrow_button[data-value='open'].btn-primary",
                         run: function () {
                             // Assertion only.
                         },

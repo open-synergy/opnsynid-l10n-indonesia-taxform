@@ -4,24 +4,31 @@
 > **Model:** `l10n_id.bukti_potong_pph_f113304_in`\
 > **Menu:** Taxform > Bukti Potong > PPh 22 (f.1.1.33.04) In\
 > **Actor:** user in group `Bukti Potong PPh 22 (f.1.1.33.04) In / Validator`\
-> **State:** `draft` | `confirm` | `done` → `cancel`\
+> **State:** `draft` → `confirm` → `open` → `done` → `cancel`\
 > **Requires:** `01-create`
 
 ## Pre-Condition
 
-- **Record:** Status is **Draft**, **Waiting for Approval**, or **Done**.
-- **Config:** The active `policy.template` grants `cancel_ok` for that state to the
-  actor's group.
+- **Record:** Status is **Draft**, with all required fields filled in and at least one
+  withholding line so the document can reach **Done**.
+- **Config:** The active `policy.template` grants `confirm_ok`, `approve_ok`, and
+  `done_ok` to the acting user, and grants `cancel_ok` for state **Done** to the actor's
+  group.
 - **Access:** User is in group `Bukti Potong PPh 22 (f.1.1.33.04) In / Validator`.
 
 ## Flow
 
 1. Open the **Taxform > Bukti Potong > PPh 22 (f.1.1.33.04) In** menu.
 2. Open the record to cancel.
-3. Click the **Cancel** button.
-4. In the wizard that appears, select the **Cancellation Reason**.
-5. Click **Confirm**.
-6. Click **OK** on the confirmation dialog.
+3. Click the **Confirm** button, then click **OK** on the confirmation dialog.
+4. Confirm the **Cancel** button is not available while status is **Waiting for
+   Approval** — the document must reach **Done** first.
+5. Click the **Approve** button, then click **OK** on the confirmation dialog.
+6. Click the **Done** button, then click **OK** on the confirmation dialog.
+7. Click the **Cancel** button.
+8. In the wizard that appears, select the **Cancellation Reason**.
+9. Click **Confirm**.
+10. Click **OK** on the confirmation dialog.
 
 ## Post-Condition
 

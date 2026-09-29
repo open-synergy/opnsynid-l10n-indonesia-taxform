@@ -1,5 +1,5 @@
 scenarios:
-  - name: "Manual Coretax number set at confirm survives action_done"
+  - name: "Manual Coretax number set while On Progress survives action_done"
     steps:
       - step: "Setup - Create tax year"
         action: "create"
@@ -175,18 +175,35 @@ scenarios:
           state:
             type: "value"
             expected: "confirm"
+          manual_number_ok:
+            type: "value"
+            expected: false
 
-      - step: "Set the Coretax number manually while Waiting for Approval"
+      - step: "Approve bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+          manual_number_ok:
+            type: "value"
+            expected: true
+
+      - step: "Set the Coretax number manually while On Progress"
         action: "write"
         target: "bukpot"
         as_user: "base.user_admin"
         values:
           name: "BP-CORETAX-0001"
 
-      - step: "Approve bukpot"
+      - step: "Finish bukpot"
         action: "call"
         target: "bukpot"
-        method: "action_approve_approval"
+        method: "action_done"
         as_user: "base.user_admin"
         refresh: true
         asserts:

@@ -35,7 +35,7 @@ class L10nIdBuktiPotongPphF113301Out(models.Model):
         copy=False,
         readonly=True,
         states={
-            "confirm": [
+            "open": [
                 ("readonly", False),
             ],
         },

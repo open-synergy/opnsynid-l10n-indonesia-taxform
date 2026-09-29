@@ -12,43 +12,48 @@ from odoo.tools.translate import _
 class L10nIdBuktiPotongPphMixin(models.AbstractModel):
     """Abstract mixin for an Indonesian Bukti Potong PPh document.
 
-    Provides the transactional workflow (draft/confirm/done/cancel via
-    ``mixin.transaction_confirm``/``done``/``cancel``) shared by every
-    concrete Bukti Potong PPh withholding-tax slip: computing the
-    total withheld tax from ``line_ids``, creating the accounting
-    journal entry and its tax lines on ``action_done``, and reversing
-    that entry on ``action_cancel``. Concrete transactional models
-    inherit this mixin and set ``type_id`` (via ``_default_type_id``)
-    to the specific Bukti Potong PPh form they represent.
+    Provides the transactional workflow (draft/confirm/open/done/cancel
+    via ``mixin.transaction_confirm``/``open``/``done``/``cancel``)
+    shared by every concrete Bukti Potong PPh withholding-tax slip:
+    computing the total withheld tax from ``line_ids``, moving to
+    ``open`` ("In Progress") once approval completes so the official
+    document number can still be entered manually, creating the
+    accounting journal entry and its tax lines on ``action_done``, and
+    reversing that entry on ``action_cancel``. Concrete transactional
+    models inherit this mixin and set ``type_id`` (via
+    ``_default_type_id``) to the specific Bukti Potong PPh form they
+    represent.
     """
 
     _name = "l10n_id.bukti_potong_pph_mixin"
     _inherit = [
         "mixin.transaction_cancel",
         "mixin.transaction_done",
+        "mixin.transaction_open",
         "mixin.transaction_confirm",
     ]
     _description = "Bukti Potong PPh"
 
     # Multiple Approval Attribute
     _approval_from_state = "draft"
-    _approval_to_state = "done"
+    _approval_to_state = "open"
     _approval_state = "confirm"
-    _after_approved_method = "action_done"
+    _after_approved_method = "action_open"
 
     # Attributes related to add element on view automatically
     _automatically_insert_view_element = True
-    _automatically_insert_done_button = False
-    _automatically_insert_done_policy_fields = False
+    _automatically_insert_open_button = False
+    _automatically_insert_open_policy_fields = False
 
     # Attributes related to add element on form view automatically
     _automatically_insert_multiple_approval_page = True
-    _statusbar_visible_label = "draft,confirm,done"
+    _statusbar_visible_label = "draft,confirm,open,done"
     _policy_field_order = [
         "confirm_ok",
         "approve_ok",
         "reject_ok",
         "restart_approval_ok",
+        "done_ok",
         "cancel_ok",
         "restart_ok",
         "manual_number_ok",
@@ -57,6 +62,7 @@ class L10nIdBuktiPotongPphMixin(models.AbstractModel):
         "action_confirm",
         "action_approve_approval",
         "action_reject_approval",
+        "action_done",
         "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
         "action_restart",
     ]
@@ -65,13 +71,14 @@ class L10nIdBuktiPotongPphMixin(models.AbstractModel):
     _state_filter_order = [
         "dom_draft",
         "dom_confirm",
+        "dom_open",
         "dom_reject",
         "dom_done",
         "dom_cancel",
     ]
 
     # Sequence attribute
-    _create_sequence_state = "done"
+    _create_sequence_state = "open"
 
     def _default_company_id(self):
         """Return the id of the current user's company.
@@ -179,6 +186,29 @@ class L10nIdBuktiPotongPphMixin(models.AbstractModel):
             else:
                 record.total_tax_final = record.manual_total_tax
 
+    name = fields.Char(
+        string="# Document",
+        default="/",
+        required=True,
+        copy=False,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+            "open": [
+                ("readonly", False),
+            ],
+        },
+        help="""Transaction/document number
+
+* Unique indentifer of transaction
+* Leave '/' to automatically generate number
+* Change '/' into any number/identifier to manually assign number.
+  Manual number assignment can be done in 'Draft'/'In Progress' state
+  Only user with 'Can Manualy Assign Number' policy can manually assign number.
+* Transaction with number other than '/' can not be deleted.""",
+    )
     type_id = fields.Many2one(
         string="Form Type",
         comodel_name="l10n_id.bukti_potong_pph_type",
@@ -381,6 +411,7 @@ class L10nIdBuktiPotongPphMixin(models.AbstractModel):
         selection=[
             ("draft", "Draft"),
             ("confirm", "Waiting for Approval"),
+            ("open", "On Progress"),
             ("done", "Done"),
             ("cancel", "Cancelled"),
             ("reject", "Rejected"),

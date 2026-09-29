@@ -4,12 +4,12 @@
 > **Model:** `l10n_id.bukti_potong_pph_f113306_in`\
 > **Menu:** Taxform > Bukti Potong > PPh 23 (f.1.1.33.06) In\
 > **Actor:** user in group `Bukti Potong PPh 23 (f.1.1.33.06) In / Validator`\
-> **State:** `cancel` | `reject` → `draft`\
-> **Requires:** `10-cancel`
+> **State:** `confirm` | `open` | `reject` → `draft`\
+> **Requires:** `04-confirm`
 
 ## Pre-Condition
 
-- **Record:** Status is **Cancelled** or **Rejected**.
+- **Record:** Status is **Waiting for Approval**, **On Progress**, or **Rejected**.
 - **Config:** The active `policy.template` grants `restart_ok` for that state to the
   actor's group.
 - **Access:** User is in group `Bukti Potong PPh 23 (f.1.1.33.06) In / Validator`.

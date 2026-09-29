@@ -262,6 +262,11 @@ msgid "Can Restart Approval"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_mixin__open_ok
+msgid "Can Start"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_mixin__cancel_reason_id
 msgid "Cancel Reason"
 msgstr ""
@@ -683,6 +688,21 @@ msgid "Number of unread messages"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113301_out__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113302_out__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113304_in__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113304_out__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113306_in__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113306_out__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113308_in__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113308_out__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113310_in__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_f113310_out__state__open
+#: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_mixin__state__open
+msgid "On Progress"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
 #: model:ir.model.fields.selection,name:ssi_l10n_id_taxform_bukti_potong_pph_mixin.selection__l10n_id_bukti_potong_pph_type__direction__out
 #: model_terms:ir.ui.view,arch_db:ssi_l10n_id_taxform_bukti_potong_pph_mixin.l10n_id_bukti_potong_pph_type_view_search
 msgid "Out"
@@ -767,6 +787,14 @@ msgid "Sequence"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_mixin__open_ok
+msgid ""
+"Start policy\n"
+"\n"
+"* If active user can see and execute 'Start' button"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_bukti_potong_pph_mixin
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_mixin.field_l10n_id_bukti_potong_pph_mixin__state
 msgid "State"
 msgstr ""
@@ -843,7 +871,7 @@ msgid ""
 "* Unique indentifer of transaction\n"
 "* Leave '/' to automatically generate number\n"
 "* Change '/' into any number/identifier to manually assign number.\n"
-"  Manual number assignment can be done in 'Draft' state\n"
+"  Manual number assignment can be done in 'Draft'/'In Progress' state\n"
 "  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
 "* Transaction with number other than '/' can not be deleted."
 msgstr ""

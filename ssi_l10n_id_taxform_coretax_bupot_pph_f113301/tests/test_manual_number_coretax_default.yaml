@@ -178,6 +178,9 @@ scenarios:
           name:
             type: "value"
             expected: "/"
+          manual_number_ok:
+            type: "value"
+            expected: false
 
       - step: "Approve bukpot"
         action: "call"
@@ -192,6 +195,9 @@ scenarios:
           name:
             type: "value"
             expected: "/"
+          manual_number_ok:
+            type: "value"
+            expected: true
 
       - step: "Finish bukpot"
         action: "call"

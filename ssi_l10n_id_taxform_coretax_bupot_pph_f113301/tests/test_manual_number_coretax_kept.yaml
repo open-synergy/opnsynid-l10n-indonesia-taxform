@@ -175,6 +175,9 @@ scenarios:
           state:
             type: "value"
             expected: "confirm"
+          manual_number_ok:
+            type: "value"
+            expected: false
 
       - step: "Approve bukpot"
         action: "call"
@@ -186,6 +189,9 @@ scenarios:
           state:
             type: "value"
             expected: "open"
+          manual_number_ok:
+            type: "value"
+            expected: true
 
       - step: "Set the Coretax number manually while On Progress"
         action: "write"

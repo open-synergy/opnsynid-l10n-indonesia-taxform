@@ -111,3 +111,966 @@ scenarios:
           state:
             type: "value"
             expected: "confirm"
+
+  - name: "Bukti Potong PPh F113302 Out - Positif (manual number kept through Done)"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 F113302 Out Positif"
+          code: "F2PS"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "09/2024 F113302 Out Positif"
+          code: "092024F2PS"
+          date_start: 2024-09-01
+          date_end: 2024-09-30
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Payable F113302 Out Positif Test"
+          code: "XF2PS"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Journal F113302 Out Positif Test"
+          code: "JF2PS"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test F113302 Out Positif"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong F113302 Out Positif"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak F113302 Out Positif"
+          is_company: false
+
+      - step: "Setup - Create income account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "income_account_type"
+
+      - step: "Setup - Create income account"
+        action: "create"
+        model: "account.account"
+        save_as: "income_account"
+        values:
+          name: "Income Account F113302 Out PS"
+          code: "IF2PS"
+          user_type_id: "REC: income_account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "Tax F113302 Out PS"
+          amount_type: "percent"
+          type_tax_use: "none"
+          amount: 5.0
+          invoice_repartition_line_ids:
+            - - 5
+              - 0
+              - 0
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "REC: account.id"
+
+      - step: "Setup - Create income journal entry"
+        action: "create"
+        model: "account.move"
+        save_as: "income_move"
+        values:
+          move_type: "entry"
+          journal_id: "REC: journal.id"
+          date: 2024-09-15
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: income_account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Income line F113302 Out PS"
+                debit: 1000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Contra line F113302 Out PS"
+                debit: 0.0
+                credit: 1000000.0
+
+      - step: "Setup - Post income journal entry"
+        action: "call"
+        target: "income_move"
+        method: "action_post"
+
+      - step: "Setup - Find income move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: income_move.id"]
+          - ["account_id", "=", "REC: income_account.id"]
+        save_as: "income_line"
+        expect_count: 1
+
+      - step: "Get F113302 Out type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113302.bukti_potong_pph_type_f113302_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113302 Out"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113302_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-09-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - tax_id: "REC: tax.id"
+                move_line_id: "REC: income_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 1000000.0
+
+      - step: "Confirm bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve bukpot moves it to On Progress"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Fill manual number while On Progress"
+        action: "write"
+        target: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          name: "BP-MANUAL-F2-001"
+
+      - step: "Assert manual number applied"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          name:
+            type: "value"
+            expected: "BP-MANUAL-F2-001"
+
+      - step: "Finish bukpot keeps the manual number"
+        action: "call"
+        target: "bukpot"
+        method: "action_done"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+          name:
+            type: "value"
+            expected: "BP-MANUAL-F2-001"
+
+  - name:
+      "Bukti Potong PPh F113302 Out - Negatif (auto-sequence, tak berubah setelah Done)"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 F113302 Out Negatif"
+          code: "F2NG"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "10/2024 F113302 Out Negatif"
+          code: "102024F2NG"
+          date_start: 2024-10-01
+          date_end: 2024-10-31
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Payable F113302 Out Negatif Test"
+          code: "XF2NG"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Journal F113302 Out Negatif Test"
+          code: "JF2NG"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test F113302 Out Negatif"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong F113302 Out Negatif"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak F113302 Out Negatif"
+          is_company: false
+
+      - step: "Setup - Create income account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "income_account_type"
+
+      - step: "Setup - Create income account"
+        action: "create"
+        model: "account.account"
+        save_as: "income_account"
+        values:
+          name: "Income Account F113302 Out NG"
+          code: "IF2NG"
+          user_type_id: "REC: income_account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "Tax F113302 Out NG"
+          amount_type: "percent"
+          type_tax_use: "none"
+          amount: 5.0
+          invoice_repartition_line_ids:
+            - - 5
+              - 0
+              - 0
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "REC: account.id"
+
+      - step: "Setup - Create income journal entry"
+        action: "create"
+        model: "account.move"
+        save_as: "income_move"
+        values:
+          move_type: "entry"
+          journal_id: "REC: journal.id"
+          date: 2024-10-15
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: income_account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Income line F113302 Out NG"
+                debit: 1000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Contra line F113302 Out NG"
+                debit: 0.0
+                credit: 1000000.0
+
+      - step: "Setup - Post income journal entry"
+        action: "call"
+        target: "income_move"
+        method: "action_post"
+
+      - step: "Setup - Find income move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: income_move.id"]
+          - ["account_id", "=", "REC: income_account.id"]
+        save_as: "income_line"
+        expect_count: 1
+
+      - step: "Get F113302 Out type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113302.bukti_potong_pph_type_f113302_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113302 Out without manual number"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113302_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-10-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - tax_id: "REC: tax.id"
+                move_line_id: "REC: income_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 1000000.0
+
+      - step: "Confirm bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve bukpot auto-assigns the sequence on entering On Progress"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+          name:
+            type: "value"
+            operator: "not_equals"
+            expected: "/"
+
+      - step: "Snapshot the auto-assigned number before Done"
+        action: "create"
+        model: "res.partner"
+        save_as: "name_snapshot"
+        values:
+          name: "Snapshot F113302 Out Negatif"
+          comment: "REC: bukpot.name"
+
+      - step: "Finish bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_done"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Assert auto-assigned number unchanged after Done"
+        action: "assert"
+        target: "bukpot"
+        asserts:
+          name:
+            type: "value"
+            expected: "REC: name_snapshot.comment"
+
+  - name: "Bukti Potong PPh F113302 Out - Cancel policy restricted to Done"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 F113302 Out Cancel"
+          code: "F2CN"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "11/2024 F113302 Out Cancel"
+          code: "112024F2CN"
+          date_start: 2024-11-01
+          date_end: 2024-11-30
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Payable F113302 Out Cancel Test"
+          code: "XF2CN"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Journal F113302 Out Cancel Test"
+          code: "JF2CN"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test F113302 Out Cancel"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong F113302 Out Cancel"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak F113302 Out Cancel"
+          is_company: false
+
+      - step: "Setup - Create income account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "income_account_type"
+
+      - step: "Setup - Create income account"
+        action: "create"
+        model: "account.account"
+        save_as: "income_account"
+        values:
+          name: "Income Account F113302 Out CN"
+          code: "IF2CN"
+          user_type_id: "REC: income_account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "Tax F113302 Out CN"
+          amount_type: "percent"
+          type_tax_use: "none"
+          amount: 5.0
+          invoice_repartition_line_ids:
+            - - 5
+              - 0
+              - 0
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "REC: account.id"
+
+      - step: "Setup - Create income journal entry"
+        action: "create"
+        model: "account.move"
+        save_as: "income_move"
+        values:
+          move_type: "entry"
+          journal_id: "REC: journal.id"
+          date: 2024-11-15
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: income_account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Income line F113302 Out CN"
+                debit: 1000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Contra line F113302 Out CN"
+                debit: 0.0
+                credit: 1000000.0
+
+      - step: "Setup - Post income journal entry"
+        action: "call"
+        target: "income_move"
+        method: "action_post"
+
+      - step: "Setup - Find income move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: income_move.id"]
+          - ["account_id", "=", "REC: income_account.id"]
+        save_as: "income_line"
+        expect_count: 1
+
+      - step: "Get F113302 Out type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113302.bukti_potong_pph_type_f113302_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113302 Out"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113302_out"
+        save_as: "bukpot"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-11-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - tax_id: "REC: tax.id"
+                move_line_id: "REC: income_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 1000000.0
+
+      - step: "Confirm bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Cancel is rejected while Waiting for Approval"
+        action: "call"
+        target: "bukpot"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "not allowed to cancel"
+
+      - step: "Approve bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Finish bukpot"
+        action: "call"
+        target: "bukpot"
+        method: "action_done"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Cancel is allowed once Done"
+        action: "call"
+        target: "bukpot"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "cancel"
+
+  - name: "Bukti Potong PPh F113302 Out - Restart allowed before Done, not after Cancel"
+    steps:
+      - step: "Setup - Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "Tax Year 2024 F113302 Out Restart"
+          code: "F2RS"
+          date_start: 2024-01-01
+          date_end: 2024-12-31
+
+      - step: "Setup - Create tax period"
+        action: "create"
+        model: "l10n_id.tax_period"
+        save_as: "tax_period"
+        values:
+          name: "12/2024 F113302 Out Restart"
+          code: "122024F2RS"
+          date_start: 2024-12-01
+          date_end: 2024-12-31
+          year_id: "REC: tax_year.id"
+
+      - step: "Setup - Create account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_current_liabilities"
+        save_as: "account_type"
+
+      - step: "Setup - Create account"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Payable F113302 Out Restart Test"
+          code: "XF2RS"
+          user_type_id: "REC: account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Journal F113302 Out Restart Test"
+          code: "JF2RS"
+          type: "general"
+
+      - step: "Setup - Create KPP partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Test F113302 Out Restart"
+          is_company: true
+
+      - step: "Setup - Create pemotong pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "pemotong_pajak"
+        values:
+          name: "PT Test Pemotong F113302 Out Restart"
+          is_company: true
+
+      - step: "Setup - Create wajib pajak partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "Wajib Pajak F113302 Out Restart"
+          is_company: false
+
+      - step: "Get F113302 Out type from data"
+        action: "ref"
+        xml_id: "ssi_l10n_id_taxform_bukti_potong_pph_f113302.bukti_potong_pph_type_f113302_out"
+        save_as: "bp_type"
+
+      - step: "Create Bukti Potong PPh F113302 Out - open document"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113302_out"
+        save_as: "bukpot_open"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-12-15
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+
+      - step: "Confirm bukpot_open"
+        action: "call"
+        target: "bukpot_open"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve bukpot_open"
+        action: "call"
+        target: "bukpot_open"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Restart is allowed while On Progress"
+        action: "call"
+        target: "bukpot_open"
+        method: "action_restart"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Setup - Create income account type ref"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "income_account_type"
+
+      - step: "Setup - Create income account"
+        action: "create"
+        model: "account.account"
+        save_as: "income_account"
+        values:
+          name: "Income Account F113302 Out RS"
+          code: "IF2RS"
+          user_type_id: "REC: income_account_type.id"
+          internal_type: "other"
+          reconcile: true
+
+      - step: "Setup - Create withholding tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "Tax F113302 Out RS"
+          amount_type: "percent"
+          type_tax_use: "none"
+          amount: 5.0
+          invoice_repartition_line_ids:
+            - - 5
+              - 0
+              - 0
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+                account_id: "REC: account.id"
+
+      - step: "Setup - Create income journal entry"
+        action: "create"
+        model: "account.move"
+        save_as: "income_move"
+        values:
+          move_type: "entry"
+          journal_id: "REC: journal.id"
+          date: 2024-12-16
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: income_account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Income line F113302 Out RS"
+                debit: 1000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                partner_id: "REC: wajib_pajak.id"
+                name: "Contra line F113302 Out RS"
+                debit: 0.0
+                credit: 1000000.0
+
+      - step: "Setup - Post income journal entry"
+        action: "call"
+        target: "income_move"
+        method: "action_post"
+
+      - step: "Setup - Find income move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: income_move.id"]
+          - ["account_id", "=", "REC: income_account.id"]
+        save_as: "income_line"
+        expect_count: 1
+
+      - step: "Create Bukti Potong PPh F113302 Out - cancelled document"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113302_out"
+        save_as: "bukpot_cancel"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: bp_type.id"
+          date: 2024-12-16
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: pemotong_pajak.id"
+          line_ids:
+            - - 0
+              - 0
+              - tax_id: "REC: tax.id"
+                move_line_id: "REC: income_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 1000000.0
+
+      - step: "Confirm bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Finish bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_done"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Cancel bukpot_cancel"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "cancel"
+
+      - step: "Restart is rejected once Cancelled"
+        action: "call"
+        target: "bukpot_cancel"
+        method: "action_restart"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "not allowed to restart"

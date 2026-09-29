@@ -203,7 +203,31 @@ odoo.define(
                 openMenuSteps,
                 // ── Flow 2 — Open the record to approve.
                 openRecordSteps("TOUR WP ApproveF113310O"),
-                // ── Flow 3 — Click the Approve button.
+                // ── Flow 3 — Click Edit and confirm the Number
+                // field is still read-only while Waiting for Approval,
+                // then discard the edit.
+                [
+                    {
+                        content: "Click Edit",
+                        trigger: ".o_form_button_edit",
+                        extra_trigger: ".o_form_view.o_form_readonly",
+                    },
+                    {
+                        content: "Number field is read-only while Waiting for Approval",
+                        trigger:
+                            ".oe_title .o_field_widget[name='name']" +
+                            ".o_readonly_modifier",
+                        extra_trigger: ".o_form_view.o_form_editable",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+                    {
+                        content: "Discard the edit",
+                        trigger: ".o_form_button_cancel",
+                    },
+                ],
+                // ── Flow 4 — Click the Approve button.
                 [
                     {
                         content: "Click the Approve button",
@@ -211,7 +235,7 @@ odoo.define(
                             ".o_statusbar_buttons button[name='action_approve_approval']",
                         extra_trigger: ".o_form_view",
                     },
-                    // ── Flow 4 — Click OK on the confirmation dialog.
+                    // ── Flow 5 — Click OK on the confirmation dialog.
                     confirmDialogStep,
                 ],
                 // ── Post-Condition — single approval level, so the
@@ -224,6 +248,30 @@ odoo.define(
                         run: function () {
                             // Assertion only.
                         },
+                    },
+                ],
+                // ── Flow 6 — Click Edit and confirm the Number field
+                // is now editable while On Progress, then discard the
+                // edit.
+                [
+                    {
+                        content: "Click Edit",
+                        trigger: ".o_form_button_edit",
+                        extra_trigger: ".o_form_view.o_form_readonly",
+                    },
+                    {
+                        content: "Number field is editable while On Progress",
+                        trigger:
+                            ".oe_title .o_field_widget[name='name']" +
+                            ":not(.o_readonly_modifier)",
+                        extra_trigger: ".o_form_view.o_form_editable",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+                    {
+                        content: "Discard the edit",
+                        trigger: ".o_form_button_cancel",
                     },
                 ],
                 // ── IK: docs/l10n_id_bukti_potong_pph_f113310_out/09-done.md

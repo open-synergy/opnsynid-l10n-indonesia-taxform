@@ -301,6 +301,12 @@ msgid "Can Restart Approval"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113310
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_in__open_ok
+#: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_out__open_ok
+msgid "Can Start"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_bukti_potong_pph_f113310
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_in__cancel_reason_id
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_out__cancel_reason_id
 msgid "Cancel Reason"
@@ -708,6 +714,15 @@ msgid "Sequence"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_bukti_potong_pph_f113310
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_in__open_ok
+#: model:ir.model.fields,help:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_out__open_ok
+msgid ""
+"Start policy\n"
+"\n"
+"* If active user can see and execute 'Start' button"
+msgstr ""
+
+#. module: ssi_l10n_id_taxform_bukti_potong_pph_f113310
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_in__state
 #: model:ir.model.fields,field_description:ssi_l10n_id_taxform_bukti_potong_pph_f113310.field_l10n_id_bukti_potong_pph_f113310_out__state
 msgid "State"
@@ -786,7 +801,7 @@ msgid ""
 "* Unique indentifer of transaction\n"
 "* Leave '/' to automatically generate number\n"
 "* Change '/' into any number/identifier to manually assign number.\n"
-"  Manual number assignment can be done in 'Draft' state\n"
+"  Manual number assignment can be done in 'Draft'/'In Progress' state\n"
 "  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
 "* Transaction with number other than '/' can not be deleted."
 msgstr ""

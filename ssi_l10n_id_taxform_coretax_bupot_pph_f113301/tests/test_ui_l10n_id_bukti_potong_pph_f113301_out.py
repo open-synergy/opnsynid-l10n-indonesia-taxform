@@ -15,10 +15,11 @@ class TestUiL10nIdBuktiPotongPphF113301Out(HttpSavepointCase):
     @classmethod
     def setUpClass(cls):
         """Create one Bukti Potong PPh f.1.1.33.01 Out document already
-        Waiting for Approval, so the tour starts from the state its IK
-        Pre-Condition requires.
+        On Progress (past approval), so the tour starts from the state
+        its IK Pre-Condition requires.
         """
         super().setUpClass()
+        cls.admin = cls.env.ref("base.user_admin")
         cls.tax_period = cls.env["l10n_id.tax_period"].create(
             {
                 "name": "TOUR 06/2026 Input Nomor Coretax F113301",
@@ -81,8 +82,20 @@ class TestUiL10nIdBuktiPotongPphF113301Out(HttpSavepointCase):
         # Fixture-only transition: bypass the policy check so setup
         # does not depend on the *current* user's group membership —
         # only the tour itself (running as "admin") needs to satisfy
-        # the policy.
-        cls.order.sudo().with_context(bypass_policy_check=True).action_confirm()
+        # the policy. ``with_user(cls.admin)`` (not ``sudo()``) so the
+        # approval record below is recorded as approved BY admin,
+        # matching the identity ``login="admin"`` uses in the tour.
+        cls.order.with_user(cls.admin).with_context(
+            bypass_policy_check=True
+        ).action_confirm()
+        cls.order.invalidate_cache()
+        # Move past approval to On Progress — this IK's tour does not
+        # perform the approval itself, unlike the base module's
+        # approve tour.
+        cls.order.with_user(cls.admin).with_context(
+            bypass_policy_check=True
+        ).action_approve_approval()
+        cls.order.invalidate_cache()
 
     def test_input_nomor_coretax(self):
         """Run the "input Coretax number" tour for Bukti Potong PPh

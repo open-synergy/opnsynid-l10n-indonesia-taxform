@@ -208,8 +208,7 @@ odoo.define(
                         extra_trigger: ".o_form_view.o_form_readonly",
                     },
                     {
-                        content:
-                            "Number field is read-only while Waiting" + " for Approval",
+                        content: "Number field is read-only while Waiting for Approval",
                         trigger:
                             ".oe_title .o_field_widget[name='name']" +
                             ".o_readonly_modifier",

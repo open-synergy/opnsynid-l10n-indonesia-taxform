@@ -175,7 +175,7 @@ if not document.approval_template_id:
     <field name="restrict_state" eval="1" />
     <field
             name="state_ids"
-            search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','=','draft')]"
+            search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_in'),('value','=','open')]"
         />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>
@@ -360,7 +360,7 @@ if not document.approval_template_id:
     <field name="restrict_state" eval="1" />
     <field
             name="state_ids"
-            search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','=','draft')]"
+            search="[('field_id.model_id.model','=','l10n_id.bukti_potong_pph_f113306_out'),('value','=','open')]"
         />
     <field name="restrict_user" eval="1" />
     <field name="computation_method">use_group</field>

@@ -12,7 +12,14 @@ class TestL10nIdTaxformBuktiPotongPphF113306(YamlTransactionCase):
     """Scenario test for Bukti Potong PPh 23 (f.1.1.33.06) In/Out."""
 
     def test_l10n_id_taxform_bukti_potong_pph_f113306(self):
-        """Run the create-and-confirm workflow scenario.
+        """Run the create/confirm/approve/done and policy scenarios.
+
+        Covers the create-and-confirm flow for In and Out, the
+        positive path of a manual number kept through ``done``, the
+        negative path of an auto-assigned sequence number unchanged
+        after ``done``, ``cancel_ok`` restricted to state ``done``,
+        and ``restart_ok`` allowed on ``confirm``/``open``/``reject``
+        but not on ``cancel`` — for both directions.
 
         :return: None
         """

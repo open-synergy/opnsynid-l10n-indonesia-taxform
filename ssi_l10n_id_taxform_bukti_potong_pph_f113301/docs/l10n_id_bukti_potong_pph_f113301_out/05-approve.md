@@ -20,13 +20,18 @@
 
 1. Open the **Taxform > Bukti Potong > PPh 21/26 Tidak Final (f.1.1.33.01) Out** menu.
 2. Open the record to approve.
-3. Click the **Approve** button.
-4. Click **OK** on the confirmation dialog.
+3. Click **Edit** and confirm the **Number** field is still read-only (not yet
+   editable), then discard the edit — proves the number cannot be changed while still
+   Waiting for Approval.
+4. Click the **Approve** button.
+5. Click **OK** on the confirmation dialog.
+6. Click **Edit** and confirm the **Number** field is now editable, then discard the
+   edit — proves the field only becomes editable once the document reaches On Progress.
 
 ## Post-Condition
 
 - If there are still pending approval levels, status remains **Waiting for Approval**
-  and the next level becomes pending.
+  and the **Number** field remains read-only, the same as in Draft.
 - If all approval levels are fulfilled, the document automatically moves to **On
   Progress** status. The document number (Bukti Potong number) is assigned at this point
   if it was left as `/`, and the field becomes editable for entering an official number

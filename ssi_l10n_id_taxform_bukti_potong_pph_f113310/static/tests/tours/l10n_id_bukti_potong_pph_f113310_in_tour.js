@@ -217,7 +217,30 @@ odoo.define(
                     confirmDialogStep,
                 ],
                 // ── Post-Condition — single approval level, so the
-                // document is finished automatically: status is Done.
+                // document automatically moves to On Progress.
+                [
+                    {
+                        content: "Status is On Progress",
+                        trigger:
+                            ".o_statusbar_status .o_arrow_button[data-value='open'].btn-primary",
+                        run: function () {
+                            // Assertion only.
+                        },
+                    },
+                ],
+                // ── IK: docs/l10n_id_bukti_potong_pph_f113310_in/09-done.md
+                // Flow 4 — Click the Done button.
+                [
+                    {
+                        content: "Click the Done button",
+                        trigger: ".o_statusbar_buttons button[name='action_done']",
+                        extra_trigger:
+                            ".o_statusbar_status .o_arrow_button[data-value='open'].btn-primary",
+                    },
+                    // ── Flow 5 — Click OK on the confirmation dialog.
+                    confirmDialogStep,
+                ],
+                // ── Post-Condition — status changes to Done.
                 [
                     {
                         content: "Status is Done",

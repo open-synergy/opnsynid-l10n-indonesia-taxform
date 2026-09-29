@@ -229,7 +229,10 @@ class TestUiL10nIdBuktiPotongPphF113310In(HttpSavepointCase):
     def test_approve(self):
         """Run the approve tour for Bukti Potong PPh f.1.1.33.10 In.
 
+        Also exercises the manual Done step that follows approval.
+
         IK: docs/l10n_id_bukti_potong_pph_f113310_in/05-approve.md
+        IK: docs/l10n_id_bukti_potong_pph_f113310_in/09-done.md
         """
         self.start_tour(
             "/web",

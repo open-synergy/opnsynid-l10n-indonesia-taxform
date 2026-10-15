@@ -798,7 +798,7 @@ scenarios:
             type: "value"
             expected: "cancel"
 
-  - name: "Bukti Potong PPh F113302 Out - Restart allowed before Done, not after Cancel"
+  - name: "Bukti Potong PPh F113302 Out - Restart allowed before Done and after Cancel"
     steps:
       - step: "Setup - Create tax year"
         action: "create"
@@ -1066,11 +1066,13 @@ scenarios:
             type: "value"
             expected: "cancel"
 
-      - step: "Restart is rejected once Cancelled"
+      - step: "Restart is allowed once Cancelled"
         action: "call"
         target: "bukpot_cancel"
         method: "action_restart"
         as_user: "base.user_admin"
-        expect_error:
-          type: "UserError"
-          message_contains: "not allowed to restart"
+        refresh: true
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"

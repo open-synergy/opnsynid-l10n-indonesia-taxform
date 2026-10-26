@@ -34,8 +34,9 @@ Configuration
 Usage
 =====
 
-1. Open an outgoing BP21 (f.1.1.33.01) record in the *Done* state.
-2. Click the *Export Coretax XML* button in the form header.
+1. Open an outgoing BP21 (f.1.1.33.01) record in the *In Progress* or
+   *Done* state.
+2. Click *Print* and choose *[XML] Coretax*.
 3. The enriched XML file is downloaded automatically.
 
 

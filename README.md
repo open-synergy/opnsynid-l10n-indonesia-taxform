@@ -39,7 +39,7 @@ addon | version | maintainers | summary
 [ssi_l10n_id_taxform_bukti_potong_pph_mixin](ssi_l10n_id_taxform_bukti_potong_pph_mixin/) | 14.0.1.9.0 |  | Indonesia - Mixin Feature for Bukti Potong PPh
 [ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch](ssi_l10n_id_taxform_coretax_bupot_21_payslip_batch/) | 14.0.1.0.1 |  | Indonesia's Taxform - Coretax PPh 21 Withholding XML from Payslip Batch
 [ssi_l10n_id_taxform_coretax_bupot_pph_f113301](ssi_l10n_id_taxform_coretax_bupot_pph_f113301/) | 14.0.1.4.0 |  | Indonesia's Taxform - Coretax Bukti Potong PPh 21/26 f.1.1.33.01 Out XML Export
-[ssi_l10n_id_taxform_coretax_bupot_pph_out](ssi_l10n_id_taxform_coretax_bupot_pph_out/) | 14.0.1.1.0 |  | Indonesia's Taxform - Coretax Bukti Potong PPh Out XML Export
+[ssi_l10n_id_taxform_coretax_bupot_pph_out](ssi_l10n_id_taxform_coretax_bupot_pph_out/) | 14.0.1.1.1 |  | Indonesia's Taxform - Coretax Bukti Potong PPh Out XML Export
 [ssi_l10n_id_taxform_faktur_pajak](ssi_l10n_id_taxform_faktur_pajak/) | 14.0.3.16.2 |  | Faktur Pajak
 [ssi_l10n_id_taxform_faktur_pajak_klipajak](ssi_l10n_id_taxform_faktur_pajak_klipajak/) | 14.0.1.6.0 |  | Klik Pajak Integration
 [ssi_l10n_id_taxform_faktur_pajak_operating_unit](ssi_l10n_id_taxform_faktur_pajak_operating_unit/) | 14.0.1.4.0 |  | Faktur Pajak + Operating Unit

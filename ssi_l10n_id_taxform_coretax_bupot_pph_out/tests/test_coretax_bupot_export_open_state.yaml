@@ -1,0 +1,165 @@
+scenarios:
+  - name: "Export Coretax XML in open state with name '/' creates an attachment"
+    steps:
+      - step: "Get the company (pemotong) partner"
+        action: "search"
+        model: "res.partner"
+        domain:
+          - ["id", "=", "REC: company.partner_id.id"]
+        limit: 1
+        save_as: "company_partner"
+
+      - step: "Set valid NPWP and NITKU on the withholder partner"
+        action: "write"
+        target: "company_partner"
+        values:
+          vat: "0029482015507000"
+          nitku: "0029482015507000000000"
+
+      - step: "Create wajib pajak (income recipient) partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "wajib_pajak"
+        values:
+          name: "PT Wajib Pajak Open"
+          is_company: true
+          vat: "0123456789012000"
+
+      - step: "Create KPP (tax office) partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "kpp"
+        values:
+          name: "KPP Pratama Open"
+          is_company: true
+
+      - step: "Create tax year"
+        action: "create"
+        model: "l10n_id.tax_year"
+        save_as: "tax_year"
+        values:
+          name: "2035"
+          code: "2035"
+          date_start: "2035-01-01"
+          date_end: "2035-12-31"
+
+      - step: "Generate tax periods for the year"
+        action: "call"
+        target: "tax_year"
+        method: "action_create_period"
+
+      - step: "Find the October 2035 tax period"
+        action: "search"
+        model: "l10n_id.tax_period"
+        domain:
+          - ["year_id", "=", "REC: tax_year.id"]
+          - ["date_start", "=", "2035-10-01"]
+        limit: 1
+        save_as: "tax_period"
+
+      - step: "Create general journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test General Open"
+          code: "TSTBPO"
+          type: "general"
+
+      - step: "Create account for the bukti potong"
+        action: "create"
+        model: "account.account"
+        save_as: "account"
+        values:
+          name: "Test PPh 23 Payable Open"
+          code: "22401TSO"
+          user_type_id: "account.data_account_type_current_liabilities"
+
+      - step: "Create account move providing the move line"
+        action: "create"
+        model: "account.move"
+        save_as: "move"
+        values:
+          journal_id: "REC: journal.id"
+          line_ids:
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Debit"
+                debit: 10000000.0
+                credit: 0.0
+            - - 0
+              - 0
+              - account_id: "REC: account.id"
+                name: "Test Credit"
+                debit: 0.0
+                credit: 10000000.0
+
+      - step: "Find the debit move line"
+        action: "search"
+        model: "account.move.line"
+        domain:
+          - ["move_id", "=", "REC: move.id"]
+          - ["debit", ">", 0]
+        limit: 1
+        save_as: "move_line"
+
+      - step: "Create PPh 23 tax at 2%"
+        action: "create"
+        model: "account.tax"
+        save_as: "tax"
+        values:
+          name: "PPh 23 2% Open"
+          type_tax_use: "purchase"
+          amount: 2.0
+          amount_type: "percent"
+
+      - step: "Create Coretax tax object code"
+        action: "create"
+        model: "l10n_id.taxform_objek_pajak"
+        save_as: "objek_pajak"
+        values:
+          code: "23-100-02"
+          name: "PPh 23 Open Test"
+
+      - step: "Create Bukti Potong PPh 23 Out directly in open state, name stays '/'"
+        action: "create"
+        model: "l10n_id.bukti_potong_pph_f113306_out"
+        save_as: "bukpot"
+        values:
+          date: "2035-10-15"
+          state: "open"
+          tax_period_id: "REC: tax_period.id"
+          journal_id: "REC: journal.id"
+          account_id: "REC: account.id"
+          kpp_id: "REC: kpp.id"
+          wajib_pajak_id: "REC: wajib_pajak.id"
+          pemotong_pajak_id: "REC: company.partner_id.id"
+          line_ids:
+            - - 0
+              - 0
+              - name: "Open State Line"
+                tax_id: "REC: tax.id"
+                move_line_id: "REC: move_line.id"
+                amount_computation_method: "manual"
+                manual_amount: 10000000.0
+                coretax_tax_object_code: "REC: objek_pajak.id"
+
+      - step: "Export Coretax XML in open state"
+        action: "call"
+        target: "bukpot"
+        method: "action_export_coretax_bupot_pph_out_xml"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Exactly one XML attachment is linked to the bukti potong"
+        action: "search"
+        model: "ir.attachment"
+        domain:
+          - ["res_model", "=", "l10n_id.bukti_potong_pph_f113306_out"]
+          - ["res_id", "=", "REC: bukpot.id"]
+          - ["mimetype", "=", "application/xml"]
+        save_as: "attachment"
+        expect_count: 1

@@ -12,13 +12,13 @@
         />
         <field name="arch" type="xml">
             <data>
-                <!-- Export button: visible only when direction=out and state=done -->
+                <!-- Export button: visible only when direction=out and state is open or done -->
                 <xpath expr="//header/field[@name='state']" position="before">
                     <button
                         name="action_export_coretax_bupot_pph_out_xml"
                         type="object"
                         string="Export Coretax XML"
-                        attrs="{'invisible': ['|', ('direction', '!=', 'out'), ('state', '!=', 'done')]}"
+                        attrs="{'invisible': ['|', ('direction', '!=', 'out'), ('state', 'not in', ['open', 'done'])]}"
                         icon="fa-file-code-o"
                     />
                 </xpath>

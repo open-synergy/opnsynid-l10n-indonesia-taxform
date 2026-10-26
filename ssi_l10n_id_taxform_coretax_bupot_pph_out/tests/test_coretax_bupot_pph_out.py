@@ -2,6 +2,9 @@
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import json
+
+from lxml import etree
 from odoo_yaml_test import YamlTransactionCase
 
 from odoo.tests import tagged
@@ -290,3 +293,64 @@ class TestCoretaxBupotPPhOut(YamlTransactionCase):
             self.wajib_pajak.write({"country_id": singapore.id})
             values = self.bukpot._prepare_coretax_bupot_pph_out_values()
             self.assertEqual(values["lines"][0]["counterpart_opt"], "NonResident")
+
+    def test_export_open_state_attachment(self):
+        """Export in ``open`` state with name ``/`` creates an XML attachment.
+
+        Delegates to a self-contained scenario (its own fixture, not
+        ``self.bukpot``).
+        """
+        self.run_yaml_scenario("test_coretax_bupot_export_open_state.yaml")
+
+    def test_export_button_visibility(self):
+        """The export button is visible only in open/done for outgoing.
+
+        Pure Python — trigger P1 (L-01/L-02: the assertions read the
+        return value of ``fields_view_get()`` and its arch, not a
+        side effect on a record, so YAML cannot observe it).
+        """
+        model = self.env["l10n_id.bukti_potong_pph_f113306_out"]
+        view = model.fields_view_get(view_type="form")
+        doc = etree.fromstring(view["arch"])
+        buttons = doc.xpath("//button[@name='action_export_coretax_bupot_pph_out_xml']")
+        self.assertEqual(len(buttons), 1)
+        modifiers = json.loads(buttons[0].get("modifiers"))
+        invisible = modifiers["invisible"]
+        env = {"direction": "out"}
+        for state, hidden in (
+            ("draft", True),
+            ("confirm", True),
+            ("open", False),
+            ("done", False),
+            ("cancel", True),
+            ("reject", True),
+        ):
+            env["state"] = state
+            self.assertEqual(self._eval_domain(invisible, env), hidden, state)
+        env["direction"] = "in"
+        for state in ("open", "done"):
+            env["state"] = state
+            self.assertTrue(self._eval_domain(invisible, env), state)
+
+    @staticmethod
+    def _eval_domain(domain, env):
+        """Evaluate a simple modifiers domain against a value mapping.
+
+        :param domain: list in prefix notation (``'|'`` plus leaves)
+        :param env: mapping of field name to value
+        :return: ``True`` if the domain matches
+        """
+        if isinstance(domain, bool):
+            return domain
+        leaves = [leaf for leaf in domain if leaf != "|"]
+        results = []
+        for field, operator, value in leaves:
+            if operator == "=":
+                results.append(env[field] == value)
+            elif operator == "!=":
+                results.append(env[field] != value)
+            elif operator == "in":
+                results.append(env[field] in value)
+            elif operator == "not in":
+                results.append(env[field] not in value)
+        return any(results) if "|" in domain else all(results)

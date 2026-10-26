@@ -54,7 +54,7 @@ on interest income) before exporting.
 Usage
 =====
 
-1. Open any outgoing Bukti Potong PPh record in the *Done* state
+1. Open any outgoing Bukti Potong PPh record in the *In Progress* or *Done* state
 2. Fill the *Coretax Tax Object Code* on each line
 3. Click the *Export Coretax XML* button in the form header
 4. The XML file will be downloaded automatically

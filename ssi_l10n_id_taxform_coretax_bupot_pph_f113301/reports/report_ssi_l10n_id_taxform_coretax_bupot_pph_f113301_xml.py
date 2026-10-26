@@ -31,22 +31,23 @@ class ReportSsiL10nIdTaxformCoretaxBupotPphF113301Xml(models.AbstractModel):
             support bulk XML export for this report)
         :param data: unused, kept for the ``ir.actions.report``
             signature
-        :raises UserError: when the document is not yet Done, or when
-            required Coretax data is missing (see
+        :raises UserError: when the document is not yet In Progress
+            or Done, or when required Coretax data is missing (see
             ``_prepare_coretax_bupot_pph_out_values``)
         :return: dict of rendering values for the ``coretax_xml``
             template
         """
         bukpot = self.env["l10n_id.bukti_potong_pph_f113301_out"].browse(docids)
         bukpot.ensure_one()
-        if bukpot.state != "done":
+        if bukpot.state not in ("open", "done"):
             error_message = _(
                 """
 Context: Print Coretax BP21 (f.1.1.33.01) XML
 Database ID: %s
-Problem: This document is not yet Done (current status: %s)
-Solution: Confirm and approve the document before printing the
-Coretax XML
+Problem: This document is not yet In Progress or Done (current
+status: %s)
+Solution: Confirm and approve the document until it is In Progress
+before printing the Coretax XML
 """
                 % (bukpot.id, bukpot.state)
             )

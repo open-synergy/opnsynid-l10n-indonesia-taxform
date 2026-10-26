@@ -31,9 +31,10 @@ msgid ""
 "\n"
 "Context: Print Coretax BP21 (f.1.1.33.01) XML\n"
 "Database ID: %s\n"
-"Problem: This document is not yet Done (current status: %s)\n"
-"Solution: Confirm and approve the document before printing the\n"
-"Coretax XML\n"
+"Problem: This document is not yet In Progress or Done (current\n"
+"status: %s)\n"
+"Solution: Confirm and approve the document until it is In Progress\n"
+"before printing the Coretax XML\n"
 msgstr ""
 
 #. module: ssi_l10n_id_taxform_coretax_bupot_pph_f113301
